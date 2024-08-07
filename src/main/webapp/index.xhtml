@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Welcome Page</title>
+</h:head>
+<h:body>
+    Hello #{gameBean.message} and welcome to the catalogue!
+    <br></br>
+    Browse our wide collection of videogames
+    <br></br>
+    To keep track of your games, please login here: [INSERT LOGIN PAGE]
+    <br></br>
+
+    <h:form>
+<!--        DISPLAY ALL GAMES -->
+        <h1><h:outputText value="Game Collection"/></h1>
+        <h:dataTable value="#{gameBean.listAllGames()}" var="game">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Title"/>
+                </f:facet>
+                <h:outputText value="#{game.title}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Price"/>
+                </f:facet>
+                <h:outputText value="#{game.price}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Genres"/>
+                </f:facet>
+                <!--        GET GENRES FROM GAME ID-->
+                <h:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre">
+                    <h:column>
+                        <h:outputText value="#{gameGenre.name}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:column>
+        </h:dataTable>
+<!--        DISPLAY ALL GENRES-->
+<!--        <h:dataTable value="#{genreBean.listAllGenres()}" var="genre">-->
+<!--            <h:column>-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="Genre"/>-->
+<!--                </f:facet>-->
+<!--                <h:outputText value="#{genre.name}"/>-->
+<!--            </h:column>-->
+<!--        </h:dataTable>-->
+    </h:form>
+
+</h:body>
+</html>
