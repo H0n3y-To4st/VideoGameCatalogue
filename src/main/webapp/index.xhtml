@@ -10,12 +10,19 @@
 </h:head>
 <h:body>
     <h1><h:outputText value="Game Collection"/></h1>
-    <p>Hello guest and welcome to the catalogue!
-    Browse our wide collection of videogames from all genres and platforms.
-    To keep track of your games, please login here: [INSERT LOGIN PAGE]
-    </p>
+    <!--    NAVIGATION SYSTEM -->
     <h:form>
-<!--        DISPLAY ALL GAMES -->
+        <h:commandButton value="Home" action="index.xhtml"/>
+        <h:commandButton value="Login" action="login.xhtml"/>
+        <h:commandButton value="Register" action="register.xhtml"/>
+    </h:form>
+
+    <p>Hello guest and welcome to the catalogue!
+        Browse our wide collection of videogames from all genres and platforms.
+        To keep track of your games, please login.
+    </p>
+    <!--        DISPLAY ALL GAMES -->
+    <h:form>
         <h:dataTable value="#{gameBean.listAllGames()}" var="game" styleClass="game-table">
             <h:column>
                 <f:facet name="header">
@@ -47,15 +54,15 @@
                 <h:outputText value="#{game.description}" styleClass="game-description"/>
             </h:column>
         </h:dataTable>
-<!--        DISPLAY ALL GENRES-->
-<!--        <h:dataTable value="#{genreBean.listAllGenres()}" var="genre">-->
-<!--            <h:column>-->
-<!--                <f:facet name="header">-->
-<!--                    <h:outputText value="Genre"/>-->
-<!--                </f:facet>-->
-<!--                <h:outputText value="#{genre.name}"/>-->
-<!--            </h:column>-->
-<!--        </h:dataTable>-->
+        <!--        DISPLAY ALL GENRES-->
+        <!--        <h:dataTable value="#{genreBean.listAllGenres()}" var="genre">-->
+        <!--            <h:column>-->
+        <!--                <f:facet name="header">-->
+        <!--                    <h:outputText value="Genre"/>-->
+        <!--                </f:facet>-->
+        <!--                <h:outputText value="#{genre.name}"/>-->
+        <!--            </h:column>-->
+        <!--        </h:dataTable>-->
     </h:form>
 
 </h:body>

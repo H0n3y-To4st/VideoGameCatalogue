@@ -54,9 +54,5 @@ public class PayaraService {
         return em.createNamedQuery(Genres.QUERY_BY_GAME_ID, Genres.class)
                 .setParameter("GameId", gameId)
                 .getResultList();
-
-//        TypedQuery<Genres> query = em.createNamedQuery(Genres.QUERY_BY_GAME_ID, Genres.class);
-//        query.setParameter("GameId", gameId);
-//        return query.getResultList();
     }
 }

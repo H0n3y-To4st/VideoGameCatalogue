@@ -13,13 +13,8 @@ body {
     border-bottom: 10px solid #353535;
 }
 
-.game-table .game-description,
 .game-table .game-genre {
     color: white;
     text-align: left;
-}
-
-.game-table .game-title,
-.game-table .game-price {
-    text-align: center;
+    padding-left: 10px;
 }
