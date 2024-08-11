@@ -1,0 +1,25 @@
+body {
+    background-color: #353535;
+    color: white;
+}
+
+.game-table {
+    background-color: #404040;
+    color: white;
+    border-collapse: collapse;
+}
+
+.game-table tr {
+    border-bottom: 10px solid #353535;
+}
+
+.game-table .game-description,
+.game-table .game-genre {
+    color: white;
+    text-align: left;
+}
+
+.game-table .game-title,
+.game-table .game-price {
+    text-align: center;
+}
