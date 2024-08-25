@@ -21,11 +21,12 @@ import java.util.List;
  */
 @Stateless
 @LocalBean
-public class PayaraService {
+public class GameService {
     
     @PersistenceContext
     private EntityManager em;
 
+//    TODO: this currently just returns the first user in the database, so their name is displayed on the home page
     public String getMessage(){
         return em.createNamedQuery("UserAccount.findAll", UserAccount.class)
                 .setMaxResults(1)
@@ -47,7 +48,7 @@ public class PayaraService {
 
 /*
   input game id to get the genre
-  search thru the genres table to get the genre of the game
+  search through the genres table to get the genre of the game
     return the genre of the game
  */
     public List<Genres> getGameGenre(int gameId){

@@ -1,6 +1,6 @@
 package fish.payara.hello.jsf;
 import fish.payara.hello.entities.Genres;
-import fish.payara.hello.service.PayaraService;
+import fish.payara.hello.service.GameService;
 import jakarta.ejb.EJB;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.RequestScoped;
@@ -15,7 +15,7 @@ import java.util.List;
 public class GenreBean {
 
     @EJB
-    private PayaraService service;
+    private GameService service;
 
     public GenreBean() {
     }

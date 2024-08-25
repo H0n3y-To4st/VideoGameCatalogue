@@ -36,11 +36,11 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.primefaces</groupId>-->
-<!--            <artifactId>primefaces</artifactId>-->
-<!--            <version>14.0.4</version>-->
-<!--            <classifier>jakarta</classifier>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>14.0.4</version>
+            <classifier>jakarta</classifier>
+        </dependency>
     </dependencies>
 </project>
