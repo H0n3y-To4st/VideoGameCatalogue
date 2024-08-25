@@ -8,8 +8,19 @@
     <title>Login Page</title>
     <h:outputStylesheet name="login.css"/>
 </h:head>
-        <h:body>
-<!--            <p:inputText id="username" value="#{loginBean.username}" placeholder="Enter your username here" required="true"/>-->
-            LOGIN SCREEN :)
-        </h:body>
+<h:body><!--           NOTE: URL still displays index.xhtml and not login, even tho it redirects to this page -->
+    LOGIN SCREEN :)
+    <br/>
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:outputLabel for="username" value="Username:"/>
+            <h:inputText id="username" value="#{loginBean.username}" required="true"/>
+            <h:outputLabel for="password" value="Password:"/>
+            <h:inputSecret id="password" value="#{loginBean.password}" required="true"/>
+            <h:commandButton value="Login" action="#{loginBean.checkForAccount()}"/>
+            <h:outputText value="#{loginBean.message}"/>
+        </h:panelGrid>
+        <h:messages/>
+    </h:form>
+</h:body>
 </html>
