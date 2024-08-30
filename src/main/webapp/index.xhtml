@@ -16,7 +16,6 @@
     <h:form>
         <h:commandButton value="Home" action="/index.xhtml"/>
         <h:commandButton value="Login" action="/login.xhtml"/>
-        <h:commandButton value="Register" action="/register.xhtml"/>
     </h:form>
 
     <p>Hello guest and welcome to the catalogue!
@@ -54,6 +53,12 @@
                     <h:outputText value="Description"/>
                 </f:facet>
                 <h:outputText value="#{game.description}" styleClass="game-description"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Save Game"/>
+                </f:facet>
+                <h:commandButton value="#{gameBean.saveGameToDashboard(game.id, loginBean.username)}" styleClass=""/>
             </h:column>
         </h:dataTable>
         <!--        DISPLAY ALL GENRES-->

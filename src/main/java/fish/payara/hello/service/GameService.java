@@ -11,7 +11,6 @@ import jakarta.ejb.Stateless;
 import jakarta.ejb.LocalBean;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-//import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -46,14 +45,16 @@ public class GameService {
                 .getResultList();
     }
 
-/*
-  input game id to get the genre
-  search through the genres table to get the genre of the game
-    return the genre of the game
- */
     public List<Genres> getGameGenre(int gameId){
         return em.createNamedQuery(Genres.QUERY_BY_GAME_ID, Genres.class)
                 .setParameter("GameId", gameId)
                 .getResultList();
+    }
+
+    public void saveGameToDashboard(int gameId, int userId){
+//        UserAccount user = em.find(UserAccount.class, userId);
+//        Games game = em.find(Games.class, gameId);
+//        user.getGames().add(game);
+//        em.merge(user); //no changes to database until this is called
     }
 }
