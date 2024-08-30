@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://primefaces.org/ui ">
+<h:head>
+    <title>Dashboard</title>
+    <h:outputStylesheet name="main.css"/>
+</h:head>
+<body>
+<!--TODO: add username here "User's Dashboard"-->
+<h1><h:outputText value="Dashboard"/></h1>
+<!--    NAVIGATION SYSTEM -->
+<h:form>
+    <h:commandButton value="Home" action="/index.xhtml"/>
+</h:form>
+<p>Welcome to your dashboard! Here you can view all your saved games.
+</p>
+<!--        DISPLAY ALL GAMES SAVED -->
+<h:form>
+<h:dataTable value="#{gameBean.listAllGames()}" var="game" styleClass="game-table">
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Title"/>
+        </f:facet>
+        <h:outputText value="#{game.title}" styleClass="game-title"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Price"/>
+        </f:facet>
+        <h:outputText value="#{game.price}" styleClass="game-price"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Genres"/>
+        </f:facet>
+        <!--        GET GENRES FROM GAME ID-->
+        <h:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre">
+            <h:column>
+                <h:outputText value="#{gameGenre.name}" styleClass="game-genre"/>
+            </h:column>
+        </h:dataTable>
+    </h:column>
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Description"/>
+        </f:facet>
+        <h:outputText value="#{game.description}" styleClass="game-description"/>
+    </h:column>
+</h:dataTable>
+</h:form>
+</body>
+</html>

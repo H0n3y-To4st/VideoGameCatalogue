@@ -3,7 +3,9 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://primefaces.org/ui ">
 <h:head>
     <title>Welcome Page</title>
     <h:outputStylesheet name="main.css"/>
@@ -12,9 +14,8 @@
     <h1><h:outputText value="Game Collection"/></h1>
     <!--    NAVIGATION SYSTEM -->
     <h:form>
-        <h:commandButton value="Home" action="index.xhtml"/>
-        <h:commandButton value="Login" action="login.xhtml"/>
-        <h:commandButton value="Register" action="register.xhtml"/>
+        <h:commandButton value="Home" action="/index.xhtml"/>
+        <h:commandButton value="Login" action="/login.xhtml"/>
     </h:form>
 
     <p>Hello guest and welcome to the catalogue!
@@ -52,6 +53,12 @@
                     <h:outputText value="Description"/>
                 </f:facet>
                 <h:outputText value="#{game.description}" styleClass="game-description"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Save Game"/>
+                </f:facet>
+                <h:commandButton value="#{gameBean.saveGameToDashboard(game.id, loginBean.username)}" styleClass=""/>
             </h:column>
         </h:dataTable>
         <!--        DISPLAY ALL GENRES-->

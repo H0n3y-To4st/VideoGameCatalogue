@@ -20,6 +20,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -33,10 +34,12 @@ import java.util.Collection;
     @NamedQuery(name = "Games.findById", query = "SELECT g FROM Games g WHERE g.id = :id"),
     @NamedQuery(name = "Games.findByTitle", query = "SELECT g FROM Games g WHERE g.title = :title"),
     @NamedQuery(name = "Games.findByPrice", query = "SELECT g FROM Games g WHERE g.price = :price"),
-    @NamedQuery(name = "Games.findByDescription", query = "SELECT g FROM Games g WHERE g.description = :description")})
+    @NamedQuery(name = "Games.findByDescription", query = "SELECT g FROM Games g WHERE g.description = :description"),
+    @NamedQuery(name = Games.QUERY_BY_USER_ID, query = "SELECT g FROM Games g INNER JOIN UserGames ug ON g.id = ug.game.id WHERE ug.user.id = :UserId")})
 public class Games implements Serializable {
     
     public static final String QUERY_ALL = "Games.findAll";
+    public static final String QUERY_BY_USER_ID = "Games.findByGameId";
     
     private static final long serialVersionUID = 1L;
     @Id
@@ -64,6 +67,14 @@ public class Games implements Serializable {
 
     @ManyToMany
     private Collection<Genres> genresCollection;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_games",
+            joinColumns = @JoinColumn(name = "games", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_account", referencedColumnName = "id")
+    )
+    private List<UserAccount> users;
 
     public Games() {
     }
@@ -120,6 +131,14 @@ public class Games implements Serializable {
         this.genresCollection = genresCollection;
     }
 
+    public List<UserAccount> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserAccount> users) {
+        this.users = users;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -144,5 +163,4 @@ public class Games implements Serializable {
     public String toString() {
         return "fish.payara.hello.entities.Games[ id=" + id + " ]";
     }
-    
 }
