@@ -6,13 +6,52 @@
       xmlns:f="jakarta.faces.core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://primefaces.org/ui ">
-<head>
-    <!--    TODO: make this class available and have its button shown in nav bar when user is logged in-->
+<h:head>
     <title>Dashboard</title>
-</head>
+    <h:outputStylesheet name="main.css"/>
+</h:head>
 <body>
-    <p>welcome to your dashboard!
-        login success!
-    </p>
+<!--TODO: add username here "User's Dashboard"-->
+<h1><h:outputText value="Dashboard"/></h1>
+<!--    NAVIGATION SYSTEM -->
+<h:form>
+    <h:commandButton value="Home" action="/index.xhtml"/>
+</h:form>
+<p>Welcome to your dashboard! Here you can view all your saved games.
+</p>
+<!--        DISPLAY ALL GAMES SAVED -->
+<h:form>
+<h:dataTable value="#{gameBean.listAllGames()}" var="game" styleClass="game-table">
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Title"/>
+        </f:facet>
+        <h:outputText value="#{game.title}" styleClass="game-title"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Price"/>
+        </f:facet>
+        <h:outputText value="#{game.price}" styleClass="game-price"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Genres"/>
+        </f:facet>
+        <!--        GET GENRES FROM GAME ID-->
+        <h:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre">
+            <h:column>
+                <h:outputText value="#{gameGenre.name}" styleClass="game-genre"/>
+            </h:column>
+        </h:dataTable>
+    </h:column>
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Description"/>
+        </f:facet>
+        <h:outputText value="#{game.description}" styleClass="game-description"/>
+    </h:column>
+</h:dataTable>
+</h:form>
 </body>
 </html>
