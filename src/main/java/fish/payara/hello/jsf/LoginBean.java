@@ -16,9 +16,6 @@ public class LoginBean {
     private String password;
     private String message;
 
-    public LoginBean() {
-    }
-
     public String getUsername() {
         return username;
     }
