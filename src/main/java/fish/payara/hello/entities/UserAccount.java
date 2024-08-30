@@ -4,38 +4,32 @@
  */
 package fish.payara.hello.entities;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
- *
  * @author IsmahHussain
  */
 @Entity
 @Table(name = "user_account")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UserAccount.findAll", query = "SELECT u FROM UserAccount u"),
-    @NamedQuery(name = "UserAccount.findById", query = "SELECT u FROM UserAccount u WHERE u.id = :id"),
-    @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT u FROM UserAccount u WHERE u.username = :username"),
-    @NamedQuery(name = "UserAccount.findByEmail", query = "SELECT u FROM UserAccount u WHERE u.email = :email"),
-    @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT u FROM UserAccount u WHERE u.password = :password"),
-    @NamedQuery(name = "UserAccount.findByPasswordHash", query = "SELECT u FROM UserAccount u WHERE u.passwordHash = :passwordHash")})
+        @NamedQuery(name = "UserAccount.findAll", query = "SELECT u FROM UserAccount u"),
+        @NamedQuery(name = "UserAccount.findById", query = "SELECT u FROM UserAccount u WHERE u.id = :id"),
+        @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT u FROM UserAccount u WHERE u.username = :username"),
+        @NamedQuery(name = "UserAccount.findByEmail", query = "SELECT u FROM UserAccount u WHERE u.email = :email"),
+        @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT u FROM UserAccount u WHERE u.password = :password")})
 public class UserAccount implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @Basic
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     @Size(max = 2147483647)
@@ -48,15 +42,23 @@ public class UserAccount implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "password")
     private String password;
-    @Size(max = 2147483647)
-    @Column(name = "password_hash")
-    private String passwordHash;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_games",
+            joinColumns = @JoinColumn(name = "user_account", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "games", referencedColumnName = "id")
+    )
+    private List<Games> games;
 
     public UserAccount() {
+
     }
 
-    public UserAccount(Integer id) {
-        this.id = id;
+    public UserAccount(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 
     public Integer getId() {
@@ -91,14 +93,6 @@ public class UserAccount implements Serializable {
         this.password = password;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -123,5 +117,13 @@ public class UserAccount implements Serializable {
     public String toString() {
         return "fish.payara.hello.entities.UserAccount[ id=" + id + " ]";
     }
-    
+
+//    // user cannot be null
+//    public List<Games> getGames() {
+//        return games;
+//    }
+//
+//    public void setGames(List<Games> games) {
+//        this.games = games;
+//    }
 }
