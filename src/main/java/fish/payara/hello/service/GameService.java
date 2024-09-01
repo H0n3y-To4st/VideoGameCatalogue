@@ -50,11 +50,4 @@ public class GameService {
                 .setParameter("GameId", gameId)
                 .getResultList();
     }
-
-    public void saveGameToDashboard(int gameId, int userId){
-//        UserAccount user = em.find(UserAccount.class, userId);
-//        Games game = em.find(Games.class, gameId);
-//        user.getGames().add(game);
-//        em.merge(user); //no changes to database until this is called
-    }
 }

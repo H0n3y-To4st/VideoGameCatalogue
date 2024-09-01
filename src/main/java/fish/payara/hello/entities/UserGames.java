@@ -4,7 +4,13 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "user_games")
+@NamedQueries({
+@NamedQuery(name = UserGames.QUERY_BY_USER_ID, query = "SELECT ug.game FROM UserGames ug WHERE ug.user.id = :userId")
+})
 public class UserGames {
+
+    public static final String QUERY_BY_USER_ID = "UserGames.findByUserId";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

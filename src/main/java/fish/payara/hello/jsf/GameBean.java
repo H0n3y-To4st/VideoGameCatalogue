@@ -32,8 +32,4 @@ public class GameBean {
     public List<Games> listAllGames(){
         return service.listAllGames();
     }
-
-    public void saveGameToDashboard(int gameId, int userId){
-        service.saveGameToDashboard(gameId, userId);
-    }
 }
