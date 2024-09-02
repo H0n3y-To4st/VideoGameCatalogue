@@ -1,13 +1,16 @@
 package fish.payara.hello.jsf;
 import fish.payara.hello.service.LoginService;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.RequestScoped;
 
+import java.io.Serializable;
+
 @Named(value = "loginBean")
-@RequestScoped
-public class LoginBean {
+@SessionScoped
+public class LoginBean implements Serializable {
 
     @Inject
     private LoginService loginService;

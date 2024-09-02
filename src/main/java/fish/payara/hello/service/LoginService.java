@@ -6,9 +6,11 @@ import jakarta.ejb.LocalBean;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import java.io.Serializable;
+
 @Stateless
 @LocalBean
-public class LoginService {
+public class LoginService implements Serializable {
 
         @PersistenceContext
         private EntityManager em;
