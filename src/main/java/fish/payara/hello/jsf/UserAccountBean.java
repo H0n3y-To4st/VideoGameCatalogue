@@ -1,4 +1,5 @@
 package fish.payara.hello.jsf;
+import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.service.UserAccountService;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -18,5 +19,9 @@ public class UserAccountBean {
 
     public Integer getLoggedInUserId(String username) {
         return userAccountService.getUserId(username);
+    }
+
+    public UserAccount getUser(Integer id){
+        return userAccountService.getUser(id);
     }
 }

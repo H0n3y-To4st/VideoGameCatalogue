@@ -3,10 +3,12 @@ package fish.payara.hello.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "games_genres_bridge")
+@Table(name = "games_genres")
 public class GamesGenresBridge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic
+    @Column(name = "game_genres_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

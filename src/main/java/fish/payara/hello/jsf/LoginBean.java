@@ -1,4 +1,5 @@
 package fish.payara.hello.jsf;
+import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.service.LoginService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
@@ -47,7 +48,10 @@ public class LoginBean implements Serializable {
     public String checkForAccount(){
         if (loginService.checkForAccount(username, password)) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("dashboard.xhtml");
+                UserAccount user = loginService.getUser(username, password);
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                facesContext.getExternalContext().getSessionMap().put("user", user);
+                facesContext.getExternalContext().redirect("dashboard.xhtml");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -56,5 +60,9 @@ public class LoginBean implements Serializable {
             message = "Invalid username or password";
             return "login";
         }
+    }
+
+    public void checkLoggedIn(){
+        loginService.checkLoggedIn();
     }
 }

@@ -23,7 +23,8 @@ import java.util.List;
         @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT u FROM UserAccount u WHERE u.username = :username"),
         @NamedQuery(name = "UserAccount.findByEmail", query = "SELECT u FROM UserAccount u WHERE u.email = :email"),
         @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT u FROM UserAccount u WHERE u.password = :password"),
-        @NamedQuery(name = "UserAccount.findIDByUsername", query = "SELECT u.id FROM UserAccount u WHERE u.username = :username")})
+        @NamedQuery(name = "UserAccount.findIDByUsername", query = "SELECT u.id FROM UserAccount u WHERE u.username = :username"),
+        @NamedQuery(name = "UserAccount.findByUsernameAndPassword", query = "SELECT u FROM UserAccount u WHERE u.username = :username AND u.password = :password")})
 public class UserAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;

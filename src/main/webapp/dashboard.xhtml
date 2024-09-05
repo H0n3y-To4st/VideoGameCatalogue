@@ -51,6 +51,12 @@
         </f:facet>
         <h:outputText value="#{game.description}" styleClass="game-description"/>
     </h:column>
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Remove"/>
+        </f:facet>
+        <h:commandButton action="#{gameBean.removeGameFromDashboard(game)}" styleClass=""/>
+    </h:column>
 </h:dataTable>
 </h:form>
 </body>
