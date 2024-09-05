@@ -38,7 +38,6 @@ public class RegisterService {
         try {
             UserAccount user = new UserAccount(username, email, password);
             em.persist(user);
-//            em.flush(); // flush the entity manager to write the data to the database
         } catch (Exception e) {
             throw new RuntimeException("Error registering user within registerservice", e);
         }

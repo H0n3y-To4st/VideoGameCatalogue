@@ -3,12 +3,15 @@ package fish.payara.hello.service;
 import fish.payara.hello.entities.UserAccount;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.LocalBean;
+import jakarta.faces.context.FacesContext;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import java.io.Serializable;
+
 @Stateless
 @LocalBean
-public class LoginService {
+public class LoginService implements Serializable {
 
         @PersistenceContext
         private EntityManager em;
@@ -21,6 +24,26 @@ public class LoginService {
                 return user.getPassword().equals(password);
             } catch (Exception e) {
                 return false;
+            }
+        }
+
+        public UserAccount getUser(String username, String password){
+            return em.createNamedQuery("UserAccount.findByUsernameAndPassword", UserAccount.class)
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .getSingleResult();
+        }
+
+        public void checkLoggedIn(){
+            try {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
+                if (user == null) {
+                    facesContext.getExternalContext().redirect("login.xhtml");
+                }
+                facesContext.getExternalContext().redirect("dashboard.xhtml");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 }

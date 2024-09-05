@@ -21,7 +21,7 @@
 </p>
 <!--        DISPLAY ALL GAMES SAVED -->
 <h:form>
-<h:dataTable value="#{gameBean.listAllGames()}" var="game" styleClass="game-table">
+<h:dataTable value="#{userGamesBean.listAllGamesInDashboard(userAccountBean.getLoggedInUserId(loginBean.username))}" var="game" styleClass="game-table">
     <h:column>
         <f:facet name="header">
             <h:outputText value="Title"/>
@@ -50,6 +50,12 @@
             <h:outputText value="Description"/>
         </f:facet>
         <h:outputText value="#{game.description}" styleClass="game-description"/>
+    </h:column>
+    <h:column>
+        <f:facet name="header">
+            <h:outputText value="Remove"/>
+        </f:facet>
+        <h:commandButton action="#{gameBean.removeGameFromDashboard(game)}" styleClass=""/>
     </h:column>
 </h:dataTable>
 </h:form>

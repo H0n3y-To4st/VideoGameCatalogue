@@ -5,7 +5,6 @@
 package fish.payara.hello.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
@@ -23,7 +22,9 @@ import java.util.List;
         @NamedQuery(name = "UserAccount.findById", query = "SELECT u FROM UserAccount u WHERE u.id = :id"),
         @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT u FROM UserAccount u WHERE u.username = :username"),
         @NamedQuery(name = "UserAccount.findByEmail", query = "SELECT u FROM UserAccount u WHERE u.email = :email"),
-        @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT u FROM UserAccount u WHERE u.password = :password")})
+        @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT u FROM UserAccount u WHERE u.password = :password"),
+        @NamedQuery(name = "UserAccount.findIDByUsername", query = "SELECT u.id FROM UserAccount u WHERE u.username = :username"),
+        @NamedQuery(name = "UserAccount.findByUsernameAndPassword", query = "SELECT u FROM UserAccount u WHERE u.username = :username AND u.password = :password")})
 public class UserAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -117,13 +118,4 @@ public class UserAccount implements Serializable {
     public String toString() {
         return "fish.payara.hello.entities.UserAccount[ id=" + id + " ]";
     }
-
-//    // user cannot be null
-//    public List<Games> getGames() {
-//        return games;
-//    }
-//
-//    public void setGames(List<Games> games) {
-//        this.games = games;
-//    }
 }

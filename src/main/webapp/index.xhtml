@@ -16,6 +16,7 @@
     <h:form>
         <h:commandButton value="Home" action="/index.xhtml"/>
         <h:commandButton value="Login" action="/login.xhtml"/>
+        <h:commandButton value="Dashboard" action="#{loginBean.checkLoggedIn()}"/>
     </h:form>
 
     <p>Hello guest and welcome to the catalogue!
@@ -58,7 +59,7 @@
                 <f:facet name="header">
                     <h:outputText value="Save Game"/>
                 </f:facet>
-                <h:commandButton value="#{gameBean.saveGameToDashboard(game.id, loginBean.username)}" styleClass=""/>
+                <h:commandButton action="#{gameBean.saveGameToDashboard(game)}" styleClass=""/>
             </h:column>
         </h:dataTable>
         <!--        DISPLAY ALL GENRES-->

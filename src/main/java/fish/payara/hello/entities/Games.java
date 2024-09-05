@@ -34,12 +34,10 @@ import java.util.List;
     @NamedQuery(name = "Games.findById", query = "SELECT g FROM Games g WHERE g.id = :id"),
     @NamedQuery(name = "Games.findByTitle", query = "SELECT g FROM Games g WHERE g.title = :title"),
     @NamedQuery(name = "Games.findByPrice", query = "SELECT g FROM Games g WHERE g.price = :price"),
-    @NamedQuery(name = "Games.findByDescription", query = "SELECT g FROM Games g WHERE g.description = :description"),
-    @NamedQuery(name = Games.QUERY_BY_USER_ID, query = "SELECT g FROM Games g INNER JOIN UserGames ug ON g.id = ug.game.id WHERE ug.user.id = :UserId")})
+    @NamedQuery(name = "Games.findByDescription", query = "SELECT g FROM Games g WHERE g.description = :description")})
 public class Games implements Serializable {
     
     public static final String QUERY_ALL = "Games.findAll";
-    public static final String QUERY_BY_USER_ID = "Games.findByGameId";
     
     private static final long serialVersionUID = 1L;
     @Id
