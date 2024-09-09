@@ -1,30 +1,43 @@
 package fish.payara.hello.jsf;
 
 import fish.payara.hello.entities.UserGames;
-import fish.payara.hello.service.RegisterService;
 import fish.payara.hello.service.UserGamesService;
-import jakarta.ejb.EJB;
-import jakarta.faces.context.FacesContext;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.enterprise.context.RequestScoped;
-
+import java.io.Serializable;
 import java.util.List;
 
 @Named(value = "userGamesBean")
-@RequestScoped
-public class UserGamesBean {
+@ViewScoped
+public class UserGamesBean implements Serializable {
 
     private int gameId;
     private int userId;
 
-    @EJB
-    UserGamesService service;
+    private List<UserGames> games;
 
     @Inject
-    private RegisterService registerService;
+    private UserGamesService service;
 
-    public List<UserGames> listAllGamesInDashboard(int userId){
+    @Inject
+    private LoginBean loginBean;
+
+    @Inject
+    private UserAccountBean userAccountBean;
+
+    public UserGamesBean() {
+        //for JPA
+    }
+
+    @PostConstruct
+    public void init() {
+        userId = userAccountBean.getLoggedInUserId(loginBean.getUsername());
+        games = service.listAllGamesInDashboard(userId);
+    }
+
+    public List<UserGames> listAllGamesInDashboard(){
         return service.listAllGamesInDashboard(userId);
     }
 
@@ -42,5 +55,13 @@ public class UserGamesBean {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public List<UserGames> getGames() {
+        return games;
+    }
+
+    public void setGames(List<UserGames> games) {
+        this.games = games;
     }
 }

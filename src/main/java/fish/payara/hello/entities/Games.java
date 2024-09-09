@@ -59,7 +59,7 @@ public class Games implements Serializable {
     @Size(min = 1, max = 500)
     @Column(name = "description")
     private String description;
-    @JoinTable(name = "games_genres_bridge", joinColumns = {
+    @JoinTable(name = "games_genres", joinColumns = {
         @JoinColumn(name = "game_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "genre_id", referencedColumnName = "id")})
 

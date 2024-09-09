@@ -7,10 +7,14 @@ package fish.payara.hello.jsf;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.service.GameService;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.enterprise.context.RequestScoped;
+
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,21 +22,24 @@ import java.util.List;
  * @author IsmahHussain
  */
 @Named(value = "gameBean")
-@RequestScoped
-public class GameBean {
+@ViewScoped
+public class GameBean implements Serializable {
 
     @Inject
     private GameService service;
 
+    private List<Games> games;
+
     public GameBean() {
-    }
-    
-    public List<Games> listAllGames(){
-        return service.listAllGames();
+        //for JPA
     }
 
-    public void saveGameToDashboard(Games game) {
-        try {
+    @PostConstruct
+    public void init() {
+        games = service.listAllGames();
+    }
+
+    public void saveGameToDashboard(Games game) throws IOException {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
             if (user == null) {
@@ -40,14 +47,19 @@ public class GameBean {
                 return;
             }
             service.saveGameToDashboard(user, game);
-        } catch (Exception e) { //this exception is hidden, it just silently catches it
-            e.printStackTrace();
-        }
     }
 
     public void removeGameFromDashboard(Games game) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
         service.removeGameFromDashboard(user, game);
+    }
+
+    public List<Games> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Games> games) {
+        this.games = games;
     }
 }

@@ -5,59 +5,48 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://primefaces.org/ui ">
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Dashboard</title>
+<!--    add dashboard css-->
     <h:outputStylesheet name="main.css"/>
 </h:head>
 <body>
-<!--TODO: add username here "User's Dashboard"-->
-<h1><h:outputText value="Dashboard"/></h1>
 <!--    NAVIGATION SYSTEM -->
-<h:form>
-    <h:commandButton value="Home" action="/index.xhtml"/>
+<h:form styleClass="nav-bar">
+    <p:toolbar>
+        <p:toolbarGroup>
+            <h1><h:outputText value="Dashboard"/></h1>
+            <p:commandButton value="Home" action="/index.xhtml"/>
+        </p:toolbarGroup>
+    </p:toolbar>
 </h:form>
 <p>Welcome to your dashboard! Here you can view all your saved games.
 </p>
 <!--        DISPLAY ALL GAMES SAVED -->
+<!--        NOTE: HAVE TO RELOAD TO DISPLAY UPDATES TO DASHBOARD -->
 <h:form>
-<h:dataTable value="#{userGamesBean.listAllGamesInDashboard(userAccountBean.getLoggedInUserId(loginBean.username))}" var="game" styleClass="game-table">
-    <h:column>
-        <f:facet name="header">
-            <h:outputText value="Title"/>
-        </f:facet>
-        <h:outputText value="#{game.title}" styleClass="game-title"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header">
-            <h:outputText value="Price"/>
-        </f:facet>
-        <h:outputText value="#{game.price}" styleClass="game-price"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header">
-            <h:outputText value="Genres"/>
-        </f:facet>
-        <!--        GET GENRES FROM GAME ID-->
-        <h:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre">
-            <h:column>
-                <h:outputText value="#{gameGenre.name}" styleClass="game-genre"/>
-            </h:column>
-        </h:dataTable>
-    </h:column>
-    <h:column>
-        <f:facet name="header">
-            <h:outputText value="Description"/>
-        </f:facet>
-        <h:outputText value="#{game.description}" styleClass="game-description"/>
-    </h:column>
-    <h:column>
-        <f:facet name="header">
-            <h:outputText value="Remove"/>
-        </f:facet>
-        <h:commandButton action="#{gameBean.removeGameFromDashboard(game)}" styleClass=""/>
-    </h:column>
-</h:dataTable>
+    <p:dataTable value="#{userGamesBean.getGames()}" var="game" styleClass="game-table">
+        <p:column headerText="Title" sortBy="#{game.title}">
+            <h:outputText value="#{game.title}"/>
+        </p:column>
+        <p:column headerText="Price" sortBy="#{game.price}">
+            <h:outputText value="#{game.price}"/>
+        </p:column>
+        <p:column headerText="Genres">
+            <p:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre" styleClass="game-genre">
+                <p:column>
+                    <h:outputText value="#{gameGenre.name}"/>
+                </p:column>
+            </p:dataTable>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Remove"/>
+            </f:facet>
+            <p:commandButton value="-" action="#{gameBean.removeGameFromDashboard(game)}" styleClass="game-save-button"/>
+        </p:column>
+    </p:dataTable>
 </h:form>
 </body>
 </html>
