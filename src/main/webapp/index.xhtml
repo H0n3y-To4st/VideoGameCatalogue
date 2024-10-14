@@ -5,6 +5,7 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:ui = "http://java.sun.com/jsf/facelets"
       xsi:schemaLocation="http://primefaces.org/ui "
       xmlns:p="http://primefaces.org/ui">
 <h:head>
@@ -32,39 +33,51 @@
 <!--        Browse our wide collection of videogames from all genres and platforms.-->
 <!--        To keep track of your games, please login.-->
 <!--    </p>-->
-    <!--        DISPLAY ALL GAMES -->
     <h:form>
-        <p:dataTable value="#{gameBean.getGames()}" var="game" styleClass="game-table">
-            <p:column headerText="Title" sortBy="#{game.title}">
-                <h:outputText value="#{game.title}"/>
-            </p:column>
-            <p:column headerText="Price" sortBy="#{game.price}">
-                <h:outputText value="#{game.price}"/>
-            </p:column>
-            <p:column headerText="Genres">
-            <p:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre" styleClass="game-genre">
-                <p:column>
-                    <h:outputText value="#{gameGenre.name}"/>
-                </p:column>
-            </p:dataTable>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="Save"/>
+        <div class="card-container">
+        <ui:repeat value="#{gameBean.games}" var="game">
+            <p:card style="margin: 1em;">
+<!--                <f:facet name="header">-->
+<!--                    <img alt="user header" src="../../resources/demo/images/usercard.png"/>-->
+<!--                </f:facet>-->
+                <f:facet name="title">
+                    <h:outputText value="#{game.name}"/>
                 </f:facet>
-                <p:commandButton value="+" action="#{gameBean.saveGameToDashboard(game)}" styleClass="game-save-button"/>
-            </p:column>
-        </p:dataTable>
-        <!--        DISPLAY ALL GENRES-->
-        <!--        <h:dataTable value="#{genreBean.listAllGenres()}" var="genre">-->
-        <!--            <h:column>-->
-        <!--                <f:facet name="header">-->
-        <!--                    <h:outputText value="Genre"/>-->
-        <!--                </f:facet>-->
-        <!--                <h:outputText value="#{genre.name}"/>-->
-        <!--            </h:column>-->
-        <!--        </h:dataTable>-->
+                <f:facet name="subtitle">
+                    <h:outputText value="Genres: #{game.genres}"/>
+                </f:facet>
+                <h:outputText value="Critic Rating: #{game.aggregated_rating}"/>
+                <f:facet name="footer">
+                    <p:commandButton icon="pi pi-check" value="Save" action="#{gameBean.saveGameToDashboard(game)}"/>
+                </f:facet>
+            </p:card>
+        </ui:repeat>
+        </div>
     </h:form>
 
+
+    <!--        DISPLAY ALL GAMES in datatable format TODO: reuse this for search functionality -->
+<!--    <h:form>-->
+<!--        <p:dataTable value="#{gameBean.games}" var="game" styleClass="game-table">-->
+<!--            <p:column headerText="Title" sortBy="#{game.name}">-->
+<!--                <h:outputText value="#{game.name}"/>-->
+<!--            </p:column>-->
+<!--            <p:column headerText="Genres">-->
+<!--                <h:outputText value="#{game.genres}"/>-->
+<!--            </p:column>-->
+<!--            <p:column headerText="First Release Date" sortBy="#{game.releaseDate}">-->
+<!--                <h:outputText value="#{game.releaseDate}"/>-->
+<!--            </p:column>-->
+<!--            <p:column headerText="Rating" sortBy="#{game.rating}">-->
+<!--                <h:outputText value="#{game.rating.intValue()}"/>-->
+<!--            </p:column>-->
+<!--            <p:column>-->
+<!--                <f:facet name="header">-->
+<!--                    <h:outputText value="Save"/>-->
+<!--                </f:facet>-->
+<!--                <p:commandButton value="+" action="#{gameBean.saveGameToDashboard(game)}" styleClass="game-save-button"/>-->
+<!--            </p:column>-->
+<!--        </p:dataTable>-->
+<!--    </h:form>-->
 </h:body>
 </html>

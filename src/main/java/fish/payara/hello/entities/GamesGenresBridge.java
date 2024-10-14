@@ -11,31 +11,31 @@ public class GamesGenresBridge {
     @Column(name = "game_genres_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "game_id", nullable = false)
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "game_id", nullable = false)
     private Games game;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "genre_id", nullable = false)
-    private Genres genre;
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "genre_id", nullable = false)
+//    private Genres genre;
 
-
-    public Games getGame() {
-        return game;
-    }
-
-    public void setGame(Games game) {
-        this.game = game;
-    }
-
-    public Genres getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genres genre) {
-        this.genre = genre;
-    }
-
+//
+//    public Games getGame() {
+//        return game;
+//    }
+//
+//    public void setGame(Games game) {
+//        this.game = game;
+//    }
+//
+//    public Genres getGenre() {
+//        return genre;
+//    }
+//
+//    public void setGenre(Genres genre) {
+//        this.genre = genre;
+//    }
+//
     public void setId(Long id) {
         this.id = id;
     }

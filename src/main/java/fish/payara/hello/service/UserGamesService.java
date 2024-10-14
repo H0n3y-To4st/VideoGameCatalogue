@@ -22,9 +22,9 @@ public class UserGamesService {
     @PersistenceContext
     private EntityManager em;
 
-    public List<UserGames> listAllGamesInDashboard(int userId){
-        return em.createNamedQuery(UserGames.QUERY_BY_USER_ID, UserGames.class)
-                .setParameter("userId", userId)
-                .getResultList();
-    }
+//    public List<UserGames> listAllGamesInDashboard(int userId){
+////        return em.createNamedQuery(UserGames.QUERY_BY_USER_ID, UserGames.class)
+////                .setParameter("userId", userId)
+////                .getResultList();
+//    }
 }

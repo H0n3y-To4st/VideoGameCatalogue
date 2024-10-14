@@ -21,6 +21,7 @@ public class GenreBean {
     }
 
     public List<Genres> listAllGenres(){
-        return service.listAllGenres();
+//        return service.listAllGenres();
+        return null;
     }
 }

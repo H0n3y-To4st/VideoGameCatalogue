@@ -10,13 +10,13 @@ import java.util.List;
 @RequestScoped
 public class GameGenreBean {
 
-    @EJB
-    GameService service;
+//    @EJB
+//    GameService service;
 
     public GameGenreBean() {
     }
 
-    public List<Genres> getGameGenre(int gameId){
-        return service.getGameGenre(gameId);
-    }
+//    public List<Genres> getGameGenre(int gameId){
+//        return service.getGameGenre(gameId);
+//    }
 }

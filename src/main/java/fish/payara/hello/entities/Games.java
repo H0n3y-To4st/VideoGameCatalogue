@@ -1,91 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fish.payara.hello.entities;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
-/**
- *
- * @author IsmahHussain
- */
-@Entity
-@Table(name = "games")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = Games.QUERY_ALL, query = "SELECT g FROM Games g"),
-    @NamedQuery(name = "Games.findById", query = "SELECT g FROM Games g WHERE g.id = :id"),
-    @NamedQuery(name = "Games.findByTitle", query = "SELECT g FROM Games g WHERE g.title = :title"),
-    @NamedQuery(name = "Games.findByPrice", query = "SELECT g FROM Games g WHERE g.price = :price"),
-    @NamedQuery(name = "Games.findByDescription", query = "SELECT g FROM Games g WHERE g.description = :description")})
 public class Games implements Serializable {
-    
-    public static final String QUERY_ALL = "Games.findAll";
-    
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id")
+
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "title")
-    private String title;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "price")
-    private double price;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "description")
-    private String description;
-    @JoinTable(name = "games_genres", joinColumns = {
-        @JoinColumn(name = "game_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "genre_id", referencedColumnName = "id")})
-
-    @ManyToMany
-    private Collection<Genres> genresCollection;
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_games",
-            joinColumns = @JoinColumn(name = "games", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_account", referencedColumnName = "id")
-    )
-    private List<UserAccount> users;
-
-    public Games() {
-    }
+    private String name;
+    private List<Genres> genres;
+//    private long releaseDate;
+    private Double aggregated_rating;
 
     public Games(Integer id) {
         this.id = id;
     }
 
-    public Games(Integer id, String title, double price, String description) {
+    public Games() {
+    }
+
+    public Games(Integer id, String name, Double aggregated_rating) {
         this.id = id;
-        this.title = title;
-        this.price = price;
-        this.description = description;
+        this.name = name;
+        this.aggregated_rating = aggregated_rating;
     }
 
     public Integer getId() {
@@ -96,45 +32,56 @@ public class Games implements Serializable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        int length = 15;
+        if (name.length() <= length) {
+            return name;
+        }
+        return name.substring(0, length) + "...";
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public double getPrice() {
-        return price;
+    public String getGenres() {
+        if (genres == null || genres.isEmpty()) {
+            return "No genres available";
+        }
+        StringBuilder genreNames = new StringBuilder();
+        for (Genres genre : genres) {
+            if (genreNames.length() > 0) {
+                genreNames.append(", ");
+            }
+            genreNames.append(genre.getName());
+        }
+        return genreNames.toString();
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setGenres(List<Genres> genres) {
+        this.genres = genres;
+    }
+//
+//    public long getReleaseDate() {
+//        return releaseDate;
+//    }
+//
+//    public void setReleaseDate(long releaseDate) {
+//        this.releaseDate = releaseDate;
+//    }
+
+    public String getAggregated_rating() {
+        String rating;
+        if (aggregated_rating == null) {
+            rating = "No rating available";
+        } else {
+            rating = String.valueOf(aggregated_rating.intValue());
+        }
+        return rating;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @XmlTransient
-    public Collection<Genres> getGenresCollection() {
-        return genresCollection;
-    }
-
-    public void setGenresCollection(Collection<Genres> genresCollection) {
-        this.genresCollection = genresCollection;
-    }
-
-    public List<UserAccount> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserAccount> users) {
-        this.users = users;
+    public void setAggregated_rating(Double aggregated_rating) {
+        this.aggregated_rating = aggregated_rating;
     }
 
     @Override
@@ -146,7 +93,6 @@ public class Games implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Games)) {
             return false;
         }
@@ -157,8 +103,8 @@ public class Games implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "fish.payara.hello.entities.Games[ id=" + id + " ]";
-    }
+//    @Override
+//    public String toString() {
+//        return "Games[ id=" + id + ", name=" + name + ", genres=" + genres + ", firstReleaseDate=" + releaseDate + ", rating=" + rating + " ]";
+//    }
 }

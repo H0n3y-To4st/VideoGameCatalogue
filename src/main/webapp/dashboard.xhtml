@@ -25,27 +25,29 @@
 </p>
 <!--        DISPLAY ALL GAMES SAVED -->
 <!--        NOTE: HAVE TO RELOAD TO DISPLAY UPDATES TO DASHBOARD -->
-<h:form>
+<h:form id="gameTable">
     <p:dataTable value="#{userGamesBean.getGames()}" var="game" styleClass="game-table">
-        <p:column headerText="Title" sortBy="#{game.title}">
-            <h:outputText value="#{game.title}"/>
-        </p:column>
-        <p:column headerText="Price" sortBy="#{game.price}">
-            <h:outputText value="#{game.price}"/>
-        </p:column>
-        <p:column headerText="Genres">
-            <p:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre" styleClass="game-genre">
-                <p:column>
-                    <h:outputText value="#{gameGenre.name}"/>
-                </p:column>
-            </p:dataTable>
-        </p:column>
-        <p:column>
-            <f:facet name="header">
-                <h:outputText value="Remove"/>
-            </f:facet>
-            <p:commandButton value="-" action="#{gameBean.removeGameFromDashboard(game)}" styleClass="game-save-button"/>
-        </p:column>
+<!--        <p:autoUpdate />-->
+<!--        <p:column headerText="Title" sortBy="#{game.title}">-->
+<!--            <h:outputText value="#{game.title}"/>-->
+<!--        </p:column>-->
+<!--        <p:column headerText="Price" sortBy="#{game.price}">-->
+<!--            <h:outputText value="#{game.price}"/>-->
+<!--        </p:column>-->
+<!--        <p:column headerText="Genres">-->
+<!--            <p:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre" styleClass="game-genre">-->
+<!--                <p:column>-->
+<!--                    <h:outputText value="#{gameGenre.name}"/>-->
+<!--                </p:column>-->
+<!--            </p:dataTable>-->
+<!--        </p:column>-->
+<!--        <p:column>-->
+<!--            <f:facet name="header">-->
+<!--                <h:outputText value="Remove"/>-->
+<!--            </f:facet>-->
+<!--            <p:commandButton value="-" action="#{gameBean.removeGameFromDashboard(game)}"/>-->
+<!--&lt;!&ndash;            <f:ajax event="keyup" execute="@this keyCode" listener="#{gameBean.removeGameFromDashboard(game)}" render="gameTable"/>&ndash;&gt;-->
+<!--        </p:column>-->
     </p:dataTable>
 </h:form>
 </body>

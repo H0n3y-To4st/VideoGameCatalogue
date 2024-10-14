@@ -33,12 +33,13 @@ public class UserGamesBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        userId = userAccountBean.getLoggedInUserId(loginBean.getUsername());
-        games = service.listAllGamesInDashboard(userId);
+//        userId = userAccountBean.getLoggedInUserId(loginBean.getUsername());
+//        games = service.listAllGamesInDashboard(userId);
     }
 
     public List<UserGames> listAllGamesInDashboard(){
-        return service.listAllGamesInDashboard(userId);
+//        return service.listAllGamesInDashboard(userId);
+        return null;
     }
 
     public int getGameId() {
