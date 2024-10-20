@@ -1,6 +1,0 @@
-POST https://api.igdb.com/v4/games?limit=100&fields=name,genres.name,rating,aggregated_rating, cover
-Content-Type: application/json
-Client-ID: 13itn7518vwktd1u8ifuc3oaik3z1s
-Authorization: Bearer r4x03x3eqqnkprmxmiihpulz96z2gc
-
-{}

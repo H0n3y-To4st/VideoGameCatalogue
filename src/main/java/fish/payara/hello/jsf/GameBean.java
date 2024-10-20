@@ -5,16 +5,16 @@
 package fish.payara.hello.jsf;
 
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.entities.Genres;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.service.GameService;
 import fish.payara.hello.service.IGDBService;
+import fish.payara.hello.service.UserGamesService;
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.primefaces.PrimeFaces;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -28,7 +28,7 @@ import java.util.List;
 public class GameBean implements Serializable {
 
     @Inject
-    private GameService service;
+    private GameService gameService;
 
     @Inject
     private IGDBService igdbService;
@@ -42,25 +42,6 @@ public class GameBean implements Serializable {
     @PostConstruct
     public void init() {
         games = igdbService.getTopGames();
-    }
-
-    public void saveGameToDashboard(Games game) throws IOException {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
-        if (user == null) {
-            facesContext.getExternalContext().redirect("login.xhtml");
-            return;
-        }
-        service.saveGameToDashboard(user, game);
-    }
-
-    public void removeGameFromDashboard(Games game) {
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
-//        service.removeGameFromDashboard(user, game);
-//        facesContext.addMessage(null, new FacesMessage(game.getName() + " removed from dashboard"));
-//        PrimeFaces.current().ajax().update("dashboard");
-//        PrimeFaces.current().ajax().update("gameTable");
     }
 
     public List<Games> getGames() {

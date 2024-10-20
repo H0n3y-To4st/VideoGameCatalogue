@@ -37,20 +37,12 @@
         <p:column headerText="Rating" sortBy="#{game.aggregated_rating}">
             <h:outputText value="#{game.aggregated_rating}"/>
         </p:column>
-<!--        <p:column headerText="Genres">-->
-<!--            <p:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre" styleClass="game-genre">-->
-<!--                <p:column>-->
-<!--                    <h:outputText value="#{gameGenre.name}"/>-->
-<!--                </p:column>-->
-<!--            </p:dataTable>-->
-<!--        </p:column>-->
-<!--        <p:column>-->
-<!--            <f:facet name="header">-->
-<!--                <h:outputText value="Remove"/>-->
-<!--            </f:facet>-->
-<!--            <p:commandButton value="-" action="#{gameBean.removeGameFromDashboard(game)}"/>-->
-<!--&lt;!&ndash;            <f:ajax event="keyup" execute="@this keyCode" listener="#{gameBean.removeGameFromDashboard(game)}" render="gameTable"/>&ndash;&gt;-->
-<!--        </p:column>-->
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Remove"/>
+            </f:facet>
+            <p:commandButton value="-" update="gameTable" action="#{userGamesBean.removeGameFromDashboard(game)}"/>
+        </p:column>
     </p:dataTable>
 </h:form>
 </body>
