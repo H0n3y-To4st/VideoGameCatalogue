@@ -1,5 +1,6 @@
 package fish.payara.hello.jsf;
 
+import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserGames;
 import fish.payara.hello.service.UserGamesService;
 import jakarta.annotation.PostConstruct;
@@ -7,7 +8,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 @Named(value = "userGamesBean")
 @ViewScoped
@@ -16,7 +17,7 @@ public class UserGamesBean implements Serializable {
     private int gameId;
     private int userId;
 
-    private List<UserGames> games;
+    private List<Games> games;
 
     @Inject
     private UserGamesService service;
@@ -33,13 +34,8 @@ public class UserGamesBean implements Serializable {
 
     @PostConstruct
     public void init() {
-//        userId = userAccountBean.getLoggedInUserId(loginBean.getUsername());
-//        games = service.listAllGamesInDashboard(userId);
-    }
-
-    public List<UserGames> listAllGamesInDashboard(){
-//        return service.listAllGamesInDashboard(userId);
-        return null;
+        userId = userAccountBean.getLoggedInUserId(loginBean.getUsername());
+        games = service.listAllGamesInDashboard(userId);
     }
 
     public int getGameId() {
@@ -58,11 +54,11 @@ public class UserGamesBean implements Serializable {
         this.userId = userId;
     }
 
-    public List<UserGames> getGames() {
+    public List<Games> getGames() {
         return games;
     }
 
-    public void setGames(List<UserGames> games) {
+    public void setGames(List<Games> games) {
         this.games = games;
     }
 }

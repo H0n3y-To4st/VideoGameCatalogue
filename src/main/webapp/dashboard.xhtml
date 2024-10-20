@@ -26,14 +26,17 @@
 <!--        DISPLAY ALL GAMES SAVED -->
 <!--        NOTE: HAVE TO RELOAD TO DISPLAY UPDATES TO DASHBOARD -->
 <h:form id="gameTable">
-    <p:dataTable value="#{userGamesBean.getGames()}" var="game" styleClass="game-table">
+    <p:dataTable value="#{userGamesBean.games}" var="game" styleClass="game-table">
 <!--        <p:autoUpdate />-->
-<!--        <p:column headerText="Title" sortBy="#{game.title}">-->
-<!--            <h:outputText value="#{game.title}"/>-->
-<!--        </p:column>-->
-<!--        <p:column headerText="Price" sortBy="#{game.price}">-->
-<!--            <h:outputText value="#{game.price}"/>-->
-<!--        </p:column>-->
+        <p:column headerText="Title" sortBy="#{game.name}">
+            <h:outputText value="#{game.name}"/>
+        </p:column>
+        <p:column headerText="Genres" sortBy="#{game.genres}">
+            <h:outputText value="#{game.genres}"/>
+        </p:column>
+        <p:column headerText="Rating" sortBy="#{game.aggregated_rating}">
+            <h:outputText value="#{game.aggregated_rating}"/>
+        </p:column>
 <!--        <p:column headerText="Genres">-->
 <!--            <p:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre" styleClass="game-genre">-->
 <!--                <p:column>-->

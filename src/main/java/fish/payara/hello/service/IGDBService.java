@@ -4,10 +4,7 @@ import fish.payara.hello.entities.Games;
 import fish.payara.hello.service.client.IGDBClient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.FormParam;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -17,11 +14,11 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import javax.ws.rs.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Path("https://api.igdb.com/v4")
+@Path("/games")
 @ApplicationScoped
 public class IGDBService {
 
@@ -37,20 +34,15 @@ public class IGDBService {
 //    private IGDBClient igdbClient;
 
     @POST
-    @Path("/{fields}/{limit}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Games> getTopGames(@FormParam("fields") String field, @FormParam("limit") int limit) {
-        // URL with the custom fields
-        String targetUrl = String.format("https://api.igdb.com/v4/games?fields=%s&limit=%d", field, limit);
-
-        // Create the client and send the request
+    public List<Games> getTopGames() {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(targetUrl);
+        WebTarget target = client.target("https://api.igdb.com/v4/games");
 
+        String body = "fields name,genres.name,aggregated_rating; where aggregated_rating > 80; limit 20;";
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .header("Client-ID", CLIENT_ID)
                 .header("Authorization", ACCESS_TOKEN)
-                .post(Entity.json(""));
+                .post(Entity.json(body));
 
         // Return the response
         List<Games> games = Collections.emptyList();
@@ -59,6 +51,23 @@ public class IGDBService {
         } else {
             System.out.println("Error: " + response.getStatus());
         }
+        response.close();
+        client.close();
+        return games;
+    }
+
+    @POST
+    public List<Games> getGameByID(int gameId) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("https://api.igdb.com/v4/games");
+
+        String body = "fields id, name, genres.name,aggregated_rating; where id = " + gameId + ";";
+        Response response = target.request(MediaType.APPLICATION_JSON)
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", ACCESS_TOKEN)
+                .post(Entity.json(body));
+
+        List<Games> games = response.readEntity(new GenericType<List<Games>>() {});
         response.close();
         client.close();
         return games;

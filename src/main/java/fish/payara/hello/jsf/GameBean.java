@@ -35,16 +35,13 @@ public class GameBean implements Serializable {
 
     private List<Games> games;
 
-//    private List<Genres> genres;
-
     public GameBean() {
         //for JPA
     }
 
     @PostConstruct
     public void init() {
-        games = igdbService.getTopGames("name,genres.name,aggregated_rating", 36);
-//        genres = igdbService.getGameGenres(games);
+        games = igdbService.getTopGames();
     }
 
     public void saveGameToDashboard(Games game) throws IOException {
@@ -58,11 +55,10 @@ public class GameBean implements Serializable {
     }
 
     public void removeGameFromDashboard(Games game) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
-        service.removeGameFromDashboard(user, game);
-//        userGamesBean.listAllGamesInDashboard(user.getId());
-        facesContext.addMessage(null, new FacesMessage(game.getName() + " removed from dashboard"));
+//        FacesContext facesContext = FacesContext.getCurrentInstance();
+//        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
+//        service.removeGameFromDashboard(user, game);
+//        facesContext.addMessage(null, new FacesMessage(game.getName() + " removed from dashboard"));
 //        PrimeFaces.current().ajax().update("dashboard");
 //        PrimeFaces.current().ajax().update("gameTable");
     }
