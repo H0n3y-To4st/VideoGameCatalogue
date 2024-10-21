@@ -23,6 +23,15 @@
 </h:form>
 <p>Welcome to your dashboard! Here you can view all your saved games.
 </p>
+
+<p:toolbarGroup align="right">
+    <!--             want to hide login button and display user account page instead-->
+    <h:form>
+        <p:commandButton value="Export Saved Games" icon="ui-icon-arrowthickstop-1-s" ajax="false" action="#{exportUserGamesBean.exportUserGames()}"/>
+    </h:form>
+
+</p:toolbarGroup>
+
 <!--        DISPLAY ALL GAMES SAVED -->
 <!--        NOTE: HAVE TO RELOAD TO DISPLAY UPDATES TO DASHBOARD -->
 <h:form id="gameTable">

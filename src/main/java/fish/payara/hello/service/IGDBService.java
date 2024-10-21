@@ -38,7 +38,7 @@ public class IGDBService {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");
 
-        String body = "fields name,genres.name,aggregated_rating; where aggregated_rating > 80; limit 20;";
+        String body = "fields name,genres.name,aggregated_rating; where aggregated_rating > 80; limit 18;";
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .header("Client-ID", CLIENT_ID)
                 .header("Authorization", ACCESS_TOKEN)
