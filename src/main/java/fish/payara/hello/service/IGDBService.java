@@ -4,6 +4,10 @@ import fish.payara.hello.entities.Games;
 import fish.payara.hello.service.client.IGDBClient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -14,7 +18,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import java.util.ArrayList;
+import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,13 +42,12 @@ public class IGDBService {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");
 
-        String body = "fields name,genres.name,aggregated_rating; where aggregated_rating > 80; limit 18;";
+        String body = "fields name,genres.name,aggregated_rating; where aggregated_rating > 90; limit 20;";
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .header("Client-ID", CLIENT_ID)
                 .header("Authorization", ACCESS_TOKEN)
                 .post(Entity.json(body));
 
-        // Return the response
         List<Games> games = Collections.emptyList();
         if (response.getStatus() == 200) {
             games = response.readEntity(new GenericType<List<Games>>() {});
@@ -53,6 +56,11 @@ public class IGDBService {
         }
         response.close();
         client.close();
+
+        for (Games game : games) {
+            game.setCoverUrl(getGameCoverByName(game.getFullName()));
+        }
+
         return games;
     }
 
@@ -71,5 +79,38 @@ public class IGDBService {
         response.close();
         client.close();
         return games;
+    }
+
+    @POST
+    public String getGameCoverByName(String gameName) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("https://api.igdb.com/v4/covers");
+
+        String body = "fields url; where game.name = \"" + gameName + "\";";        Response response = target.request(MediaType.APPLICATION_JSON)
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", ACCESS_TOKEN)
+                .post(Entity.json(body));
+
+        String url = "No cover available";
+        if (response.getStatus() == 200) {
+            String jsonResponse = response.readEntity(String.class);
+            JsonReader jsonReader = Json.createReader(new StringReader(jsonResponse));
+            JsonArray jsonArray = jsonReader.readArray();
+            jsonReader.close();
+
+            if (!jsonArray.isEmpty()) {
+                JsonObject jsonObject = jsonArray.getJsonObject(0);
+                url = jsonObject.getString("url", "No cover available").replace("thumb", "cover_big");
+                if (!url.equals("No cover available")) {
+                    url = "https:" + url;
+                }
+            }
+        } else {
+            System.out.println("Error: " + response.getStatus());
+        }
+
+        response.close();
+        client.close();
+        return url;
     }
 }

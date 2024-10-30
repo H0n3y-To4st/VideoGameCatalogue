@@ -56,7 +56,7 @@ public class UserGamesService {
                     .setParameter("gameId", game.getId())
                     .getSingleResult();
         } catch (NoResultException e) {
-            Logger.getLogger(GameService.class.getName()).log(Level.INFO, "No existing game found for user, proceeding to save new game", e);
+            Logger.getLogger(UserGamesService.class.getName()).log(Level.INFO, "Game not saved to the dashboard");
         }
         if (checkForExisting == null) {
             UserGames userGames = new UserGames(user, game.getId());

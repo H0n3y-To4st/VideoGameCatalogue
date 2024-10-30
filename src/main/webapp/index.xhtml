@@ -29,17 +29,13 @@
             </p:toolbarGroup>
         </p:toolbar>
     </h:form>
-<!--    <p>Hello guest and welcome to the catalogue!-->
-<!--        Browse our wide collection of videogames from all genres and platforms.-->
-<!--        To keep track of your games, please login.-->
-<!--    </p>-->
     <h:form>
         <div class="card-container">
         <ui:repeat value="#{gameBean.games}" var="game">
             <p:card style="margin: 1em;">
-<!--                <f:facet name="header">-->
-<!--                    <img alt="user header" src="../../resources/demo/images/usercard.png"/>-->
-<!--                </f:facet>-->
+                <f:facet name="header">
+                    <img src="#{game.coverUrl}" alt="No Game Cover Found"/>
+                </f:facet>
                 <f:facet name="title">
                     <h:outputText value="#{game.name}"/>
                 </f:facet>
@@ -47,9 +43,7 @@
                     <h:outputText value="Genres: #{game.genres}"/>
                 </f:facet>
                 <h:outputText value="Critic Rating: #{game.aggregated_rating}"/>
-                <f:facet name="footer">
-                    <p:commandButton icon="pi pi-check" value="Save" action="#{userGamesBean.saveGameToDashboard(game)}"/>
-                </f:facet>
+                <p:commandButton icon="pi pi-check" value="Save" action="#{userGamesBean.saveGameToDashboard(game)}"/>
             </p:card>
         </ui:repeat>
         </div>
