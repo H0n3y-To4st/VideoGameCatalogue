@@ -38,8 +38,9 @@ public class IGDBService {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");
 
-        //TODO: specify for games only, not stuff like dlcs
-        String body = "fields name,genres.name,aggregated_rating,category; where aggregated_rating > 90; limit 40;";
+        String body = "fields name,genres.name,rating,category;\n" +
+                "where rating >= 80 & category = 0 & themes != (42); sort rating_count desc;\n" +
+                "limit 12;";
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .header("Client-ID", CLIENT_ID)
                 .header("Authorization", ACCESS_TOKEN)
@@ -83,7 +84,8 @@ public class IGDBService {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/covers");
 
-        String body = "fields url; where game.name = \"" + gameName + "\";";        Response response = target.request(MediaType.APPLICATION_JSON)
+        String body = "fields url; where game.name = \"" + gameName + "\";";
+        Response response = target.request(MediaType.APPLICATION_JSON)
                 .header("Client-ID", CLIENT_ID)
                 .header("Authorization", ACCESS_TOKEN)
                 .post(Entity.json(body));
@@ -109,5 +111,20 @@ public class IGDBService {
         response.close();
         client.close();
         return url;
+    }
+
+    @POST
+    @Path("/search")
+    public void searchGamesByName(String gameName) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("https://api.igdb.com/v4/search");
+
+        String body = "fields url; where name = \"" + gameName + "\";";
+        Response response = target.request(MediaType.APPLICATION_JSON)
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", ACCESS_TOKEN)
+                .post(Entity.json(body));
+
+
     }
 }

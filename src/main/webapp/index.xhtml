@@ -30,6 +30,7 @@
         </p:toolbar>
     </h:form>
     <h:form>
+        <h1>Search for Popular Games</h1>
         <div class="card-container">
         <ui:repeat value="#{gameBean.games}" var="game">
             <p:card style="margin: 1em;">
@@ -42,7 +43,7 @@
                 <f:facet name="subtitle">
                     <h:outputText value="Genres: #{game.genres}"/>
                 </f:facet>
-                <h:outputText value="Critic Rating: #{game.aggregated_rating}"/>
+                <h:outputText value="User Rating: #{game.rating}"/>
                 <p:commandButton icon="pi pi-check" value="Save" action="#{userGamesBean.saveGameToDashboard(game)}"/>
             </p:card>
         </ui:repeat>

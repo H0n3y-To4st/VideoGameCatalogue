@@ -50,7 +50,7 @@ public class ExportUserGamesService extends HttpServlet {
             String genres = game.getGenres() != null ? String.join(", ", game.getGenres()) : "N/A";
             row.createCell(2).setCellValue(genres);
 
-            row.createCell(3).setCellValue(game.getAggregated_rating() != null ? game.getAggregated_rating() : "N/A");
+            row.createCell(3).setCellValue(game.getRating() != null ? game.getRating() : "N/A");
         }
 
         // Set the content type and headers for the response

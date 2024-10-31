@@ -16,7 +16,7 @@ public class Games implements Serializable {
     private List<Genres> genres;
 //    private long releaseDate;
     private String coverUrl;
-    private Double aggregated_rating;
+    private Double rating;
 
     public Games(Integer id) {
         this.id = id;
@@ -25,11 +25,11 @@ public class Games implements Serializable {
     public Games() {
     }
 
-    public Games(Integer id, String name, String coverUrl, Double aggregated_rating) {
+    public Games(Integer id, String name, String coverUrl, Double rating) {
         this.id = id;
         this.name = name;
         this.coverUrl = coverUrl;
-        this.aggregated_rating = aggregated_rating;
+        this.rating = rating;
     }
 
     public Integer getId() {
@@ -86,18 +86,18 @@ public class Games implements Serializable {
 //        this.releaseDate = releaseDate;
 //    }
 
-    public String getAggregated_rating() {
+    public String getRating() {
         String rating;
-        if (aggregated_rating == null) {
+        if (this.rating == null) {
             rating = "No rating available";
         } else {
-            rating = String.valueOf(aggregated_rating.intValue());
+            rating = String.valueOf(this.rating.intValue());
         }
         return rating;
     }
 
-    public void setAggregated_rating(Double aggregated_rating) {
-        this.aggregated_rating = aggregated_rating;
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     @Override
