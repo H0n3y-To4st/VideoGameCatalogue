@@ -92,6 +92,7 @@ body .ui-card {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 264px;
     height: 352px;
 }
 

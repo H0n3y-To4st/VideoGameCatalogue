@@ -1,9 +1,9 @@
 package fish.payara.hello.service;
 
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.entities.Genres;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.entities.UserGames;
+import fish.payara.hello.restapi.IGDBService;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.LocalBean;
 import jakarta.inject.Inject;
@@ -12,9 +12,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

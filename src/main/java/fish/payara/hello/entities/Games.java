@@ -1,6 +1,6 @@
 package fish.payara.hello.entities;
 
-import fish.payara.hello.service.IGDBService;
+import fish.payara.hello.restapi.IGDBService;
 import jakarta.inject.Inject;
 
 import java.io.Serializable;

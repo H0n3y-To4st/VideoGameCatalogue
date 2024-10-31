@@ -5,7 +5,7 @@
 package fish.payara.hello.jsf;
 
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.service.IGDBService;
+import fish.payara.hello.restapi.IGDBService;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;

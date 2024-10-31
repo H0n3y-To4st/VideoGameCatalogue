@@ -1,4 +1,4 @@
-package fish.payara.hello.service.client;
+package fish.payara.hello.restapi.client;
 import fish.payara.hello.entities.Games;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;

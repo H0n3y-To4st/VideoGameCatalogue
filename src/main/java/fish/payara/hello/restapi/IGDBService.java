@@ -1,9 +1,7 @@
-package fish.payara.hello.service;
+package fish.payara.hello.restapi;
 
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.service.client.IGDBClient;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
@@ -16,13 +14,11 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
 
-@Path("/games")
 @ApplicationScoped
 public class IGDBService {
 
@@ -42,7 +38,8 @@ public class IGDBService {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");
 
-        String body = "fields name,genres.name,aggregated_rating; where aggregated_rating > 90; limit 20;";
+        //TODO: specify for games only, not stuff like dlcs
+        String body = "fields name,genres.name,aggregated_rating,category; where aggregated_rating > 90; limit 40;";
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .header("Client-ID", CLIENT_ID)
                 .header("Authorization", ACCESS_TOKEN)
