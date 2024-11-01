@@ -4,7 +4,9 @@ import fish.payara.hello.restapi.IGDBService;
 import jakarta.inject.Inject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Games implements Serializable {
 
@@ -13,9 +15,9 @@ public class Games implements Serializable {
 
     private Integer id;
     private String name;
-    private List<Genres> genres;
+    private List<Map<String, String>> genres;
 //    private long releaseDate;
-    private String coverUrl;
+    private Map<String, String> cover;
     private Double rating;
 
     public Games(Integer id) {
@@ -25,10 +27,9 @@ public class Games implements Serializable {
     public Games() {
     }
 
-    public Games(Integer id, String name, String coverUrl, Double rating) {
+    public Games(Integer id, String name, Double rating) {
         this.id = id;
         this.name = name;
-        this.coverUrl = coverUrl;
         this.rating = rating;
     }
 
@@ -62,11 +63,11 @@ public class Games implements Serializable {
             return "No genres available";
         }
         StringBuilder genreNames = new StringBuilder();
-        for (Genres genre : genres) {
+        for (Map<String, String> genre : genres) {
             if (genreNames.length() > 0) {
                 genreNames.append(", ");
             }
-            genreNames.append(genre.getName());
+            genreNames.append(genre.get("name"));
             if (genreNames.length() > length) {
                 return genreNames.substring(0, length) + "...";
             }
@@ -74,7 +75,7 @@ public class Games implements Serializable {
         return genreNames.toString();
     }
 
-    public void setGenres(List<Genres> genres) {
+    public void setGenres(List<Map<String, String>> genres) {
         this.genres = genres;
     }
 //
@@ -119,12 +120,12 @@ public class Games implements Serializable {
         return true;
     }
 
-    public String getCoverUrl() {
-        return coverUrl;
+    public String getCover() {
+        return cover != null ? "https:" + cover.get("url").replace("thumb", "cover_big") : "No cover available";
     }
 
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
+    public void setCover(Map<String, String> cover) {
+        this.cover = cover;
     }
 
 //    @Override
