@@ -71,17 +71,25 @@ public class IGDBService {
     }
 
     @POST
-    @Path("/search")
-    public void searchGamesByName(String gameName) {
+//    @Path("/search")
+    public List<Games> searchGamesByName(String gameName, boolean advancedSearch) {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("https://api.igdb.com/v4/search");
+        WebTarget target = client.target("https://api.igdb.com/v4/games");
 
-        String body = "fields url; where name = \"" + gameName + "\";";
+        String body = "fields name,genres.name,rating, cover.url;\n"+
+                "where themes != (42);\n" +
+                "where name ~ *\"" + gameName + "\"*; limit 3;";
+//        if (!advancedSearch) {
+//            body += "limit 3;";
+//        }
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .header("Client-ID", CLIENT_ID)
                 .header("Authorization", ACCESS_TOKEN)
                 .post(Entity.json(body));
 
-
+        List<Games> games = response.readEntity(new GenericType<List<Games>>() {});
+        response.close();
+        client.close();
+        return games;
     }
 }

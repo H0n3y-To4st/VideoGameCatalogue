@@ -4,7 +4,6 @@ import fish.payara.hello.restapi.IGDBService;
 import jakarta.inject.Inject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +44,10 @@ public class Games implements Serializable {
         return name;
     }
 
+    public void setFullName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         int length = 22;
         if (name.length() <= length) {
@@ -64,7 +67,7 @@ public class Games implements Serializable {
         }
         StringBuilder genreNames = new StringBuilder();
         for (Map<String, String> genre : genres) {
-            if (genreNames.length() > 0) {
+            if (!genreNames.isEmpty()) {
                 genreNames.append(", ");
             }
             genreNames.append(genre.get("name"));
@@ -128,8 +131,11 @@ public class Games implements Serializable {
         this.cover = cover;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Games[ id=" + id + ", name=" + name + ", genres=" + genres + ", firstReleaseDate=" + releaseDate + ", rating=" + rating + " ]";
-//    }
+    public String getThumbCover() {
+        return cover != null ? "https:" + cover.get("url") : "No cover available";
+    }
+
+    public void setThumbCover(Map<String, String> cover) {
+        this.cover = cover;
+    }
 }

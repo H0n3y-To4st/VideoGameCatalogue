@@ -26,6 +26,9 @@ public class GameBean implements Serializable {
 
     private List<Games> games;
 
+    private String searchQuery;
+    private List<Games> searchGames;
+
     public GameBean() {
         //for JPA
     }
@@ -41,5 +44,25 @@ public class GameBean implements Serializable {
 
     public void setGames(List<Games> games) {
         this.games = games;
+    }
+
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+    }
+
+    public List<Games> getSearchGames() {
+        return searchGames;
+    }
+
+    public void setSearchGames(List<Games> searchGames) {
+        this.searchGames = searchGames;
+    }
+
+    public List<Games> searchGamesByName(String name) {
+        return igdbService.searchGamesByName(name, false);
     }
 }
