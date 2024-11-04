@@ -1,20 +1,129 @@
 body {
     background-color: #353535;
     color: white;
+    padding-top: 60px;
 }
 
+/* Game Datatables */
 .game-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+body .ui-datatable .ui-datatable-data>tr {
     background-color: #404040;
     color: white;
-    border-collapse: collapse;
 }
 
 .game-table tr {
     border-bottom: 10px solid #353535;
 }
 
-.game-table .game-genre {
+.game-table .game-genre tr {
+    border: none;
+    background: transparent;
+    font-size: 11px;
+}
+
+.game-table .game-genre thead {
+    display: none;
+}
+
+/* NAV BAR */
+.nav-bar {
+    background-color: black;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+.nav-bar .ui-toolbar {
+    background-color: transparent;
     color: white;
-    text-align: left;
-    padding-left: 10px;
+    border: none;
+    padding: 0;
+    margin: 5px;
+    width: 100%;
+}
+
+.nav-bar .ui-button {
+    background-color: black;
+    color: white;
+    margin-right: .5rem;
+    margin-left: .5rem;
+    border: none;
+    height: 60px;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 1em;
+}
+
+body .ui-card .ui-card-body {
+    padding: 1rem;
+    margin-top: auto;
+}
+
+body .ui-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #404040;
+    color: white;
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12);
+    border-radius: 4px;
+}
+
+.ui-card-body {
+    width: 100%;
+    height: 175px;
+    box-sizing: border-box;
+    background-color: #404040;
+}
+
+.ui-card-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 264px;
+    height: 352px;
+}
+
+body .ui-button {
+    margin-left: 15px;
+}
+
+body .ui-card .ui-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: .5rem;
+}
+
+.ui-card-header img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* QUICK SEARCH BAR */
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {
+    font-weight: normal;
+    width: 300px;
+    margin-left: 10px;
+}
+
+.ui-autocomplete-panel .ui-autocomplete-table th, .ui-autocomplete-panel .ui-autocomplete-table td {
+     border-width: 0px;
+     border-style: none;
+    border-color: inherit;
+    padding: 4px 10px 4px 10px;
+    height: 50px;
+    width: 300px;
 }

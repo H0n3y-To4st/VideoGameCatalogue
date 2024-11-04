@@ -44,13 +44,13 @@ public class UserAccount implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_games",
-            joinColumns = @JoinColumn(name = "user_account", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "games", referencedColumnName = "id")
-    )
-    private List<Games> games;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "user_games",
+//            joinColumns = @JoinColumn(name = "user_account", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "games", referencedColumnName = "id")
+//    )
+//    private List<Games> games;
 
     public UserAccount() {
 

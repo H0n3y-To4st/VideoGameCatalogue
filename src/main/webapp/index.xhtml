@@ -5,73 +5,70 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://primefaces.org/ui ">
+      xmlns:ui = "http://java.sun.com/jsf/facelets"
+      xsi:schemaLocation="http://primefaces.org/ui "
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Welcome Page</title>
-    <h:outputStylesheet name="main.css"/>
 </h:head>
 <h:body>
-    <h1><h:outputText value="Game Collection"/></h1>
+    <h:outputStylesheet name="main.css"/>
     <!--    NAVIGATION SYSTEM -->
-    <h:form>
-        <h:commandButton value="Home" action="/index.xhtml"/>
-        <h:commandButton value="Login" action="/login.xhtml"/>
-        <h:commandButton value="Dashboard" action="#{loginBean.checkLoggedIn()}"/>
-    </h:form>
+    <h:form styleClass="nav-bar">
+        <p:toolbar>
+            <p:toolbarGroup>
+                <p:sidebar widgetVar="sidebar1">
+                    <h3>Quick Navigation</h3>
+                </p:sidebar>
+                <p:commandButton icon="pi pi-bars" type="button" onclick="PF('sidebar1').show()" styleClass="mr-2" />
+            <h1><h:outputText value="Game Collection"/></h1>
+            <p:commandButton value="Home" action="/index.xhtml"/>
+            <p:commandButton value="Dashboard" action="#{loginBean.checkLoggedIn()}"/>
+            </p:toolbarGroup>
 
-    <p>Hello guest and welcome to the catalogue!
-        Browse our wide collection of videogames from all genres and platforms.
-        To keep track of your games, please login.
-    </p>
-    <!--        DISPLAY ALL GAMES -->
-    <h:form>
-        <h:dataTable value="#{gameBean.listAllGames()}" var="game" styleClass="game-table">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Title"/>
-                </f:facet>
-                <h:outputText value="#{game.title}" styleClass="game-title"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Price"/>
-                </f:facet>
-                <h:outputText value="#{game.price}" styleClass="game-price"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Genres"/>
-                </f:facet>
-                <!--        GET GENRES FROM GAME ID-->
-                <h:dataTable value="#{gameGenreBean.getGameGenre(game.id)}" var="gameGenre">
-                    <h:column>
-                        <h:outputText value="#{gameGenre.name}" styleClass="game-genre"/>
-                    </h:column>
-                </h:dataTable>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Description"/>
-                </f:facet>
-                <h:outputText value="#{game.description}" styleClass="game-description"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Save Game"/>
-                </f:facet>
-                <h:commandButton action="#{gameBean.saveGameToDashboard(game)}" styleClass=""/>
-            </h:column>
-        </h:dataTable>
-        <!--        DISPLAY ALL GENRES-->
-        <!--        <h:dataTable value="#{genreBean.listAllGenres()}" var="genre">-->
-        <!--            <h:column>-->
-        <!--                <f:facet name="header">-->
-        <!--                    <h:outputText value="Genre"/>-->
-        <!--                </f:facet>-->
-        <!--                <h:outputText value="#{genre.name}"/>-->
-        <!--            </h:column>-->
-        <!--        </h:dataTable>-->
+            <p:toolbarGroup align="right">
+                <div class="field col-12 md:col-4">
+<!--                    //TODO: fix icon not showing-->
+                    <p:autoComplete id="quickSearch" icon="pi pi-search" minQueryLength="3" value="#{gameBean.searchQuery}"
+                                    completeMethod="#{gameBean.searchGamesByName}"
+                                    var="game" itemLabel="#{game.name}" itemValue="#{game}"
+                                    forceSelection="true"
+                                    scrollHeight="250"
+                                    placeholder="Quick Search, input at least 3 chars">
+                        <p:column>
+                            <h:panelGrid columns="2">
+                                <h:graphicImage value="#{game.thumbCover}" width="100" height="100"/>
+                                <h:outputText value="#{game.name}"/>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:autoComplete>
+                </div>
+<!--             want to hide login button and display user account page instead-->
+                <p:commandButton value="Login" action="/login.xhtml"/>
+            </p:toolbarGroup>
+        </p:toolbar>
     </h:form>
-
+    <h:form>
+        <h1>Popular Games</h1>
+        <div class="card-container">
+        <ui:repeat value="#{gameBean.games}" var="game">
+            <p:card style="margin: 1em;">
+                <f:facet name="header">
+                    <img src="#{game.cover}" alt="No Game Cover Found"/>
+                </f:facet>
+                <f:facet name="title">
+                    <h:outputText value="#{game.name}"/>
+                </f:facet>
+                <f:facet name="subtitle">
+                    <h:outputText value="Genres: #{game.genres}"/>
+                </f:facet>
+                <h:outputText value="User Rating: #{game.rating}"/>
+                <p:commandButton icon="pi pi-check" value="Save" action="#{userGamesBean.saveGameToDashboard(game)}"/>
+                <br/>
+                <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}"/>
+            </p:card>
+        </ui:repeat>
+        </div>
+    </h:form>
 </h:body>
 </html>

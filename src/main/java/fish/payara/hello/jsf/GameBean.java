@@ -5,49 +5,92 @@
 package fish.payara.hello.jsf;
 
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.entities.UserAccount;
-import fish.payara.hello.service.GameService;
+import fish.payara.hello.restapi.IGDBService;
+import jakarta.annotation.PostConstruct;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.enterprise.context.RequestScoped;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
- *
  * @author IsmahHussain
  */
 @Named(value = "gameBean")
-@RequestScoped
-public class GameBean {
+@ViewScoped
+public class GameBean implements Serializable {
 
     @Inject
-    private GameService service;
+    private IGDBService igdbService;
+
+    private List<Games> games;
+
+    private String searchQuery;
+    private List<Games> searchGames;
+
+    private Games selectedGame;
 
     public GameBean() {
-    }
-    
-    public List<Games> listAllGames(){
-        return service.listAllGames();
+        //for JPA
     }
 
-    public void saveGameToDashboard(Games game) {
+    @PostConstruct
+    public void init() {
+        games = igdbService.getTopGames();
+//        try {
+//            String requestBody = new String(FacesContext.getCurrentInstance().getExternalContext().getRequest().getInputStream().readAllBytes());
+//            JsonObject jsonObject = Json.createReader(new StringReader(requestBody)).readObject();
+//            int gameId = jsonObject.getInt("id");
+//            selectedGame = igdbService.getGameByID(gameId).get(0);
+//        } catch (IOException | JsonException e) {
+//            // Handle the exception, e.g., log an error or set a default value
+//            System.err.println("Error reading request body: " + e.getMessage());
+//        }
+    }
+
+    public List<Games> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Games> games) {
+        this.games = games;
+    }
+
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+    }
+
+    public List<Games> getSearchGames() {
+        return searchGames;
+    }
+
+    public void setSearchGames(List<Games> searchGames) {
+        this.searchGames = searchGames;
+    }
+
+    public List<Games> searchGamesByName(String name) {
+        return igdbService.searchGamesByName(name, false);
+    }
+
+    public Games getSelectedGame() {
+        return selectedGame;
+    }
+
+    public void setSelectedGame(Games selectedGame) {
         try {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
-            if (user == null) {
-                facesContext.getExternalContext().redirect("login.xhtml");
-                return;
+            this.selectedGame = igdbService.getSelectedGameDetails(selectedGame.getId());
+            if (this.selectedGame != null) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                facesContext.getExternalContext().redirect("game.xhtml");
             }
-            service.saveGameToDashboard(user, game);
-        } catch (Exception e) { //this exception is hidden, it just silently catches it
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void removeGameFromDashboard(Games game) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
-        service.removeGameFromDashboard(user, game);
     }
 }
