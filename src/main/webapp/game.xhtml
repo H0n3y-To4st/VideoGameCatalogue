@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xsi:schemaLocation="http://primefaces.org/ui "
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Game page</title>
+</h:head>
+<body>
+<h:form>
+    <h:panelGrid columns="2" cellpadding="0">
+        <h:outputLabel value="Name: " />
+        <h:outputText value="#{gameBean.selectedGame.name}"/>
+
+        <h:outputLabel value="Genres:" />
+        <h:outputText value="#{gameBean.selectedGame.genres}"/>
+
+        <h:outputLabel value="Rating:" />
+        <h:outputText value="#{gameBean.selectedGame.rating}"/>
+
+        <h:outputLabel value="Cover:" />
+        <h:graphicImage value="#{gameBean.selectedGame.cover.url}" alt="No Game Cover Found"/>
+    </h:panelGrid>
+</h:form>
+</body>
+</html>

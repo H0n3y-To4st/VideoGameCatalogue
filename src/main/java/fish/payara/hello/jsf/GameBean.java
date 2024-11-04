@@ -7,6 +7,7 @@ package fish.payara.hello.jsf;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.restapi.IGDBService;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -29,6 +30,8 @@ public class GameBean implements Serializable {
     private String searchQuery;
     private List<Games> searchGames;
 
+    private Games selectedGame;
+
     public GameBean() {
         //for JPA
     }
@@ -36,6 +39,15 @@ public class GameBean implements Serializable {
     @PostConstruct
     public void init() {
         games = igdbService.getTopGames();
+//        try {
+//            String requestBody = new String(FacesContext.getCurrentInstance().getExternalContext().getRequest().getInputStream().readAllBytes());
+//            JsonObject jsonObject = Json.createReader(new StringReader(requestBody)).readObject();
+//            int gameId = jsonObject.getInt("id");
+//            selectedGame = igdbService.getGameByID(gameId).get(0);
+//        } catch (IOException | JsonException e) {
+//            // Handle the exception, e.g., log an error or set a default value
+//            System.err.println("Error reading request body: " + e.getMessage());
+//        }
     }
 
     public List<Games> getGames() {
@@ -64,5 +76,21 @@ public class GameBean implements Serializable {
 
     public List<Games> searchGamesByName(String name) {
         return igdbService.searchGamesByName(name, false);
+    }
+
+    public Games getSelectedGame() {
+        return selectedGame;
+    }
+
+    public void setSelectedGame(Games selectedGame) {
+        try {
+            this.selectedGame = igdbService.getSelectedGameDetails(selectedGame.getId());
+            if (this.selectedGame != null) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                facesContext.getExternalContext().redirect("game.xhtml");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

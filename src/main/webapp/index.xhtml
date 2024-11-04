@@ -64,6 +64,8 @@
                 </f:facet>
                 <h:outputText value="User Rating: #{game.rating}"/>
                 <p:commandButton icon="pi pi-check" value="Save" action="#{userGamesBean.saveGameToDashboard(game)}"/>
+                <br/>
+                <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}"/>
             </p:card>
         </ui:repeat>
         </div>

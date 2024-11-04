@@ -92,4 +92,22 @@ public class IGDBService {
         client.close();
         return games;
     }
+
+    @POST
+    public Games getSelectedGameDetails(int gameId) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("https://api.igdb.com/v4/games");
+
+        String body = "fields name,genres.name,rating, cover.url;\n"
+                + "where id = " + gameId + ";";
+        Response response = target.request(MediaType.APPLICATION_JSON)
+                .header("Client-ID", CLIENT_ID)
+                .header("Authorization", ACCESS_TOKEN)
+                .post(Entity.json(body));
+
+        Games game = response.readEntity(new GenericType<Games>() {});
+        response.close();
+        client.close();
+        return game;
+    }
 }
