@@ -2,7 +2,6 @@ package fish.payara.hello.restapi;
 
 import fish.payara.hello.entities.Games;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.*;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -28,7 +27,6 @@ public class IGDBService {
 //    @RestClient
 //    private IGDBClient igdbClient;
 
-    @POST
     public List<Games> getTopGames() {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");
@@ -53,7 +51,6 @@ public class IGDBService {
         return games;
     }
 
-    @POST
     public List<Games> getGameByID(int gameId) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");
@@ -70,8 +67,6 @@ public class IGDBService {
         return games;
     }
 
-    @POST
-//    @Path("/search")
     public List<Games> searchGamesByName(String gameName, boolean advancedSearch) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");
@@ -93,7 +88,6 @@ public class IGDBService {
         return games;
     }
 
-    @POST
     public Games getSelectedGameDetails(int gameId) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");

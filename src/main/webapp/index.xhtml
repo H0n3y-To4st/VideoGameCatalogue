@@ -15,13 +15,14 @@
     <h:outputStylesheet name="main.css"/>
     <!--    NAVIGATION SYSTEM -->
     <h:form styleClass="nav-bar">
+        <p:sidebar widgetVar="sidebar" modal="true">
+            <h3>Quick Navigation</h3>
+        </p:sidebar>
+        <p:commandButton icon="pi pi-bars" type="button" onclick="PF('sidebar').show()"/>
         <p:toolbar>
             <p:toolbarGroup>
-                <p:sidebar widgetVar="sidebar1">
-                    <h3>Quick Navigation</h3>
-                </p:sidebar>
-                <p:commandButton icon="pi pi-bars" type="button" onclick="PF('sidebar1').show()" styleClass="mr-2" />
             <h1><h:outputText value="Game Collection"/></h1>
+<!--                TODO: fix index redirect url via faces instead of this, create navigation class?-->
             <p:commandButton value="Home" action="/index.xhtml"/>
             <p:commandButton value="Dashboard" action="#{loginBean.checkLoggedIn()}"/>
             </p:toolbarGroup>

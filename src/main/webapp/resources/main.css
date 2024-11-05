@@ -59,6 +59,14 @@ body .ui-datatable .ui-datatable-data>tr {
     height: 60px;
 }
 
+.ui-sidebar {
+    z-index: 1050 !important;
+}
+
+.ui-widget-overlay {
+    z-index: 999 !important;
+}
+
 .card-container {
     display: flex;
     flex-wrap: wrap;
