@@ -65,7 +65,9 @@
                 <h:outputText value="User Rating: #{game.rating}"/>
                 <p:commandButton icon="pi pi-check" value="Save" action="#{userGamesBean.saveGameToDashboard(game)}"/>
                 <br/>
-                <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}"/>
+                <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}">
+                    <p:ajax listener="#{gameBean.setSelectedGame(game)}" oncomplete="PF('growl').renderMessage({summary:'Game Selected', detail:'#{gameBean.selectedGame} has been selected', severity:'info'})"/>
+                </p:commandButton>
             </p:card>
         </ui:repeat>
         </div>

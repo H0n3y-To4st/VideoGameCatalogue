@@ -7,6 +7,7 @@ package fish.payara.hello.jsf;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.restapi.IGDBService;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -14,6 +15,9 @@ import jakarta.inject.Named;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author IsmahHussain
@@ -32,6 +36,8 @@ public class GameBean implements Serializable {
 
     private Games selectedGame;
 
+    Logger logger = Logger.getLogger(getClass().getName());
+
     public GameBean() {
         //for JPA
     }
@@ -39,15 +45,21 @@ public class GameBean implements Serializable {
     @PostConstruct
     public void init() {
         games = igdbService.getTopGames();
-//        try {
-//            String requestBody = new String(FacesContext.getCurrentInstance().getExternalContext().getRequest().getInputStream().readAllBytes());
-//            JsonObject jsonObject = Json.createReader(new StringReader(requestBody)).readObject();
-//            int gameId = jsonObject.getInt("id");
-//            selectedGame = igdbService.getGameByID(gameId).get(0);
-//        } catch (IOException | JsonException e) {
-//            // Handle the exception, e.g., log an error or set a default value
-//            System.err.println("Error reading request body: " + e.getMessage());
-//        }
+        //this makes it available when the game page is loaded (but not refreshed) since it is retrieved from the flash scope
+        //when the game page is refreshed, the selectedGame is null because it is no longer in the flash scope
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap();
+        String gameIdParam = params.get("gameId");
+
+        if (gameIdParam != null) {
+            int gameId = Integer.parseInt(gameIdParam);
+            selectedGame = igdbService.getSelectedGameDetails(gameId);
+        } else {
+            selectedGame = (Games) facesContext.getExternalContext().getFlash().get("selectedGame");
+        }
+        if (selectedGame != null) {
+            logger.log(Level.INFO, "Selected Game: " + selectedGame.getName());
+        }
     }
 
     public List<Games> getGames() {
@@ -85,9 +97,14 @@ public class GameBean implements Serializable {
     public void setSelectedGame(Games selectedGame) {
         try {
             this.selectedGame = igdbService.getSelectedGameDetails(selectedGame.getId());
+            //this is how you pass data between pages during a redirect
             if (this.selectedGame != null) {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
-                facesContext.getExternalContext().redirect("game.xhtml");
+                facesContext.getExternalContext().getFlash().put("selectedGame", this.selectedGame);
+                String gameName = this.selectedGame.getFullName().replace(" ", "-");
+                facesContext.getExternalContext().redirect("game.xhtml?gameId=" + this.selectedGame.getId() + "&gameName=" + gameName);
+            } else {
+                logger.log(Level.SEVERE, "Selected Game is null");
             }
         } catch (Exception e) {
             e.printStackTrace();
