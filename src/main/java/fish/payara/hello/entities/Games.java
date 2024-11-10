@@ -4,6 +4,7 @@ import fish.payara.hello.restapi.IGDBService;
 import jakarta.inject.Inject;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,9 @@ public class Games implements Serializable {
     private List<Map<String, String>> genres;
 //    private long releaseDate;
     private Map<String, String> cover;
+    private List<Map<String, String>> screenshots;
     private Double rating;
+    public String summary;
 
     public Games(Integer id) {
         this.id = id;
@@ -81,6 +84,33 @@ public class Games implements Serializable {
     public void setGenres(List<Map<String, String>> genres) {
         this.genres = genres;
     }
+
+    public String getFullGenres() {
+        if (genres == null || genres.isEmpty()) {
+            return "No genres available";
+        }
+        StringBuilder genreNames = new StringBuilder();
+        for (Map<String, String> genre : genres) {
+            if (!genreNames.isEmpty()) {
+                genreNames.append(", ");
+            }
+            genreNames.append(genre.get("name"));
+        }
+        return genreNames.toString();
+    }
+
+    public void setFullGenres(List<Map<String, String>> genres) {
+        this.genres = genres;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
 //
 //    public long getReleaseDate() {
 //        return releaseDate;
@@ -137,5 +167,23 @@ public class Games implements Serializable {
 
     public void setThumbCover(Map<String, String> cover) {
         this.cover = cover;
+    }
+
+    public Map<String, String> getBigScreenshot(Map<String, String> currentScreenshot) {
+        if (currentScreenshot == null || !currentScreenshot.containsKey("url")) {
+            return currentScreenshot;
+        }
+        Map<String, String> updatedScreenshot = new HashMap<>(currentScreenshot);
+        String url = "https:" + updatedScreenshot.get("url").replace("thumb", "cover_big_2x");
+        updatedScreenshot.put("url", url);
+        return updatedScreenshot;
+    }
+
+    public List<Map<String, String>> getScreenshots() {
+        return screenshots;
+    }
+
+    public void setScreenshots(List<Map<String, String>> screenshots) {
+        this.screenshots = screenshots;
     }
 }

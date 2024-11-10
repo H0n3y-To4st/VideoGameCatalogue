@@ -72,8 +72,8 @@ public class IGDBService {
         WebTarget target = client.target("https://api.igdb.com/v4/games");
 
         String body = "fields name,genres.name,rating, cover.url;\n"+
-                "where themes != (42);\n" +
-                "where name ~ *\"" + gameName + "\"*; limit 3;";
+                "where name ~ *\"" + gameName + "\"* & category = 0 & themes != (42); limit 3;";
+//
 //        if (!advancedSearch) {
 //            body += "limit 3;";
 //        }
@@ -92,7 +92,7 @@ public class IGDBService {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.igdb.com/v4/games");
 
-        String body = "fields name,genres.name,rating, cover.url;\n"
+        String body = "fields name,genres.name,rating,summary,cover.url,screenshots.url;\n"
                 + "where id = " + gameId + ";";
         Response response = target.request(MediaType.APPLICATION_JSON)
                 .header("Client-ID", CLIENT_ID)

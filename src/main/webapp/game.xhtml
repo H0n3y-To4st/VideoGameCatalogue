@@ -12,19 +12,62 @@
     <title>Game page</title>
 </h:head>
 <body>
-<h:form>
-    <h:panelGrid columns="2" cellpadding="0">
-        <h:outputLabel value="Name: " />
-        <h:outputText value="#{gameBean.selectedGame.name}"/>
+<h:outputStylesheet name="main.css"/>
+<h:outputStylesheet name="game.css"/>
+<!--    NAVIGATION SYSTEM -->
+<h:form styleClass="nav-bar">
+    <p:sidebar widgetVar="sidebar" modal="true">
+        <h3>Quick Navigation</h3>
+    </p:sidebar>
+    <p:commandButton icon="pi pi-bars" type="button" onclick="PF('sidebar').show()"/>
+    <p:toolbar>
+        <p:toolbarGroup>
+            <h1><h:outputText value="Game Collection"/></h1>
+            <!--                TODO: fix index redirect url via faces instead of this, create navigation class?-->
+            <p:commandButton value="Home" action="/index.xhtml"/>
+            <p:commandButton value="Dashboard" action="#{loginBean.checkLoggedIn()}"/>
+        </p:toolbarGroup>
 
-        <h:outputLabel value="Genres:" />
-        <h:outputText value="#{gameBean.selectedGame.genres}"/>
+        <p:toolbarGroup align="right">
+            <div class="field col-12 md:col-4">
+                <!--                    //TODO: fix icon not showing-->
+                <p:autoComplete id="quickSearch" icon="pi pi-search" minQueryLength="3" value="#{gameBean.searchQuery}"
+                                completeMethod="#{gameBean.searchGamesByName}"
+                                var="game" itemLabel="#{game.name}" itemValue="#{game}"
+                                forceSelection="true"
+                                scrollHeight="250"
+                                placeholder="Quick Search, input at least 3 chars">
+                    <p:column>
+                        <h:panelGrid columns="2">
+                            <h:graphicImage value="#{game.thumbCover}" width="100" height="100"/>
+                            <h:outputText value="#{game.name}"/>
+                        </h:panelGrid>
+                    </p:column>
+                </p:autoComplete>
+            </div>
+            <!--             want to hide login button and display user account page instead-->
+            <p:commandButton value="Login" action="/login.xhtml"/>
+        </p:toolbarGroup>
+    </p:toolbar>
+</h:form>
 
-        <h:outputLabel value="Rating:" />
-        <h:outputText value="#{gameBean.selectedGame.rating}"/>
-
-        <h:outputLabel value="Cover:" />
+<h:form styleClass="game-overview">
+    <h1>
+    <h:outputText value="#{gameBean.selectedGame.fullName}"/>
+    </h1>
+    <p:knob value="#{gameBean.selectedGame.rating}" disabled="true"/>
+    <h:panelGrid columns="2" cellpadding="50px">
         <h:graphicImage value="#{gameBean.selectedGame.cover}" alt="No Game Cover Found"/>
+            <p:galleria value="#{gameBean.selectedGame.screenshots}" var="screenshot" numVisible="5"
+                        style="max-width: 600px">
+                <img src="#{gameBean.selectedGame.getBigScreenshot(screenshot).url}" alt="Missing screenshot"
+                     style="width: 100%"/>
+                <f:facet name="thumbnail">
+                    <img src="#{screenshot.url}" alt="Missing screenshot"/>
+                </f:facet>
+            </p:galleria>
+        <h:outputText value="#{gameBean.selectedGame.fullGenres}"/>
+        <h:outputText value="#{gameBean.selectedGame.summary}"/>
     </h:panelGrid>
 </h:form>
 </body>

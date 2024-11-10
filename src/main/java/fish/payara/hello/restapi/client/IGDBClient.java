@@ -11,13 +11,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@RegisterRestClient(baseUri = "https://api.igdb.com/v4")
+//@RegisterRestClient(baseUri = "https://api.igdb.com/v4")
 public interface IGDBClient {
 
-    @POST
-    @Path("/games")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    List<Games> getTopGames(@HeaderParam("Client-ID") String clientId,
-                            @HeaderParam("Authorization") String accessToken);
+//    @POST
+//    @Path("/games")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    List<Games> getTopGames(@HeaderParam("Client-ID") String clientId,
+//                            @HeaderParam("Authorization") String accessToken);
 }

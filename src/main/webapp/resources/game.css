@@ -1,0 +1,31 @@
+.game-overview .game-overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.game-overview th, .game-overview table td {
+    align-items: center;
+    vertical-align: center;
+}
+
+.game-overview table td:first-child {
+    width: 25%;
+    /*background: red;*/
+}
+
+.game-overview table td:nth-child(2) {
+    width: 100%;
+    /*background: pink;*/
+}
+
+.game-overview .knob {
+    width: 100px;
+    height: 100px;
+    margin-right: 1rem;
+}
+
+.game-overview .galleria {
+    margin-top: 1rem;
+}
