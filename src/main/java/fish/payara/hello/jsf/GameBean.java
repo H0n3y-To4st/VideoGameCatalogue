@@ -12,6 +12,11 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 
 import java.io.Serializable;
 import java.util.List;
@@ -44,7 +49,9 @@ public class GameBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        games = igdbService.getTopGames();
+//        games = igdbService.getTopGames();
+        games = fetchTopGames();
+
         //this makes it available when the game page is loaded (but not refreshed) since it is retrieved from the flash scope
         //when the game page is refreshed, the selectedGame is null because it is no longer in the flash scope
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -96,18 +103,52 @@ public class GameBean implements Serializable {
 
     public void setSelectedGame(Games selectedGame) {
         try {
-            this.selectedGame = igdbService.getSelectedGameDetails(selectedGame.getId());
+//            this.selectedGame = igdbService.getSelectedGameDetails(selectedGame.getId());
+            this.selectedGame = fetchGameDetails(selectedGame.getId());
             //this is how you pass data between pages during a redirect
             if (this.selectedGame != null) {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 facesContext.getExternalContext().getFlash().put("selectedGame", this.selectedGame);
-                String gameName = this.selectedGame.getFullName().replace(" ", "-");
-                facesContext.getExternalContext().redirect("game.xhtml?gameId=" + this.selectedGame.getId() + "&gameName=" + gameName);
+                facesContext.getExternalContext().redirect("game.xhtml?gameId=" + this.selectedGame.getId());
             } else {
                 logger.log(Level.SEVERE, "Selected Game is null");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private List<Games> fetchTopGames() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/top");
+        Response response = target.request().get();
+
+        if (response.getStatus() == 200) {
+            games = response.readEntity(new GenericType<List<Games>>() {
+            });
+            logger.log(Level.INFO, "Fetched top games");
+        } else {
+            logger.log(Level.SEVERE, "Failed to fetch top games");
+        }
+        response.close();
+        client.close();
+
+        return games;
+    }
+    //this is using the endpoint from the REST API to set the selectedGame
+    private Games fetchGameDetails(int gameId) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/" + gameId);
+        Response response = target.request().get();
+
+        if (response.getStatus() == 200) {
+            selectedGame = response.readEntity(Games.class);
+            logger.log(Level.INFO, "Selected Game: " + selectedGame.getName());
+        } else {
+            logger.log(Level.SEVERE, "Failed to fetch game details");
+        }
+        response.close();
+        client.close();
+        return selectedGame;
     }
 }

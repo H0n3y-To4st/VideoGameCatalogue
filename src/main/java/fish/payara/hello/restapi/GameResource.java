@@ -29,14 +29,29 @@ public class GameResource {
 //    }
 
     @GET
-    @Path("/{gameId}/{gameName}")
+    @Path("/{gameId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getGameByName(@PathParam("gameId") int gameId, @PathParam("gameName") String gameName) {
+    public Response getGameByID(@PathParam("gameId") int gameId) {
         Games games = igdbService.getSelectedGameDetails(gameId);
         if (games.getId() == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(games).build();
     }
+
+    @GET
+    @Path("/top")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Games> getTopGames() {
+        List<Games> games = igdbService.getTopGames();
+        if (games.isEmpty()) {
+//            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return games;
+    }
+
+    //include more functionality here, complete the jax-rs endpoints, refer to endpoint link
+    // can i include update delete and create here?
+    // finish the client and root resources and then will be done with jaxrs
 
 }

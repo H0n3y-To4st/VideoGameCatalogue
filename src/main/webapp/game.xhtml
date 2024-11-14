@@ -57,7 +57,7 @@
     </h1>
     <p:knob value="#{gameBean.selectedGame.rating}" disabled="true"/>
     <h:panelGrid columns="2" cellpadding="50px">
-        <h:graphicImage value="#{gameBean.selectedGame.cover}" alt="No Game Cover Found"/>
+        <img src="#{gameBean.selectedGame.cover.url}" alt="No Game Cover Found"/>
             <p:galleria value="#{gameBean.selectedGame.screenshots}" var="screenshot" numVisible="5"
                         style="max-width: 600px">
                 <img src="#{gameBean.selectedGame.getBigScreenshot(screenshot).url}" alt="Missing screenshot"
@@ -66,7 +66,9 @@
                     <img src="#{screenshot.url}" alt="Missing screenshot"/>
                 </f:facet>
             </p:galleria>
-        <h:outputText value="#{gameBean.selectedGame.fullGenres}"/>
+        <ui:repeat value="#{gameBean.selectedGame.genres}" var="genre">
+            <h:outputText value="#{genre.name} "/>
+        </ui:repeat>
         <h:outputText value="#{gameBean.selectedGame.summary}"/>
     </h:panelGrid>
 </h:form>

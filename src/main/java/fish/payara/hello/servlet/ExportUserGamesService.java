@@ -47,7 +47,7 @@ public class ExportUserGamesService extends HttpServlet {
             row.createCell(1).setCellValue(game.getName());
 
             // Combine genres as a comma-separated string
-            String genres = game.getGenres() != null ? String.join(", ", game.getGenres()) : "N/A";
+            String genres = game.getGenres() != null ? String.join(", ", game.getGenres().toString()) : "N/A";
             row.createCell(2).setCellValue(genres);
 
             row.createCell(3).setCellValue(game.getRating() != null ? game.getRating() : "N/A");

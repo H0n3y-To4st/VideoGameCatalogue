@@ -63,40 +63,42 @@ public class Games implements Serializable {
         this.name = name;
     }
 
-    public String getGenres() {
-        int length = 20;
-        if (genres == null || genres.isEmpty()) {
-            return "No genres available";
-        }
-        StringBuilder genreNames = new StringBuilder();
-        for (Map<String, String> genre : genres) {
-            if (!genreNames.isEmpty()) {
-                genreNames.append(", ");
-            }
-            genreNames.append(genre.get("name"));
-            if (genreNames.length() > length) {
-                return genreNames.substring(0, length) + "...";
-            }
-        }
-        return genreNames.toString();
+    public List<Map<String, String>> getGenres() {
+//        int length = 20;
+//        if (genres == null || genres.isEmpty()) {
+//            return "No genres available";
+//        }
+//        StringBuilder genreNames = new StringBuilder();
+//        for (Map<String, String> genre : genres) {
+//            if (!genreNames.isEmpty()) {
+//                genreNames.append(", ");
+//            }
+//            genreNames.append(genre.get("name"));
+//            if (genreNames.length() > length) {
+//                return genreNames.substring(0, length) + "...";
+//            }
+//        }
+//        return genreNames.toString();
+        return genres;
     }
 
     public void setGenres(List<Map<String, String>> genres) {
         this.genres = genres;
     }
 
-    public String getFullGenres() {
-        if (genres == null || genres.isEmpty()) {
-            return "No genres available";
-        }
-        StringBuilder genreNames = new StringBuilder();
-        for (Map<String, String> genre : genres) {
-            if (!genreNames.isEmpty()) {
-                genreNames.append(", ");
-            }
-            genreNames.append(genre.get("name"));
-        }
-        return genreNames.toString();
+    public List<Map<String, String>> getFullGenres() {
+//        if (genres == null || genres.isEmpty()) {
+//            return "No genres available";
+//        }
+//        StringBuilder genreNames = new StringBuilder();
+//        for (Map<String, String> genre : genres) {
+//            if (!genreNames.isEmpty()) {
+//                genreNames.append(", ");
+//            }
+//            genreNames.append(genre.get("name"));
+//        }
+//        return genreNames.toString();
+        return genres;
     }
 
     public void setFullGenres(List<Map<String, String>> genres) {
@@ -153,16 +155,20 @@ public class Games implements Serializable {
         return true;
     }
 
-    public String getCover() {
-        return cover != null ? "https:" + cover.get("url").replace("thumb", "cover_big") : "No cover available";
+    public Map<String, String> getCover() {
+//        return cover != null ? "https:" + cover.get("url").replace("thumb", "cover_big") : "No cover available";
+        String url = cover.get("url").replace("thumb", "cover_big");
+        cover.put("url", url);
+        return cover;
     }
 
     public void setCover(Map<String, String> cover) {
         this.cover = cover;
     }
 
-    public String getThumbCover() {
-        return cover != null ? "https:" + cover.get("url") : "No cover available";
+    public Map<String, String> getThumbCover() {
+//        return cover != null ? "https:" + cover.get("url") : "No cover available";
+        return cover;
     }
 
     public void setThumbCover(Map<String, String> cover) {
