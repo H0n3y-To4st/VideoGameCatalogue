@@ -16,8 +16,6 @@ import java.util.List;
 @ApplicationScoped
 public class IGDBService {
 
-//    private String BASE_URI = "https://api.igdb.com/v4";
-
     //TODO: set these as environment variables
     private String CLIENT_ID = "13itn7518vwktd1u8ifuc3oaik3z1s";
     private String ACCESS_TOKEN = "Bearer r4x03x3eqqnkprmxmiihpulz96z2gc";

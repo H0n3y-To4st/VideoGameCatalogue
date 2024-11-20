@@ -43,37 +43,37 @@ public class UserGamesService {
         return games;
     }
 
-    public void saveGameToDashboard(UserAccount user, Games game) {
-        if (game == null) {
-            return;
-        }
+    public void saveGameToDashboard(UserAccount user, int gameId) {
         UserGames checkForExisting = null;
         try {
             checkForExisting = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
                     .setParameter("userId", user.getId())
-                    .setParameter("gameId", game.getId())
+                    .setParameter("gameId", gameId)
                     .getSingleResult();
         } catch (NoResultException e) {
             Logger.getLogger(UserGamesService.class.getName()).log(Level.INFO, "Game not saved to the dashboard");
         }
         if (checkForExisting == null) {
-            UserGames userGames = new UserGames(user, game.getId());
+            UserGames userGames = new UserGames(user, gameId);
             em.persist(userGames);
         }
     }
 //        // add primeface notification pop up if saved already within else block, mb change ui for save game button to show it already saved with primefaces
 //        Logger.getLogger(GameService.class.getName()).log(Level.INFO, "Game already saved to the dashboard");
 
-    public void removeGameFromDashboard(UserAccount user, Games game) {
+    public void removeGameFromDashboard(UserAccount user, int gameId) {
         try {
             UserGames userGames = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
                     .setParameter("userId", user.getId())
-                    .setParameter("gameId", game.getId())
+                    .setParameter("gameId", gameId)
                     .getSingleResult();
             em.remove(userGames);
         } catch (NoResultException e) {
-            System.out.println("No game found for user: " + user.getId() + " and game: " + game.getId());
+            System.out.println("No game found for user: " + user.getId() + " and game: " + gameId);
 
         }
+    }
+
+    public void updateGameDetails(Games game) {
     }
 }

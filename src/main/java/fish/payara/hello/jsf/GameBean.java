@@ -49,7 +49,6 @@ public class GameBean implements Serializable {
 
     @PostConstruct
     public void init() {
-//        games = igdbService.getTopGames();
         games = fetchTopGames();
 
         //this makes it available when the game page is loaded (but not refreshed) since it is retrieved from the flash scope

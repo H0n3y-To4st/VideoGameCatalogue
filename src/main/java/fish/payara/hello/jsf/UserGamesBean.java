@@ -38,20 +38,20 @@ public class UserGamesBean implements Serializable {
     }
 
     //need to redirect to login page if user is not logged in
-    public void saveGameToDashboard(Games game) throws IOException {
+    public void saveGameToDashboard(int gameId) throws IOException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
         if (user == null) {
             facesContext.getExternalContext().redirect("login.xhtml");
             return;
         }
-        userGamesService.saveGameToDashboard(user, game);
+        userGamesService.saveGameToDashboard(user, gameId);
     }
 
-    public void removeGameFromDashboard(Games game) {
+    public void removeGameFromDashboard(int gameId) {
         UserAccount user = userAccountBean.getUser(userId);
-        if (user != null && game != null) {
-            userGamesService.removeGameFromDashboard(user, game);
+        if (user != null) {
+            userGamesService.removeGameFromDashboard(user, gameId);
 
             // Refresh the list after removal
             games = userGamesService.listAllGamesInDashboard(user.getId());
@@ -59,6 +59,10 @@ public class UserGamesBean implements Serializable {
             // Optionally update UI components
             PrimeFaces.current().ajax().update("gameTable");
         }
+    }
+
+    public void updateGameDetails(Games game) {
+        userGamesService.updateGameDetails(game);
     }
 
     public List<Games> getGames() {
