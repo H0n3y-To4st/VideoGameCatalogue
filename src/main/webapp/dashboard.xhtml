@@ -44,6 +44,9 @@
         <p:column headerText="Rating" sortBy="#{game.rating}">
             <h:outputText value="#{game.rating}"/>
         </p:column>
+        <p:column headerText="Enum test" sortBy="#{userGamesBean.gameState}">
+        <h:outputText value="#{userGamesBean.getGameState(game.id)}"/>
+        </p:column>
         <p:column>
             <f:facet name="header">
                 <h:outputText value="Remove"/>

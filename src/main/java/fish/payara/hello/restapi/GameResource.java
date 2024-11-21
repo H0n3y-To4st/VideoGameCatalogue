@@ -2,16 +2,15 @@ package fish.payara.hello.restapi;
 
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
-import fish.payara.hello.entities.UserGames;
 import fish.payara.hello.jsf.UserGamesBean;
 import fish.payara.hello.service.UserAccountService;
 import fish.payara.hello.service.UserGamesService;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.io.IOException;
 import java.util.List;
 
 @Path("/games")
@@ -29,7 +28,6 @@ public class GameResource {
     @Inject
     UserAccountService userAccountService;
 
-    //FETCH GAME DATA = COMPLETE
     @GET
     @Path("/{gameId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,7 +39,6 @@ public class GameResource {
         return Response.ok(games).build();
     }
 
-    //FETCH GAME DATA = COMPLETE
     @GET
     @Path("/top")
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,20 +52,14 @@ public class GameResource {
     This allows you to create or update the collection assignments without modifying the core game details.
      */
     @PUT
-    @Path("/update")
+    @Path("/update/{gameId}/{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateGameDetails(Games game) {
-        boolean isUpdated = true;
-        userGamesBean.updateGameDetails(game);
-        if (isUpdated) {
-            return Response.ok().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+    public Response updateGameDetails(@PathParam("gameId") int gameId, @PathParam("userId") int userId) {
+        userGamesService.updateGameSaveState(userId, gameId);
+        return Response.ok().build();
     }
 
-    // delete game from dashboard - COMPLETE
     @DELETE
     @Path("/delete/{gameId}/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -85,12 +76,9 @@ public class GameResource {
     @Path("/save/{gameId}/{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response saveGameToDashboard(@PathParam("gameId") int gameId, @PathParam("userId") int userId) throws IOException {
+    public Response saveGameToDashboard(@PathParam("gameId") int gameId, @PathParam("userId") int userId) {
         UserAccount user = userAccountService.getUser(userId);
         userGamesService.saveGameToDashboard(user, gameId);
-        if (user == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
         return Response.ok().build();
     }
 }

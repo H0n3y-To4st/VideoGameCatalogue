@@ -74,6 +74,14 @@ public class UserGamesService {
         }
     }
 
-    public void updateGameDetails(Games game) {
+    public UserGames.gamestate getGameState(int userId, int gameId) {
+        return em.createNamedQuery("UserGames.findStateByUserIdAndGameId", UserGames.gamestate.class)
+                .setParameter("userId", userId)
+                .setParameter("gameId", gameId)
+                .getSingleResult();
+    }
+
+    public void updateGameSaveState(int game, int gameId) {
+
     }
 }
