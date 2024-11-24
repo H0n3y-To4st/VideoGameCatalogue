@@ -19,14 +19,14 @@ body .ui-datatable .ui-datatable-data>tr {
     border-bottom: 10px solid #353535;
 }
 
-.game-table .game-genre tr {
+/* Genre nested data table*/
+.genre-table thead {
+    display: none;
+}
+.genre-table tr {
     border: none;
     background: transparent;
-    font-size: 11px;
-}
-
-.game-table .game-genre thead {
-    display: none;
+    font-size: 13.5px;
 }
 
 /* NAV BAR */
