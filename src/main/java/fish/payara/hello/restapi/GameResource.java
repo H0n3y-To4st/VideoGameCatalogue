@@ -2,7 +2,7 @@ package fish.payara.hello.restapi;
 
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
-import fish.payara.hello.jsf.UserGamesBean;
+import fish.payara.hello.entities.UserGames;
 import fish.payara.hello.service.UserAccountService;
 import fish.payara.hello.service.UserGamesService;
 
@@ -21,9 +21,6 @@ public class GameResource {
 
     @Inject
     UserGamesService userGamesService;
-
-    @Inject
-    UserGamesBean userGamesBean;
 
     @Inject
     UserAccountService userAccountService;
@@ -56,7 +53,7 @@ public class GameResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateGameDetails(@PathParam("gameId") int gameId, @PathParam("userId") int userId) {
-        userGamesService.updateGameSaveState(userId, gameId);
+//        userGamesService.updateGameSaveState(userId, gameId, gameStates);
         return Response.ok().build();
     }
 
@@ -77,8 +74,11 @@ public class GameResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveGameToDashboard(@PathParam("gameId") int gameId, @PathParam("userId") int userId) {
-        UserAccount user = userAccountService.getUser(userId);
-        userGamesService.saveGameToDashboard(user, gameId);
+//        if (user == null) {
+//            return Response.status(Response.Status.NOT_FOUND).build();
+//        }
+        List<UserGames.gamestate> gamestate = List.of(UserGames.gamestate.BACKLOG);
+        userGamesService.saveGameToDashboard(userId, gameId, gamestate);
         return Response.ok().build();
     }
 }

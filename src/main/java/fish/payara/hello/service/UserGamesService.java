@@ -13,8 +13,6 @@ import jakarta.persistence.PersistenceContext;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -43,22 +41,26 @@ public class UserGamesService {
         return games;
     }
 
-    public void saveGameToDashboard(UserAccount user, int gameId) {
-        UserGames checkForExisting = null;
+    public void saveGameToDashboard(int userId, int gameId, List<UserGames.gamestate> gamestate) {
         try {
-            checkForExisting = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
-                    .setParameter("userId", user.getId())
+            UserGames checkForExisting = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
+                    .setParameter("userId", userId)
                     .setParameter("gameId", gameId)
                     .getSingleResult();
+
+            checkForExisting.setGameState(gamestate);
+            em.merge(checkForExisting);
         } catch (NoResultException e) {
-            Logger.getLogger(UserGamesService.class.getName()).log(Level.INFO, "Game not saved to the dashboard");
-        }
-        if (checkForExisting == null) {
-            UserGames userGames = new UserGames(user, gameId);
+            UserAccount user = em.find(UserAccount.class, userId);
+
+            UserGames userGames = new UserGames();
+            userGames.setUser(user);
+            userGames.setGame(gameId);
+            userGames.setGameState(gamestate);
             em.persist(userGames);
         }
     }
-//        // add primeface notification pop up if saved already within else block, mb change ui for save game button to show it already saved with primefaces
+//        add primeface notification pop up if saved already within else block, mb change ui for save game button to show it already saved with primefaces
 //        Logger.getLogger(GameService.class.getName()).log(Level.INFO, "Game already saved to the dashboard");
 
     public void removeGameFromDashboard(UserAccount user, int gameId) {
@@ -81,7 +83,12 @@ public class UserGamesService {
                 .getSingleResult();
     }
 
-    public void updateGameSaveState(int game, int gameId) {
-
+    public void updateGameSaveState(int game, int gameId, List<UserGames.gamestate> gameStates) {
+        UserGames userGames = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
+                .setParameter("userId", game)
+                .setParameter("gameId", gameId)
+                .getSingleResult();
+        userGames.setGameState(gameStates);
+        em.merge(userGames);
     }
 }

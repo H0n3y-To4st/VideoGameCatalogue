@@ -34,16 +34,18 @@ public class LoginService implements Serializable {
                     .getSingleResult();
         }
 
-        public void checkLoggedIn(){
+        public boolean checkLoggedIn(){
             try {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
                 if (user == null) {
-                    facesContext.getExternalContext().redirect("login.xhtml");
+//                    facesContext.getExternalContext().redirect("login.xhtml");
+                    return false;
                 }
-                facesContext.getExternalContext().redirect("dashboard.xhtml");
+//                facesContext.getExternalContext().redirect("dashboard.xhtml");
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return true;
         }
 }

@@ -13,8 +13,12 @@ public class UserAccountService {
     private EntityManager em;
 
     public Integer getUserId(String username){
-       return em.createNamedQuery("UserAccount.findIDByUsername", Integer.class)
-                .setParameter("username", username).getSingleResult();
+        try {
+            return em.createNamedQuery("UserAccount.findIDByUsername", Integer.class)
+                    .setParameter("username", username).getSingleResult();
+        } catch (Exception e){
+            return null;
+        }
     }
 
     public UserAccount getUser(Integer id){

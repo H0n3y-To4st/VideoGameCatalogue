@@ -40,18 +40,14 @@ public class LoginBean implements Serializable {
         return message;
     }
 
-    /*
-     this works because of how jsf handles it,
-     don't need to specify in faces-config.xml
-     */
-
     public String checkForAccount(){
         if (loginService.checkForAccount(username, password)) {
             try {
                 UserAccount user = loginService.getUser(username, password);
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 facesContext.getExternalContext().getSessionMap().put("user", user);
-                facesContext.getExternalContext().redirect("dashboard.xhtml");
+//                facesContext.getExternalContext().redirect("dashboard.xhtml");
+                facesContext.getExternalContext().redirect("index.xhtml");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -62,7 +58,7 @@ public class LoginBean implements Serializable {
         }
     }
 
-    public void checkLoggedIn(){
-        loginService.checkLoggedIn();
+    public boolean checkLoggedIn(){
+        return loginService.checkLoggedIn();
     }
 }

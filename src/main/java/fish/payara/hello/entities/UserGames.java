@@ -1,6 +1,9 @@
 package fish.payara.hello.entities;
 
+import fish.payara.hello.GamestateArrayConverter;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "user_games")
@@ -35,16 +38,17 @@ public class UserGames {
     @Column(name = "game_id", nullable = false)
     private Integer game;
 
+    @Column(name = "game_state")
     @Enumerated(EnumType.STRING)
-    @Column(name = "game_state", nullable = false)
-    private gamestate gameStatus;
+    private List<gamestate> gameStatus;
 
     public UserGames() {
     }
 
-    public UserGames(UserAccount user, Integer game) {
+    public UserGames(UserAccount user, Integer game, List<gamestate> gameStatus) {
         this.user = user;
         this.game = game;
+        this.gameStatus = gameStatus;
     }
 
     public void setId(Integer id) {
@@ -67,12 +71,15 @@ public class UserGames {
         return user;
     }
 
-    public gamestate getGameState() {
+    public void setUser(UserAccount user) {
+        this.user = user;
+    }
+
+    public List<gamestate> getGameState() {
         return gameStatus;
     }
 
-    public void setGameState(gamestate gameStatus) {
+    public void setGameState(List<gamestate> gameStatus) {
         this.gameStatus = gameStatus;
     }
-
 }

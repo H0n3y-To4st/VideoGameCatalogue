@@ -38,14 +38,18 @@
         <p:column headerText="Title" sortBy="#{game.name}">
             <h:outputText value="#{game.name}"/>
         </p:column>
-        <p:column headerText="Genres" sortBy="#{game.genres}">
-            <h:outputText value="#{game.genres}"/>
+        <p:column headerText="Genres">
+    <p:dataTable value="#{game.genres}" var="genre" styleClass="genre-table">
+        <p:column>
+            <h:outputText value="#{genre.get('name')}"/>
+        </p:column>
+    </p:dataTable>
         </p:column>
         <p:column headerText="Rating" sortBy="#{game.rating}">
             <h:outputText value="#{game.rating}"/>
         </p:column>
-        <p:column headerText="Enum test" sortBy="#{userGamesBean.gameState}">
-        <h:outputText value="#{userGamesBean.getGameState(game.id)}"/>
+        <p:column headerText="Collection" sortBy="#{userGamesBean.gameStateByID(game.id)}">
+        <h:outputText value="#{userGamesBean.gameStateByID(game.id)}"/>
         </p:column>
         <p:column>
             <f:facet name="header">
