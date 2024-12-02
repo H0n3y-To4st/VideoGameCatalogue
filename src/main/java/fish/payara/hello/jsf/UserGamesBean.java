@@ -1,5 +1,6 @@
 package fish.payara.hello.jsf;
 
+import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.entities.UserGames;
@@ -12,6 +13,7 @@ import jakarta.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,8 +26,8 @@ public class UserGamesBean implements Serializable {
 
     private int userId;
 
-    private List<UserGames.gamestate> gameStates;
-    private List<UserGames.gamestate> selectedGameStates;
+    private List<GameState> gameStates;
+    private List<GameState> selectedGameStates;
 
     @Inject
     private UserGamesService userGamesService;
@@ -44,7 +46,8 @@ public class UserGamesBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        gameStates = List.of(UserGames.gamestate.values());
+        gameStates = List.of(GameState.values());
+        selectedGameStates = new ArrayList<>();
         if (loginBean.checkLoggedIn()) {
             try {
                 userId = userAccountBean.getLoggedInUserId(loginBean.getUsername());
@@ -72,10 +75,7 @@ public class UserGamesBean implements Serializable {
 //        }
 //        response.close();
 //        client.close();
-
-        // why is the gamestate not being saved and is instead null?
-        logger.log(Level.SEVERE, "Before saving, the selected game states are: " + selectedGameStates);
-        userGamesService.saveGameToDashboard(userId, gameId, selectedGameStates);
+        userGamesService.saveGameToDashboard(userId, gameId);
     }
 
     public void removeGameFromDashboard(int gameId) {
@@ -99,28 +99,7 @@ public class UserGamesBean implements Serializable {
         this.games = games;
     }
 
-//    public UserGames.gamestate[] getGameStateByGameID(int gameId) {
-//        gameStates = userGamesService.getGameState(userId, gameId);
-//        return gameStates;
-//    }
-
-    public List<UserGames.gamestate> getGameStates() {
-        return gameStates;
-    }
-
-    public void setGameStates(List<UserGames.gamestate> gameStates) {
-        this.gameStates = gameStates;
-    }
-
-    public List<UserGames.gamestate> getSelectedGameStates() {
-        return selectedGameStates;
-    }
-
-    //TODO: the selected game states are correctly assigned but are then reset to null before being saved
-    // is something reinitializing the userGamesBean?
-
-    public void setSelectedGameStates(List<UserGames.gamestate> selectedGameStates) {
-        logger.log(Level.SEVERE, "method call and the selected game states are: " + selectedGameStates);
-        this.selectedGameStates = selectedGameStates;
+    public int getUserGameId(int gameId) {
+        return userGamesService.getUserGameId(userId, gameId);
     }
 }

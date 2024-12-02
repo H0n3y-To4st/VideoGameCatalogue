@@ -1,5 +1,6 @@
 package fish.payara.hello.entities;
 
+import fish.payara.hello.jsf.UserGameStatesBean;
 import fish.payara.hello.restapi.IGDBService;
 import jakarta.inject.Inject;
 
@@ -7,6 +8,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class Games implements Serializable {
 
@@ -22,9 +24,7 @@ public class Games implements Serializable {
     private Double rating;
     public String summary;
 
-    public Games(Integer id) {
-        this.id = id;
-    }
+    Logger logger = Logger.getLogger(Games.class.getName());
 
     public Games() {
     }
@@ -64,44 +64,10 @@ public class Games implements Serializable {
     }
 
     public List<Map<String, String>> getGenres() {
-//        int length = 20;
-//        if (genres == null || genres.isEmpty()) {
-//            return "No genres available";
-//        }
-//        StringBuilder genreNames = new StringBuilder();
-//        for (Map<String, String> genre : genres) {
-//            if (!genreNames.isEmpty()) {
-//                genreNames.append(", ");
-//            }
-//            genreNames.append(genre.get("name"));
-//            if (genreNames.length() > length) {
-//                return genreNames.substring(0, length) + "...";
-//            }
-//        }
-//        return genreNames.toString();
         return genres;
     }
 
     public void setGenres(List<Map<String, String>> genres) {
-        this.genres = genres;
-    }
-
-    public List<Map<String, String>> getFullGenres() {
-//        if (genres == null || genres.isEmpty()) {
-//            return "No genres available";
-//        }
-//        StringBuilder genreNames = new StringBuilder();
-//        for (Map<String, String> genre : genres) {
-//            if (!genreNames.isEmpty()) {
-//                genreNames.append(", ");
-//            }
-//            genreNames.append(genre.get("name"));
-//        }
-//        return genreNames.toString();
-        return genres;
-    }
-
-    public void setFullGenres(List<Map<String, String>> genres) {
         this.genres = genres;
     }
 
@@ -156,9 +122,12 @@ public class Games implements Serializable {
     }
 
     public Map<String, String> getCover() {
-//        return cover != null ? "https:" + cover.get("url").replace("thumb", "cover_big") : "No cover available";
-        String url = cover.get("url").replace("thumb", "cover_big");
-        cover.put("url", url);
+        String url = cover.get("url");
+        if (url.contains("thumb")) {
+            url = url.replace("thumb", "cover_big");
+            cover.put("url", url);
+        }
+        logger.info("Cover URL: " + cover.get("url"));
         return cover;
     }
 
@@ -167,7 +136,12 @@ public class Games implements Serializable {
     }
 
     public Map<String, String> getThumbCover() {
-//        return cover != null ? "https:" + cover.get("url") : "No cover available";
+        String url = cover.get("url");
+        if (url.contains("cover_big")) {
+            url = url.replace("cover_big", "thumb");
+            cover.put("url", url);
+        }
+        logger.info("Cover URL: " + cover.get("url"));
         return cover;
     }
 

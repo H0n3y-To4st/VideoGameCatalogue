@@ -1,7 +1,8 @@
 package fish.payara.hello.entities;
 
-import fish.payara.hello.GamestateArrayConverter;
+//import fish.payara.hello.GamestateArrayConverter;
 import jakarta.persistence.*;
+import fish.payara.hello.GameState;
 
 import java.util.List;
 
@@ -9,21 +10,11 @@ import java.util.List;
 @Table(name = "user_games")
 @NamedQueries({
         @NamedQuery(name = UserGames.QUERY_BY_USER_ID, query = "SELECT ug FROM UserGames ug WHERE ug.user.id = :userId"),
-        @NamedQuery(name = "UserGames.findByUserIdAndGameId", query = "SELECT ug FROM UserGames ug WHERE ug.user.id = :userId AND ug.game = :gameId"),
-        @NamedQuery(name = "UserGames.findStateByUserIdAndGameId", query = "SELECT ug.gameStatus FROM UserGames ug WHERE ug.user.id = :userId AND ug.game = :gameId")
+        @NamedQuery(name = "UserGames.findByUserIdAndGameId", query = "SELECT ug FROM UserGames ug WHERE ug.user.id = :userId AND ug.game = :gameId")
 })
 public class UserGames {
 
    public static final String QUERY_BY_USER_ID = "UserGames.findByUserId";
-
-    public enum gamestate {
-        BACKLOG,
-        PLAYING,
-        DROPPED,
-        COMPLETED,
-        WISHLISTED,
-        FAVOURITED
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,17 +29,12 @@ public class UserGames {
     @Column(name = "game_id", nullable = false)
     private Integer game;
 
-    @Column(name = "game_state")
-    @Enumerated(EnumType.STRING)
-    private List<gamestate> gameStatus;
-
     public UserGames() {
     }
 
-    public UserGames(UserAccount user, Integer game, List<gamestate> gameStatus) {
+    public UserGames(UserAccount user, Integer game) {
         this.user = user;
         this.game = game;
-        this.gameStatus = gameStatus;
     }
 
     public void setId(Integer id) {
@@ -73,13 +59,5 @@ public class UserGames {
 
     public void setUser(UserAccount user) {
         this.user = user;
-    }
-
-    public List<gamestate> getGameState() {
-        return gameStatus;
-    }
-
-    public void setGameState(List<gamestate> gameStatus) {
-        this.gameStatus = gameStatus;
     }
 }

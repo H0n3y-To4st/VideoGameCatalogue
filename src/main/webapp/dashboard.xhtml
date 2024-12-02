@@ -8,7 +8,7 @@
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Dashboard</title>
-<!--    add dashboard css-->
+    <!--    add dashboard css-->
     <h:outputStylesheet name="main.css"/>
 </h:head>
 <body>
@@ -27,30 +27,38 @@
 <p:toolbarGroup align="right">
     <!--             want to hide login button and display user account page instead-->
     <h:form>
-        <p:commandButton value="Export Saved Games" icon="ui-icon-arrowthickstop-1-s" ajax="false" action="#{exportUserGamesBean.exportUserGames()}"/>
+        <p:commandButton value="Export Saved Games" icon="ui-icon-arrowthickstop-1-s" ajax="false"
+                         action="#{exportUserGamesBean.exportUserGames()}"/>
     </h:form>
-
 </p:toolbarGroup>
 
 <!--        DISPLAY ALL GAMES SAVED -->
 <h:form id="gameTable">
     <p:dataTable value="#{userGamesBean.games}" var="game" styleClass="game-table">
+        <p:column headerText="Icon">
+            <img src="#{game.thumbCover.url}" alt="Game Cover"/>
+        </p:column>
+
         <p:column headerText="Title" sortBy="#{game.name}">
             <h:outputText value="#{game.name}"/>
         </p:column>
+
         <p:column headerText="Genres">
-    <p:dataTable value="#{game.genres}" var="genre" styleClass="genre-table">
-        <p:column>
-            <h:outputText value="#{genre.get('name')}"/>
+            <p:dataTable value="#{game.genres}" var="genre" styleClass="nested-table">
+                <p:column>
+                    <h:outputText value="#{genre.get('name')}"/>
+                </p:column>
+            </p:dataTable>
         </p:column>
-    </p:dataTable>
+
+        <p:column headerText="Collection">
+            <p:dataTable value="#{userGameStatesBean.getGameStatesByUserGameId(game.id)}" var="gameState" styleClass="nested-table">
+                <p:column>
+                    <h:outputText value="#{gameState}"/>
+                </p:column>
+            </p:dataTable>
         </p:column>
-        <p:column headerText="Rating" sortBy="#{game.rating}">
-            <h:outputText value="#{game.rating}"/>
-        </p:column>
-        <p:column headerText="Collection" sortBy="#{userGamesBean.gameStateByID(game.id)}">
-        <h:outputText value="#{userGamesBean.gameStateByID(game.id)}"/>
-        </p:column>
+
         <p:column>
             <f:facet name="header">
                 <h:outputText value="Remove"/>

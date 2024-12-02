@@ -5,7 +5,7 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:ui = "http://java.sun.com/jsf/facelets"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xsi:schemaLocation="http://primefaces.org/ui "
       xmlns:p="http://primefaces.org/ui"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions">
@@ -22,15 +22,15 @@
         <p:commandButton icon="pi pi-bars" type="button" onclick="PF('sidebar').show()"/>
         <p:toolbar>
             <p:toolbarGroup>
-            <h1><h:outputText value="Game Collection"/></h1>
-<!--                TODO: fix index redirect url via faces instead of this, create navigation class?-->
-            <p:commandButton value="Home" action="/index.xhtml"/>
-            <p:commandButton value="Dashboard" action="#{loginBean.checkLoggedIn()}"/>
+                <h1>Game Collection</h1>
+                <!-- TODO: fix index redirect url via faces instead of this, create navigation class? -->
+                <p:commandButton value="Home" action="/index.xhtml"/>
+                <p:commandButton value="Dashboard" action="/dashboard.xhtml" rendered="#{loginBean.checkLoggedIn()}"/>
             </p:toolbarGroup>
 
             <p:toolbarGroup align="right">
                 <div class="field col-12 md:col-4">
-<!--                    //TODO: fix icon not showing-->
+                    <!-- //TODO: fix icon not showing -->
                     <p:autoComplete id="quickSearch" icon="pi pi-search" minQueryLength="3" value="#{gameBean.searchQuery}"
                                     completeMethod="#{gameBean.searchGamesByName}"
                                     var="game" itemLabel="#{game.name}" itemValue="#{game}"
@@ -45,7 +45,7 @@
                         </p:column>
                     </p:autoComplete>
                 </div>
-<!--             want to hide login button and display user account page instead-->
+                <!-- want to hide login button and display user account page instead -->
                 <p:commandButton value="Login" action="/login.xhtml"/>
             </p:toolbarGroup>
         </p:toolbar>
@@ -53,37 +53,49 @@
     <h:form>
         <h1>Popular Games</h1>
         <div class="card-container">
-        <ui:repeat value="#{gameBean.games}" var="game">
-            <p:card style="margin: 1em;">
-                <f:facet name="header">
-                    <img src="#{game.cover.url}" alt="No Game Cover Found"/>
-                </f:facet>
-                <f:facet name="title">
-                    <h:outputText value="#{game.name}"/>
-                </f:facet>
-                <f:facet name="subtitle">
-                    <h:outputText value="#{game.genres.get(0).name}"/>
-                    <h:outputText value="..." rendered="#{game.genres.size() ge 2}"/>
-                </f:facet>
-                <h:outputText value="User Rating: #{game.rating}"/>
-                <p:selectCheckboxMenu id="menu"
-                                      label="Collections"
-                                      updateLabel="true"
-                                      selectedLabel="Collections Selected"
-                                      value="#{userGamesBean.selectedGameStates}">
-                    <f:selectItems value="#{userGamesBean.gameStates}"/>
-                </p:selectCheckboxMenu>
-                <p:commandButton icon="pi pi-check" value="Save"
-                                 action="#{userGamesBean.saveGameToDashboard(game.id)}"
-                                 update="menu"/>
-                <br/>
-                <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}">
-<!--                    any effect if i comment this out? currently this oncomplete does not work -->
-                    <p:ajax listener="#{gameBean.setSelectedGame(game)}" oncomplete="PF('growl').renderMessage({summary:'Game Selected', detail:'#{gameBean.selectedGame} has been selected', severity:'info'})"/>
-                </p:commandButton>
-            </p:card>
-        </ui:repeat>
+            <ui:repeat value="#{gameBean.games}" var="game">
+                <p:card style="margin: 1em;">
+                    <f:facet name="header">
+                        <img src="#{game.cover.url}" alt="No Game Cover Found"/>
+                    </f:facet>
+                    <f:facet name="title">
+                        <h:outputText value="#{game.name}"/>
+                    </f:facet>
+                    <f:facet name="subtitle">
+                        <h:outputText value="#{game.genres.get(0).name}"/>
+                        <h:outputText value="..." rendered="#{game.genres.size() ge 2}"/>
+                    </f:facet>
+                    <h:outputText value="User Rating: #{game.rating}"/>
+                    <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}">
+                        <p:ajax listener="#{gameBean.setSelectedGame(game)}"/>
+                    </p:commandButton>
+<!--                    add jsf logic to prevent saved game from being re-saved -->
+                    <p:commandButton icon="pi pi-check" value="Save"
+                                     rendered="#{loginBean.checkLoggedIn()}"
+                                     onclick="PF('gameDialog').show();"
+                                     update=":gameStateForm:menu">
+                        <f:setPropertyActionListener target="#{userGameStatesBean.selectedGameId}" value="#{game.id}" />
+                    </p:commandButton>
+                </p:card>
+            </ui:repeat>
         </div>
     </h:form>
+
+    <p:dialog header="Select Game Collections" widgetVar="gameDialog" modal="true" resizable="false">
+        <h:form id="gameStateForm">
+            <h:outputText value="Select the collections you want to save this game to"/>
+            <br/>
+<!--            <h:inputHidden id="selectedGameId" value="#{userGameStatesBean.selectedGameId}" />-->
+            <p:selectCheckboxMenu id="menu"
+                                  label="Collections"
+                                  value="#{userGameStatesBean.selectedGameStates}">
+                <f:selectItems value="#{userGameStatesBean.gameStates}" var="state" itemValue="#{state}" itemLabel="#{state}" />
+            </p:selectCheckboxMenu>
+            <p:commandButton icon="pi pi-check" value="Save"
+                             action="#{userGameStatesBean.saveGameAndStates(userGameStatesBean.selectedGameId, userGameStatesBean.selectedGameStates)}"
+                             update=":gameStateForm:menu"
+                             oncomplete="PF('gameDialog').hide();"/>
+        </h:form>
+    </p:dialog>
 </h:body>
 </html>

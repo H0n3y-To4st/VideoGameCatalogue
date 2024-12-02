@@ -19,11 +19,10 @@ body .ui-datatable .ui-datatable-data>tr {
     border-bottom: 10px solid #353535;
 }
 
-/* Genre nested data table*/
-.genre-table thead {
+.nested-table thead {
     display: none;
 }
-.genre-table tr {
+.nested-table tr {
     border: none;
     background: transparent;
     font-size: 13.5px;
@@ -67,6 +66,7 @@ body .ui-datatable .ui-datatable-data>tr {
     z-index: 999 !important;
 }
 
+/* Card Content */
 .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -75,8 +75,8 @@ body .ui-datatable .ui-datatable-data>tr {
 }
 
 body .ui-card .ui-card-body {
-    padding: 1rem;
-    margin-top: auto;
+    /*padding: 1rem;*/
+    /*margin-top: auto;*/
 }
 
 body .ui-card {
@@ -105,7 +105,8 @@ body .ui-card {
 }
 
 body .ui-button {
-    margin-left: 15px;
+    margin-left: 3px;
+    margin-top: 20px;
 }
 
 body .ui-card .ui-card-title {
@@ -134,4 +135,26 @@ body .ui-card .ui-card-title {
     padding: 4px 10px 4px 10px;
     height: 50px;
     width: 300px;
+}
+
+/* GameSave popup menu*/
+body .ui-dialog {
+    border-radius: 4px;
+    width: 350px;
+    visibility: visible;
+    z-index: 1022;
+    display: grid;
+    left: 773.5px;
+    top: 199.906px;
+}
+
+body .ui-selectcheckboxmenu {
+    vertical-align: baseline;
+    border: black;
+    position: relative;
+    transition: background-color .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s;
+    border-radius: 4px;
+    background: #404040;
+    color: white;
+    margin-left: 40px;
 }

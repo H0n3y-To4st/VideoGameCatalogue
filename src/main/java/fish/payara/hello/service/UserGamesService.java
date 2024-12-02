@@ -1,5 +1,6 @@
 package fish.payara.hello.service;
 
+import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.entities.UserGames;
@@ -28,27 +29,23 @@ public class UserGamesService {
     @PersistenceContext
     private EntityManager em;
 
-    // Updated to return all games the user has saved
     public List<Games> listAllGamesInDashboard(int userId) {
         List<UserGames> userGamesList = em.createNamedQuery(UserGames.QUERY_BY_USER_ID, UserGames.class)
                 .setParameter("userId", userId)
                 .getResultList();
         List<Games> games = new ArrayList<>();
         for (UserGames userGame : userGamesList) {
-            // Fetch each game by its ID and add it to the list
             games.addAll(igdbService.getGameByID(userGame.getGame()));
         }
         return games;
     }
 
-    public void saveGameToDashboard(int userId, int gameId, List<UserGames.gamestate> gamestate) {
+    public void saveGameToDashboard(int userId, int gameId) {
         try {
             UserGames checkForExisting = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
                     .setParameter("userId", userId)
                     .setParameter("gameId", gameId)
                     .getSingleResult();
-
-            checkForExisting.setGameState(gamestate);
             em.merge(checkForExisting);
         } catch (NoResultException e) {
             UserAccount user = em.find(UserAccount.class, userId);
@@ -56,7 +53,6 @@ public class UserGamesService {
             UserGames userGames = new UserGames();
             userGames.setUser(user);
             userGames.setGame(gameId);
-            userGames.setGameState(gamestate);
             em.persist(userGames);
         }
     }
@@ -76,19 +72,15 @@ public class UserGamesService {
         }
     }
 
-    public UserGames.gamestate getGameState(int userId, int gameId) {
-        return em.createNamedQuery("UserGames.findStateByUserIdAndGameId", UserGames.gamestate.class)
-                .setParameter("userId", userId)
-                .setParameter("gameId", gameId)
-                .getSingleResult();
-    }
-
-    public void updateGameSaveState(int game, int gameId, List<UserGames.gamestate> gameStates) {
-        UserGames userGames = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
-                .setParameter("userId", game)
-                .setParameter("gameId", gameId)
-                .getSingleResult();
-        userGames.setGameState(gameStates);
-        em.merge(userGames);
+    public int getUserGameId(int userId, int gameId) {
+        try {
+            UserGames userGame = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
+                    .setParameter("userId", userId)
+                    .setParameter("gameId", gameId)
+                    .getSingleResult();
+            return userGame.getId();
+        } catch (NoResultException e) {
+            throw new IllegalArgumentException("No UserGames found for userId: " + userId + " and gameId: " + gameId);
+        }
     }
 }

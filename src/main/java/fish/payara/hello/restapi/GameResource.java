@@ -1,8 +1,11 @@
 package fish.payara.hello.restapi;
 
+import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.entities.UserGames;
+import fish.payara.hello.restapi.dto.UserID;
+import fish.payara.hello.restapi.dto.UserIDs;
 import fish.payara.hello.service.UserAccountService;
 import fish.payara.hello.service.UserGamesService;
 
@@ -49,16 +52,18 @@ public class GameResource {
     This allows you to create or update the collection assignments without modifying the core game details.
      */
     @PUT
-    @Path("/update/{gameId}/{userId}")
+    @Path("/{gameId}/players")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateGameDetails(@PathParam("gameId") int gameId, @PathParam("userId") int userId) {
-//        userGamesService.updateGameSaveState(userId, gameId, gameStates);
+    public Response updateGameDetails(@PathParam("gameId") int gameId, UserIDs userIds) {
+//        userGamesService.updateGameSaveState(userIds, gameId, gameStates);
+
+        //body - list of userids
         return Response.ok().build();
     }
 
     @DELETE
-    @Path("/delete/{gameId}/{userId}")
+    @Path("/{gameId}/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteGameFromDashboard(@PathParam("gameId") int gameId, @PathParam("userId") int userId) {
         UserAccount user = userAccountService.getUser(userId);
@@ -70,15 +75,17 @@ public class GameResource {
     }
 
     @POST
-    @Path("/save/{gameId}/{userId}")
+    @Path("/{gameId}/players")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response saveGameToDashboard(@PathParam("gameId") int gameId, @PathParam("userId") int userId) {
+    public Response saveGameToDashboard(@PathParam("gameId") int gameId, UserID userId) {
 //        if (user == null) {
 //            return Response.status(Response.Status.NOT_FOUND).build();
 //        }
-        List<UserGames.gamestate> gamestate = List.of(UserGames.gamestate.BACKLOG);
-        userGamesService.saveGameToDashboard(userId, gameId, gamestate);
+
+        //body params - userid,
+//        List<GameState> gamestate = List.of(UserGames.gamestate.BACKLOG);
+//        userGamesService.saveGameToDashboard(userId.getId(), gameId, gamestate);
         return Response.ok().build();
     }
 }
