@@ -95,15 +95,19 @@ public class UserGamesBean implements Serializable {
     }
 
     public void removeGameFromDashboard(int gameId) {
-        UserAccount user = userAccountBean.getUser(userId);
-        if (user != null) {
-            userGamesService.removeGameFromDashboard(user, gameId);
+        UserID userID = new UserID();
+        userID.setId(userId);
 
-            // Refresh the list after removal
-            games = userGamesService.listAllGamesInDashboard(user.getId());
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/delete/" + gameId + "/dashboard")
+                .queryParam("userId", userID.getId());
+        Response response = target.request(MediaType.APPLICATION_JSON).delete();
 
-            // Optionally update UI components
+        if (response.getStatus() == 200) {
+            games = userGamesService.listAllGamesInDashboard(userID.getId());
             PrimeFaces.current().ajax().update("gameTable");
+        }  else {
+            logger.log(Level.SEVERE, "Failed to delete game from dashboard");
         }
     }
 

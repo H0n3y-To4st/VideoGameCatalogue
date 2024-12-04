@@ -63,15 +63,15 @@ public class GameResource {
     }
 
     @DELETE
-    @Path("/{gameId}/{userId}")
+    @Path("/delete/{gameId}/dashboard")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteGameFromDashboard(@PathParam("gameId") int gameId, @PathParam("userId") int userId) {
-        UserAccount user = userAccountService.getUser(userId);
-        if (user == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        userGamesService.removeGameFromDashboard(user, gameId);
-        return Response.noContent().build();
+    public Response deleteGameFromDashboard(@PathParam("gameId") int gameId, @QueryParam("userId") int userId) {
+//        if (userId == null) {
+//            return Response.status(Response.Status.NOT_FOUND).build();
+//        }
+        userGamesService.removeGameFromDashboard(userId, gameId);
+        return Response.ok().build();
     }
 
     @POST

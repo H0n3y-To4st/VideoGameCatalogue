@@ -6,6 +6,7 @@ import fish.payara.hello.entities.UserGameStates;
 import fish.payara.hello.entities.UserGames;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
@@ -38,6 +39,19 @@ public class UserGameStatesService {
             }
         } else {
             throw new IllegalArgumentException("UserGames not found for id: " + userGamesId);
+        }
+    }
+
+    public void removeGameStates(int userGamesId) {
+        try {
+            List<UserGameStates> userGameStatesList = em.createNamedQuery("UserGameStates.findByUserGameId", UserGameStates.class)
+                    .setParameter("userGameId", userGamesId)
+                    .getResultList();
+            for (UserGameStates userGameStates : userGameStatesList) {
+                em.remove(userGameStates);
+            }
+        } catch (NoResultException e) {
+            System.out.println("No game states found for userGameId: " + userGamesId);
         }
     }
 

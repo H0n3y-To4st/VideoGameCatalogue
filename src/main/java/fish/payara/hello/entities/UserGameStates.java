@@ -8,6 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_game_states")
+@NamedQueries({
+        @NamedQuery(name = "UserGameStates.findByUserGameId", query = "SELECT ugs FROM UserGameStates ugs WHERE ugs.userGames.id = :userGameId")
+})
 public class UserGameStates {
 
     public enum gamestate {

@@ -3,6 +3,7 @@ package fish.payara.hello.service;
 import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
+import fish.payara.hello.entities.UserGameStates;
 import fish.payara.hello.entities.UserGames;
 import fish.payara.hello.restapi.IGDBService;
 import jakarta.ejb.Stateless;
@@ -68,16 +69,18 @@ public class UserGamesService {
 //        add primeface notification pop up if saved already within else block, mb change ui for save game button to show it already saved with primefaces
 //        Logger.getLogger(GameService.class.getName()).log(Level.INFO, "Game already saved to the dashboard");
 
-    public void removeGameFromDashboard(UserAccount user, int gameId) {
+    public void removeGameFromDashboard(int userId, int gameId) {
         try {
             UserGames userGames = em.createNamedQuery("UserGames.findByUserIdAndGameId", UserGames.class)
-                    .setParameter("userId", user.getId())
+                    .setParameter("userId", userId)
                     .setParameter("gameId", gameId)
                     .getSingleResult();
+
+            userGameStatesService.removeGameStates(userGames.getId());
+
             em.remove(userGames);
         } catch (NoResultException e) {
-            System.out.println("No game found for user: " + user.getId() + " and game: " + gameId);
-
+            System.out.println("No game found for user: " + userId + " and game: " + gameId);
         }
     }
 

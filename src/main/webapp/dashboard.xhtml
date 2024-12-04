@@ -63,7 +63,7 @@
             <f:facet name="header">
                 <h:outputText value="Remove"/>
             </f:facet>
-            <p:commandButton value="-" update="gameTable" action="#{userGamesBean.removeGameFromDashboard(game)}"/>
+            <p:commandButton value="-" update="gameTable" action="#{userGamesBean.removeGameFromDashboard(game.id)}"/>
         </p:column>
     </p:dataTable>
 </h:form>
