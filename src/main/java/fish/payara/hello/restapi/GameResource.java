@@ -75,17 +75,14 @@ public class GameResource {
     }
 
     @POST
-    @Path("/{gameId}/players")
+    @Path("/save/{gameId}/dashboard")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveGameToDashboard(@PathParam("gameId") int gameId, UserID userId) {
-//        if (user == null) {
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
-
-        //body params - userid,
-//        List<GameState> gamestate = List.of(UserGames.gamestate.BACKLOG);
-//        userGamesService.saveGameToDashboard(userId.getId(), gameId, gamestate);
+        if (userId == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        userGamesService.saveGameToDashboard(userId.getId(), gameId);
         return Response.ok().build();
     }
 }

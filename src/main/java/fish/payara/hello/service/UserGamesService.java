@@ -29,6 +29,9 @@ public class UserGamesService {
     @PersistenceContext
     private EntityManager em;
 
+    @Inject
+    UserGameStatesService userGameStatesService;
+
     public List<Games> listAllGamesInDashboard(int userId) {
         List<UserGames> userGamesList = em.createNamedQuery(UserGames.QUERY_BY_USER_ID, UserGames.class)
                 .setParameter("userId", userId)
@@ -38,6 +41,12 @@ public class UserGamesService {
             games.addAll(igdbService.getGameByID(userGame.getGame()));
         }
         return games;
+    }
+
+    public void saveGameAndStates(int userId, int gameId, List<GameState> selectedGameStates) {
+        saveGameToDashboard(userId, gameId);
+        int userGameId = getUserGameId(userId, gameId);
+        userGameStatesService.saveGameStates(userGameId, selectedGameStates);
     }
 
     public void saveGameToDashboard(int userId, int gameId) {

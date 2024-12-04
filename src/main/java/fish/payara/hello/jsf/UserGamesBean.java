@@ -4,12 +4,21 @@ import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.entities.UserGames;
+import fish.payara.hello.restapi.dto.UserID;
+import fish.payara.hello.service.UserGameStatesService;
 import fish.payara.hello.service.UserGamesService;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
@@ -31,6 +40,12 @@ public class UserGamesBean implements Serializable {
 
     @Inject
     private UserGamesService userGamesService;
+
+    @Inject
+    private UserGameStatesService userGameStatesService;
+
+    @Inject
+    private UserGameStatesBean userGameStatesBean;
 
     @Inject
     private LoginBean loginBean;
@@ -58,24 +73,25 @@ public class UserGamesBean implements Serializable {
         }
     }
 
-    public void saveGameToDashboard(int gameId) {
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
-//        if (user == null) {
-//            facesContext.getExternalContext().redirect("login.xhtml");
-//            return;
-//        }
-//        Client client = ClientBuilder.newClient();
-//        WebTarget target = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/save/" + gameId + "/" + user.getId());
-//        Response response = target.request().get();
-//        if (response.getStatus() == 200) {
-//            logger.log(Level.INFO, "Saved game to dashboard");
-//        } else {
-//            logger.log(Level.SEVERE, "Failed to saved game to dashboard");
-//        }
-//        response.close();
-//        client.close();
-        userGamesService.saveGameToDashboard(userId, gameId);
+    public void saveGameAndStates(int gameId) {
+        UserID userID = new UserID();
+        userID.setId(userId);
+
+        //save game to dashboard, include body params
+        Client client = ClientBuilder.newClient();
+        Response response = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/save/" + gameId + "/dashboard")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(userID, MediaType.APPLICATION_JSON));
+
+        if (response.getStatus() == 200) {
+            logger.log(Level.INFO, "Saved game to dashboard");
+            selectedGameStates = new ArrayList<>(userGameStatesBean.getSelectedGameStates());
+            userGameStatesService.saveGameStates(getUserGameId(gameId), selectedGameStates);
+        } else {
+            logger.log(Level.SEVERE, "Failed to saved game to dashboard");
+        }
+        response.close();
+        client.close();
     }
 
     public void removeGameFromDashboard(int gameId) {
@@ -101,5 +117,9 @@ public class UserGamesBean implements Serializable {
 
     public int getUserGameId(int gameId) {
         return userGamesService.getUserGameId(userId, gameId);
+    }
+
+    public int getUserId() {
+        return userId;
     }
 }

@@ -92,7 +92,7 @@
                 <f:selectItems value="#{userGameStatesBean.gameStates}" var="state" itemValue="#{state}" itemLabel="#{state}" />
             </p:selectCheckboxMenu>
             <p:commandButton icon="pi pi-check" value="Save"
-                             action="#{userGameStatesBean.saveGameAndStates(userGameStatesBean.selectedGameId, userGameStatesBean.selectedGameStates)}"
+                             action="#{userGamesBean.saveGameAndStates(userGameStatesBean.selectedGameId)}"
                              update=":gameStateForm:menu"
                              oncomplete="PF('gameDialog').hide();"/>
         </h:form>

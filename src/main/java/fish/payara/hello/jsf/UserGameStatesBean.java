@@ -24,12 +24,15 @@ public class UserGameStatesBean implements Serializable {
     private int selectedGameId;
 
     @Inject
-    private UserGameStatesService userGameStatesService;
-
-    Logger logger = Logger.getLogger(UserGameStatesBean.class.getName());
+    private UserGamesBean userGamesBean;
 
     @Inject
-    private UserGamesBean userGamesBean;
+    private UserGameStatesService userGameStatesService;
+
+    @Inject
+    private UserGamesService userGamesService;
+
+    Logger logger = Logger.getLogger(UserGameStatesBean.class.getName());
 
     @PostConstruct
     public void init() {
@@ -38,9 +41,7 @@ public class UserGameStatesBean implements Serializable {
     }
 
     public void saveGameAndStates(int gameId, List<GameState> selectedGameStates) {
-        userGamesBean.saveGameToDashboard(gameId);
-        userGameStatesService.saveGameStates(userGamesBean.getUserGameId(gameId), selectedGameStates);
-        selectedGameStates = new ArrayList<>(userGameStatesService.getSelectedGameStates());
+        userGamesService.saveGameAndStates(userGamesBean.getUserId(), gameId, selectedGameStates);
     }
 
     public List<GameState> getGameStates() {
