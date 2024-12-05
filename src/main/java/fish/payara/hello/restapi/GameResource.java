@@ -46,13 +46,9 @@ public class GameResource {
         List<Games> games = igdbService.getTopGames();
         return games;
     }
-    /*
-    Instead, you manage user-specific metadata in your database, such as which game belongs to which collection
-    (e.g., "wishlist," "completed").
-    This allows you to create or update the collection assignments without modifying the core game details.
-     */
+
     @PUT
-    @Path("/{gameId}/players")
+    @Path("/update/{gameId}/dashboard")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateGameDetails(@PathParam("gameId") int gameId, UserIDs userIds) {
@@ -71,7 +67,9 @@ public class GameResource {
 //            return Response.status(Response.Status.NOT_FOUND).build();
 //        }
         userGamesService.removeGameFromDashboard(userId, gameId);
-        return Response.ok().build();
+        // TODO: FIX RETURN TO THIS: return Response.noContent().build();
+        // TODO: doing this will be status 204 no content instead of 200 ok
+        return Response.noContent().build();
     }
 
     @POST

@@ -103,7 +103,7 @@ public class UserGamesBean implements Serializable {
                 .queryParam("userId", userID.getId());
         Response response = target.request(MediaType.APPLICATION_JSON).delete();
 
-        if (response.getStatus() == 200) {
+        if (response.getStatus() == 204) {
             games = userGamesService.listAllGamesInDashboard(userID.getId());
             PrimeFaces.current().ajax().update("gameTable");
         }  else {
