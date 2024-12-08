@@ -5,23 +5,32 @@ import jakarta.ejb.LocalBean;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Stateless
 @LocalBean
-public class UserAccountService {
+public class UserAccountService implements Serializable {
 
     @PersistenceContext
     private EntityManager em;
 
-    public Integer getUserId(String username){
+    Logger logger = Logger.getLogger(UserAccountService.class.getName());
+
+    public UserAccount getUserByUsername(String username){
         try {
-            return em.createNamedQuery("UserAccount.findIDByUsername", Integer.class)
+
+            UserAccount user = em.createNamedQuery("UserAccount.findIDByUsername", UserAccount.class)
                     .setParameter("username", username).getSingleResult();
+            logger.log(Level.SEVERE, "Getting user: " + username + "user ID" + user.getId());
+            return user;
         } catch (Exception e){
             return null;
         }
     }
 
-    public UserAccount getUser(Integer id){
+    public UserAccount getUserByID(Integer id){
         return em.createNamedQuery("UserAccount.findById", UserAccount.class)
                 .setParameter("id", id).getSingleResult();
     }

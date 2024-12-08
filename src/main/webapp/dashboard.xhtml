@@ -61,11 +61,38 @@
 
         <p:column>
             <f:facet name="header">
+                <h:outputText value="Update"/>
+            </f:facet>
+            <p:commandButton icon="pi pi-check" value="Update"
+                             onclick="PF('gameDialog').show();">
+                <f:setPropertyActionListener target="#{userGameStatesBean.selectedGameId}" value="#{game.id}" />
+            </p:commandButton>
+        </p:column>
+
+        <p:column>
+            <f:facet name="header">
                 <h:outputText value="Remove"/>
             </f:facet>
             <p:commandButton value="-" update="gameTable" action="#{userGamesBean.removeGameFromDashboard(game.id)}"/>
         </p:column>
     </p:dataTable>
 </h:form>
+
+<p:dialog header="Update Game Collections" widgetVar="gameDialog" modal="true" resizable="false">
+    <h:form id="gameStateForm">
+        <h:outputText value="Update the collections you want to save this game to"/>
+        <br/>
+        <!--            <h:inputHidden id="selectedGameId" value="#{userGameStatesBean.selectedGameId}" />-->
+        <p:selectCheckboxMenu id="menu"
+                              label="Collections"
+                              value="#{userGameStatesBean.selectedGameStates}">
+            <f:selectItems value="#{userGameStatesBean.gameStates}" var="state" itemValue="#{state}" itemLabel="#{state}" />
+        </p:selectCheckboxMenu>
+        <p:commandButton icon="pi pi-check" value="Save"
+                         action="#{userGameStatesBean.updateGameStates(userGameStatesBean.selectedGameId, userGameStatesBean.selectedGameStates)}"
+                         update=":gameStateForm:menu"
+                         oncomplete="PF('gameDialog').hide();"/>
+    </h:form>
+</p:dialog>
 </body>
 </html>

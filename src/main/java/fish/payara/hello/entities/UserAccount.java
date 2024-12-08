@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author IsmahHussain
@@ -27,30 +26,25 @@ import java.util.List;
         @NamedQuery(name = "UserAccount.findByUsernameAndPassword", query = "SELECT u FROM UserAccount u WHERE u.username = :username AND u.password = :password")})
 public class UserAccount implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+
     @Id
     @Basic
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
     @Size(max = 2147483647)
     @Column(name = "username")
     private String username;
+
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 2147483647)
     @Column(name = "email")
     private String email;
+
     @Size(max = 2147483647)
     @Column(name = "password")
     private String password;
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_games",
-//            joinColumns = @JoinColumn(name = "user_account", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "games", referencedColumnName = "id")
-//    )
-//    private List<Games> games;
 
     public UserAccount() {
 

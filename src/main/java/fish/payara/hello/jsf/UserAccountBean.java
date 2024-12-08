@@ -1,27 +1,23 @@
 package fish.payara.hello.jsf;
+
 import fish.payara.hello.entities.UserAccount;
-import fish.payara.hello.service.UserAccountService;
-import jakarta.inject.Inject;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+
+import java.io.Serializable;
 
 @Named(value = "userAccountBean")
-@RequestScoped
-public class UserAccountBean {
+@SessionScoped
+public class UserAccountBean implements Serializable {
 
-    @Inject
-    private UserAccountService userAccountService;
-
-    @PersistenceContext
-    private EntityManager em;
-
-    public Integer getLoggedInUserId(String username) {
-        return userAccountService.getUserId(username);
+    public Integer getLoggedInUserId() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
+        return user != null ? user.getId() : null;
     }
 
-    public UserAccount getUser(Integer id){
-        return userAccountService.getUser(id);
+    public boolean isLoggedIn() {
+        return getLoggedInUserId() != null;
     }
 }

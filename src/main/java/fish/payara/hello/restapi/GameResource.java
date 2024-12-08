@@ -1,12 +1,9 @@
 package fish.payara.hello.restapi;
 
-import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.entities.UserAccount;
-import fish.payara.hello.entities.UserGames;
+import fish.payara.hello.restapi.dto.UpdateGameStates;
 import fish.payara.hello.restapi.dto.UserID;
-import fish.payara.hello.restapi.dto.UserIDs;
-import fish.payara.hello.service.UserAccountService;
+import fish.payara.hello.service.UserGameStatesService;
 import fish.payara.hello.service.UserGamesService;
 
 import jakarta.inject.Inject;
@@ -26,7 +23,7 @@ public class GameResource {
     UserGamesService userGamesService;
 
     @Inject
-    UserAccountService userAccountService;
+    UserGameStatesService userGameStatesService;
 
     @GET
     @Path("/{gameId}")
@@ -51,10 +48,8 @@ public class GameResource {
     @Path("/update/{gameId}/dashboard")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateGameDetails(@PathParam("gameId") int gameId, UserIDs userIds) {
-//        userGamesService.updateGameSaveState(userIds, gameId, gameStates);
-
-        //body - list of userids
+    public Response updateSavedGameStates(@PathParam("gameId") int gameId, UpdateGameStates updateGameStates) {
+        userGameStatesService.updateGameStates(updateGameStates.getUserId(), gameId, updateGameStates.getSelectedGameStates());
         return Response.ok().build();
     }
 
@@ -63,12 +58,7 @@ public class GameResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteGameFromDashboard(@PathParam("gameId") int gameId, @QueryParam("userId") int userId) {
-//        if (userId == null) {
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
         userGamesService.removeGameFromDashboard(userId, gameId);
-        // TODO: FIX RETURN TO THIS: return Response.noContent().build();
-        // TODO: doing this will be status 204 no content instead of 200 ok
         return Response.noContent().build();
     }
 

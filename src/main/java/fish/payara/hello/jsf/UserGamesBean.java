@@ -2,15 +2,12 @@ package fish.payara.hello.jsf;
 
 import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.entities.UserAccount;
-import fish.payara.hello.entities.UserGames;
 import fish.payara.hello.restapi.dto.UserID;
 import fish.payara.hello.service.UserGameStatesService;
 import fish.payara.hello.service.UserGamesService;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.ws.rs.client.Client;
@@ -19,6 +16,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
@@ -28,14 +26,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Named(value = "userGamesBean")
-@ViewScoped
+@SessionScoped
 public class UserGamesBean implements Serializable {
 
     private List<Games> games;
-
     private int userId;
 
-    private List<GameState> gameStates;
+//    private List<GameState> gameStates;
     private List<GameState> selectedGameStates;
 
     @Inject
@@ -48,29 +45,20 @@ public class UserGamesBean implements Serializable {
     private UserGameStatesBean userGameStatesBean;
 
     @Inject
-    private LoginBean loginBean;
-
-    @Inject
     private UserAccountBean userAccountBean;
 
     Logger logger = Logger.getLogger(UserGamesBean.class.getName());
 
     public UserGamesBean() {
-        logger.info("UserGamesBean instantiated");
     }
 
     @PostConstruct
     public void init() {
-        gameStates = List.of(GameState.values());
+//        gameStates = List.of(GameState.values());
         selectedGameStates = new ArrayList<>();
-        if (loginBean.checkLoggedIn()) {
-            try {
-                userId = userAccountBean.getLoggedInUserId(loginBean.getUsername());
-                games = userGamesService.listAllGamesInDashboard(userId);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        userId = userAccountBean.getLoggedInUserId();
+//        games = userGamesService.listAllGamesInDashboard(userId);
+        logger.info("UserGamesBean instantiated");
     }
 
     public void saveGameAndStates(int gameId) {
@@ -112,6 +100,7 @@ public class UserGamesBean implements Serializable {
     }
 
     public List<Games> getGames() {
+        games = userGamesService.listAllGamesInDashboard(userId);
         return games;
     }
 
@@ -120,10 +109,10 @@ public class UserGamesBean implements Serializable {
     }
 
     public int getUserGameId(int gameId) {
-        return userGamesService.getUserGameId(userId, gameId);
-    }
+        UserID userID = new UserID();
+        userID.setId(userId);
 
-    public int getUserId() {
-        return userId;
+        logger.log(Level.SEVERE, "Current User ID: " + userID.getId() + " Game ID: " + gameId);
+        return userGamesService.getUserGameId(userID.getId(), gameId);
     }
 }

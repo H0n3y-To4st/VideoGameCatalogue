@@ -4,19 +4,37 @@ import fish.payara.hello.GameState;
 import fish.payara.hello.UserGameStatesId;
 import fish.payara.hello.entities.UserGameStates;
 import fish.payara.hello.entities.UserGames;
+import fish.payara.hello.jsf.UserAccountBean;
+import fish.payara.hello.jsf.UserGamesBean;
+import fish.payara.hello.restapi.dto.UserID;
+
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Stateless
-public class UserGameStatesService {
+public class UserGameStatesService implements Serializable {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Inject
+    private UserGamesBean userGamesBean;
+
+    @Inject
+    private UserAccountBean userAccountBean;
+
+    @Inject
+    private UserGamesService userGamesService;
+
+    Logger logger = Logger.getLogger(UserGameStatesService.class.getName());
 
     public List<GameState> getSelectedGameStates() {
         // Implement logic to retrieve selected game states
@@ -59,5 +77,40 @@ public class UserGameStatesService {
         Query query = em.createQuery("SELECT ugs.id.gameState FROM UserGameStates ugs WHERE ugs.id.userGamesId = :userGameId");
         query.setParameter("userGameId", userGameId);
         return query.getResultList();
+    }
+
+    public void updateGameStates(UserID userId, int gameId, List<GameState> selectedGameStates) {
+            int userGamesId = userGamesService.getUserGameId(userId.getId(), gameId);
+
+            List<GameState> alreadySavedGameStates = getGameStatesByUserGameId(userGamesId);
+            UserGames userGames = em.find(UserGames.class, userGamesId);
+
+            if (userGames != null) {
+                for (GameState newState : selectedGameStates) {
+                    if (!alreadySavedGameStates.contains(newState)) {
+                        UserGameStatesId id = new UserGameStatesId();
+                        id.setUserGamesId(userGamesId);
+                        id.setGameState(newState);
+
+                        UserGameStates userGameStates = new UserGameStates();
+                        userGameStates.setId(id);
+                        userGameStates.setUserGames(userGames);
+
+                        em.merge(userGameStates);
+                    }
+                }
+
+                for (GameState savedState : alreadySavedGameStates) {
+                    if (!selectedGameStates.contains(savedState)) {
+                        Query query = em.createQuery("DELETE FROM UserGameStates ugs WHERE ugs.id.userGamesId = :userGamesId AND ugs.id.gameState = :gameState");
+                        query.setParameter("userGamesId", userGamesId);
+                        query.setParameter("gameState", savedState);
+                        query.executeUpdate();
+                    }
+                }
+            } else {
+                // Handle the case where userId is null
+                throw new IllegalArgumentException("userId: " + userId + " not found during update game state");
+            }
     }
 }

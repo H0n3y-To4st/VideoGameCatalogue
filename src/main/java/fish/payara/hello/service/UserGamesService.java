@@ -1,11 +1,10 @@
 package fish.payara.hello.service;
 
-import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
-import fish.payara.hello.entities.UserGameStates;
 import fish.payara.hello.entities.UserGames;
 import fish.payara.hello.restapi.IGDBService;
+
 import jakarta.ejb.Stateless;
 import jakarta.ejb.LocalBean;
 import jakarta.inject.Inject;
@@ -13,22 +12,22 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author IsmahHussain
  */
 @Stateless
 @LocalBean
-public class UserGamesService {
-
-    @Inject
-    IGDBService igdbService;
+public class UserGamesService implements Serializable {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Inject
+    IGDBService igdbService;
 
     @Inject
     UserGameStatesService userGameStatesService;
@@ -42,12 +41,6 @@ public class UserGamesService {
             games.addAll(igdbService.getGameByID(userGame.getGame()));
         }
         return games;
-    }
-
-    public void saveGameAndStates(int userId, int gameId, List<GameState> selectedGameStates) {
-        saveGameToDashboard(userId, gameId);
-        int userGameId = getUserGameId(userId, gameId);
-        userGameStatesService.saveGameStates(userGameId, selectedGameStates);
     }
 
     public void saveGameToDashboard(int userId, int gameId) {

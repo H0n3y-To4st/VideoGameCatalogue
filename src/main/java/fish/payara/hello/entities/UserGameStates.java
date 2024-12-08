@@ -13,15 +13,6 @@ import java.util.List;
 })
 public class UserGameStates {
 
-    public enum gamestate {
-        BACKLOG,
-        PLAYING,
-        DROPPED,
-        COMPLETED,
-        WISHLISTED,
-        FAVOURITED
-    }
-
     @EmbeddedId
     private UserGameStatesId id;
 
@@ -33,7 +24,7 @@ public class UserGameStates {
     public UserGameStates() {
     }
 
-    public UserGameStates(UserGameStatesId id, UserGames  userGames) {
+    public UserGameStates(UserGameStatesId id, UserGames userGames) {
         this.id = id;
         this.userGames = userGames;
     }

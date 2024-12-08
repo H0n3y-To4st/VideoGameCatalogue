@@ -1,26 +1,34 @@
 package fish.payara.hello.jsf;
 
 import fish.payara.hello.GameState;
+import fish.payara.hello.restapi.dto.UpdateGameStates;
+import fish.payara.hello.restapi.dto.UserID;
 import fish.payara.hello.service.UserGameStatesService;
-import fish.payara.hello.service.UserGamesService;
+
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.view.ViewScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Named(value = "userGameStatesBean")
-@ViewScoped
+@SessionScoped
 public class UserGameStatesBean implements Serializable {
 
     private List<GameState> gameStates;
     private List<GameState> selectedGameStates;
-
     private int selectedGameId;
 
     @Inject
@@ -29,8 +37,9 @@ public class UserGameStatesBean implements Serializable {
     @Inject
     private UserGameStatesService userGameStatesService;
 
+    @Named("userAccountBean")
     @Inject
-    private UserGamesService userGamesService;
+    private UserAccountBean userAccountBean;
 
     Logger logger = Logger.getLogger(UserGameStatesBean.class.getName());
 
@@ -38,10 +47,6 @@ public class UserGameStatesBean implements Serializable {
     public void init() {
         gameStates = List.of(GameState.values());
         selectedGameStates = new ArrayList<>(userGameStatesService.getSelectedGameStates());
-    }
-
-    public void saveGameAndStates(int gameId, List<GameState> selectedGameStates) {
-        userGamesService.saveGameAndStates(userGamesBean.getUserId(), gameId, selectedGameStates);
     }
 
     public List<GameState> getGameStates() {
@@ -70,8 +75,34 @@ public class UserGameStatesBean implements Serializable {
     }
 
     public List<GameState> getGameStatesByUserGameId(int gameId) {
-        List<GameState> gameStates = userGameStatesService.getGameStatesByUserGameId(userGamesBean.getUserGameId(gameId));
-        gameStates.sort(Comparator.comparingInt(Enum::ordinal));
-        return gameStates;
+        return userGameStatesService.getGameStatesByUserGameId(userGamesBean.getUserGameId(gameId));
     }
+
+    public void updateGameStates(int gameId, List<GameState> selectedGameStates) {
+
+        int id = userAccountBean.getLoggedInUserId();
+        UserID userId = new UserID();
+        userId.setId(id);
+
+        UpdateGameStates request = new UpdateGameStates();
+        request.setUserId(userId);
+        request.setSelectedGameStates(selectedGameStates);
+
+        try {
+            Client client = ClientBuilder.newClient();
+            Response response = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/update/" + gameId + "/dashboard")
+                    .request(MediaType.APPLICATION_JSON)
+                    .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+
+            if (response.getStatus() == 200) {
+                logger.log(Level.INFO, "Updated game state");
+                PrimeFaces.current().ajax().update("gameTable");
+            } else {
+                logger.log(Level.SEVERE, "Failed to update game state");
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "An error occurred while updating game states", e);
+        }
+    }
+
 }
