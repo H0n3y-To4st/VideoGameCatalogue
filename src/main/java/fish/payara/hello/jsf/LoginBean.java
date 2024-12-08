@@ -1,16 +1,17 @@
 package fish.payara.hello.jsf;
+
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.service.LoginService;
-import jakarta.enterprise.context.SessionScoped;
+
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.enterprise.context.RequestScoped;
 
 import java.io.Serializable;
 
 @Named(value = "loginBean")
-@SessionScoped
+@ViewScoped
 public class LoginBean implements Serializable {
 
     @Inject
@@ -40,13 +41,12 @@ public class LoginBean implements Serializable {
         return message;
     }
 
-    public String checkForAccount(){
+    public String checkForAccount() {
         if (loginService.checkForAccount(username, password)) {
             try {
                 UserAccount user = loginService.getUser(username, password);
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 facesContext.getExternalContext().getSessionMap().put("user", user);
-//                facesContext.getExternalContext().redirect("dashboard.xhtml");
                 facesContext.getExternalContext().redirect("index.xhtml");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -58,7 +58,7 @@ public class LoginBean implements Serializable {
         }
     }
 
-    public boolean checkLoggedIn(){
+    public boolean checkLoggedIn() {
         return loginService.checkLoggedIn();
     }
 }

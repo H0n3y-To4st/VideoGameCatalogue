@@ -14,9 +14,9 @@
     <h:form>
         <h:panelGrid columns="2" styleClass="login-form">
             <h:outputLabel for="username" value="Username:"/>
-            <h:inputText id="username" value="#{loginBean.username}" required="false"/>
+            <h:inputText id="username" value="#{loginBean.username}" required="true"/>
             <h:outputLabel for="password" value="Password:"/>
-            <h:inputSecret id="password" value="#{loginBean.password}" required="false"/>
+            <h:inputSecret id="password" value="#{loginBean.password}" required="true"/>
             <h:commandButton value="Login" action="#{loginBean.checkForAccount()}" styleClass="button"/>
             <h:outputText value="#{loginBean.message}"/>
             Don't have an account?
