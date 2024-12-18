@@ -16,7 +16,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @Stateless
@@ -79,38 +81,54 @@ public class UserGameStatesService implements Serializable {
         return query.getResultList();
     }
 
+    // TODO: optimise this
+
+    //get current game states for a user game
+    //get selected game states
+    //compare the two
+
+    //using sets to more efficiently compare the two lists
+    //time this
     public void updateGameStates(UserID userId, int gameId, List<GameState> selectedGameStates) {
-            int userGamesId = userGamesService.getUserGameId(userId.getId(), gameId);
+        int userGamesId = userGamesService.getUserGameId(userId.getId(), gameId);
 
-            List<GameState> alreadySavedGameStates = getGameStatesByUserGameId(userGamesId);
-            UserGames userGames = em.find(UserGames.class, userGamesId);
+        List<GameState> alreadySavedGameStates = getGameStatesByUserGameId(userGamesId);
+        Set<GameState> alreadySavedGameStatesSet = new HashSet<>(alreadySavedGameStates);
+        Set<GameState> selectedGameStatesSet = new HashSet<>(selectedGameStates);
 
-            if (userGames != null) {
-                for (GameState newState : selectedGameStates) {
-                    if (!alreadySavedGameStates.contains(newState)) {
-                        UserGameStatesId id = new UserGameStatesId();
-                        id.setUserGamesId(userGamesId);
-                        id.setGameState(newState);
+        UserGames userGames = em.find(UserGames.class, userGamesId);
 
-                        UserGameStates userGameStates = new UserGameStates();
-                        userGameStates.setId(id);
-                        userGameStates.setUserGames(userGames);
+        if (userGames != null) {
+            //remove already saved game states from selected game states
+            Set<GameState> statesToAdd = new HashSet<>(selectedGameStatesSet);
+            statesToAdd.removeAll(alreadySavedGameStatesSet);
 
-                        em.merge(userGameStates);
-                    }
+            Set<GameState> statesToRemove = new HashSet<>(alreadySavedGameStatesSet);
+            statesToRemove.removeAll(selectedGameStatesSet);
+
+            if (!statesToAdd.isEmpty()) {
+                for (GameState newState : statesToAdd) {
+                    UserGameStatesId id = new UserGameStatesId();
+                    id.setUserGamesId(userGamesId);
+                    id.setGameState(newState);
+
+                    UserGameStates userGameStates = new UserGameStates();
+                    userGameStates.setId(id);
+                    userGameStates.setUserGames(userGames);
+
+                    em.merge(userGameStates);
                 }
-
-                for (GameState savedState : alreadySavedGameStates) {
-                    if (!selectedGameStates.contains(savedState)) {
-                        Query query = em.createQuery("DELETE FROM UserGameStates ugs WHERE ugs.id.userGamesId = :userGamesId AND ugs.id.gameState = :gameState");
-                        query.setParameter("userGamesId", userGamesId);
-                        query.setParameter("gameState", savedState);
-                        query.executeUpdate();
-                    }
-                }
-            } else {
-                // Handle the case where userId is null
-                throw new IllegalArgumentException("userId: " + userId + " not found during update game state");
             }
+
+            if (!statesToRemove.isEmpty()) {
+                Query query = em.createQuery("DELETE FROM UserGameStates ugs WHERE ugs.id.userGamesId = :userGamesId AND ugs.id.gameState IN :gameStates");
+                query.setParameter("userGamesId", userGamesId);
+                query.setParameter("gameStates", statesToRemove);
+                query.executeUpdate();
+            }
+        } else {
+            throw new IllegalArgumentException("userId: " + userId + " not found during update game state");
+        }
     }
+
 }

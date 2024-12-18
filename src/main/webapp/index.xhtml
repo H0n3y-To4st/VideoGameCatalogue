@@ -7,8 +7,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xsi:schemaLocation="http://primefaces.org/ui "
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Welcome Page</title>
 </h:head>
@@ -66,8 +65,8 @@
                         <h:outputText value="..." rendered="#{game.genres.size() ge 2}"/>
                     </f:facet>
                     <h:outputText value="User Rating: #{game.rating}"/>
+                    <br/>
                     <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}">
-                        <p:ajax listener="#{gameBean.setSelectedGame(game)}"/>
                     </p:commandButton>
 <!--                    add jsf logic to prevent saved game from being re-saved -->
                     <p:commandButton icon="pi pi-check" value="Save"

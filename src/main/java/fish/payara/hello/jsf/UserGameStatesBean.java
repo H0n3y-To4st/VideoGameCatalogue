@@ -88,8 +88,9 @@ public class UserGameStatesBean implements Serializable {
         request.setUserId(userId);
         request.setSelectedGameStates(selectedGameStates);
 
-        try {
-            Client client = ClientBuilder.newClient();
+            //this is just for demo for demonstrating accessing the REST API from the JSF managed bean
+        try  (Client client = ClientBuilder.newClient()) {
+
             Response response = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/update/" + gameId + "/dashboard")
                     .request(MediaType.APPLICATION_JSON)
                     .put(Entity.entity(request, MediaType.APPLICATION_JSON));
