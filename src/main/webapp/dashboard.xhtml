@@ -5,27 +5,20 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Dashboard</title>
-    <!--    add dashboard css-->
-    <h:outputStylesheet name="main.css"/>
 </h:head>
 <body>
-<!--    NAVIGATION SYSTEM -->
-<h:form styleClass="nav-bar">
-    <p:toolbar>
-        <p:toolbarGroup>
-            <h1><h:outputText value="Dashboard"/></h1>
-            <p:commandButton value="Home" action="/index.xhtml"/>
-        </p:toolbarGroup>
-    </p:toolbar>
-</h:form>
+
+<h:outputStylesheet name="main.css"/>
+<ui:include src="games/navbar.xhtml"/>
+
 <p>Welcome to your dashboard! Here you can view all your saved games.
 </p>
 
 <p:toolbarGroup align="right">
-    <!--             want to hide login button and display user account page instead-->
     <h:form>
         <p:commandButton value="Export Saved Games" icon="ui-icon-arrowthickstop-1-s" ajax="false"
                          action="#{exportUserGamesBean.exportUserGames()}"/>

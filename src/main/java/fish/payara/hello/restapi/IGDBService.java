@@ -16,9 +16,11 @@ public class IGDBService {
     private IGDBClient igdbClient;
 
     public List<Games> getTopGames() {
-        String body = "fields name,genres.name,rating,category, cover.url;\n" +
-                "where rating >= 90 & category = 0 & themes != (42); sort rating_count desc;\n" +
-                "limit 24;";
+        String body = """
+                fields name,genres.name,rating,category, cover.url;
+                where rating >= 90 & category = 0 & themes != (42); sort rating_count desc;
+                limit 24;
+                """;
         return igdbClient.getTopGames(body);
     }
 
@@ -34,8 +36,10 @@ public class IGDBService {
     }
 
     public Games getSelectedGameDetails(int gameId) {
-        String body = "fields name,genres.name,rating,summary,cover.url,screenshots.url;\n" +
-                "where id = " + gameId + ";";
+        String body = """
+                fields name,involved_companies.company.name,genres.name,
+                first_release_date,rating,summary,cover.url,screenshots.url;
+                """ + "where id = " + gameId + ";";
         return igdbClient.getSelectedGameDetails(body);
     }
 }

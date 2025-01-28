@@ -1,24 +1,18 @@
 package fish.payara.hello.entities;
 
-import fish.payara.hello.jsf.UserGameStatesBean;
-import fish.payara.hello.restapi.IGDBService;
-import jakarta.inject.Inject;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Games implements Serializable {
 
-    @Inject
-    IGDBService igdbService;
-
     private Integer id;
     private String name;
     private List<Map<String, String>> genres;
-//    private long releaseDate;
+    private long first_release_date;
+    private List<Map<String, Object>> involved_companies;
     private Map<String, String> cover;
     private List<Map<String, String>> screenshots;
     private Double rating;
@@ -79,14 +73,32 @@ public class Games implements Serializable {
         this.summary = summary;
     }
 
-//
-//    public long getReleaseDate() {
-//        return releaseDate;
-//    }
-//
-//    public void setReleaseDate(long releaseDate) {
-//        this.releaseDate = releaseDate;
-//    }
+    public String getGameReleaseYear() {
+        Date date = new Date(first_release_date * 1000);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(date);
+    }
+
+    public void setGameReleaseYear(long first_release_date) {
+        this.first_release_date = first_release_date;
+    }
+
+    public long getfirst_release_date() {
+        return first_release_date;
+    }
+
+    public void setfirst_release_date(long first_release_date) {
+        this.first_release_date = first_release_date;
+    }
+
+    public List<Map<String, Object>> getInvolved_companies() {
+        return involved_companies;
+    }
+
+    public void setInvolved_companies(List<Map<String, Object>> involved_companies) {
+        this.involved_companies = involved_companies;
+    }
 
     public String getRating() {
         String rating;
@@ -154,9 +166,17 @@ public class Games implements Serializable {
             return currentScreenshot;
         }
         Map<String, String> updatedScreenshot = new HashMap<>(currentScreenshot);
-        String url = "https:" + updatedScreenshot.get("url").replace("thumb", "cover_big_2x");
+        String url = "https:" + updatedScreenshot.get("url").replace("thumb", "screenshot_big");
         updatedScreenshot.put("url", url);
         return updatedScreenshot;
+    }
+
+    public String getBackgroundImageUrl(Games selectedGame) {
+        if (selectedGame != null && !selectedGame.getScreenshots().isEmpty()) {
+            Map<String, String> firstScreenshot = selectedGame.getScreenshots().getLast();
+            return selectedGame.getBigScreenshot(firstScreenshot).get("url").replace("cover_big_2x", "1080p");
+        }
+        return "screenshot not found";
     }
 
     public List<Map<String, String>> getScreenshots() {

@@ -8,7 +8,7 @@
     <title>Login Page</title>
     <h:outputStylesheet name="login.css"/>
 </h:head>
-<h:body><!--           NOTE: URL still displays index.xhtml and not login, even tho it redirects to this page -->
+<h:body>
     LOGIN PAGE
     <br/>
     <h:form>
@@ -17,11 +17,11 @@
             <h:inputText id="username" value="#{loginBean.username}" required="true"/>
             <h:outputLabel for="password" value="Password:"/>
             <h:inputSecret id="password" value="#{loginBean.password}" required="true"/>
-            <h:commandButton value="Login" action="#{loginBean.checkForAccount()}" styleClass="button"/>
+            <h:commandButton value="Login" action="#{loginBean.login()}" styleClass="button"/>
             <h:outputText value="#{loginBean.message}"/>
             Don't have an account?
             <br/>
-            <h:commandButton value="Register" action="/register.xhtml" styleClass="button"/>
+            <h:commandButton value="Register" action="/register.xhtml?faces-redirect=true" styleClass="button"/>
         </h:panelGrid>
         <h:messages/>
     </h:form>

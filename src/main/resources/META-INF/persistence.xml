@@ -3,6 +3,8 @@
   <persistence-unit name="fish.payara_videogame-catalogue_war_3.9.8PU" transaction-type="JTA">
     <jta-data-source>jdbc/videogamecatalogue</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <properties>
+
+    </properties>
   </persistence-unit>
 </persistence>

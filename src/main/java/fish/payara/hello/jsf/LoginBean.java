@@ -1,17 +1,25 @@
 package fish.payara.hello.jsf;
 
+import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.service.LoginService;
 
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.security.Principal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Named(value = "loginBean")
-@ViewScoped
+@SessionScoped
 public class LoginBean implements Serializable {
 
     @Inject
@@ -20,6 +28,8 @@ public class LoginBean implements Serializable {
     private String username;
     private String password;
     private String message;
+
+    Logger logger = Logger.getLogger(LoginBean.class.getName());
 
     public String getUsername() {
         return username;
@@ -54,11 +64,35 @@ public class LoginBean implements Serializable {
             return null;
         } else {
             message = "Invalid username or password";
+            logger.log(Level.SEVERE, "Login failed");
             return "login";
         }
     }
 
     public boolean checkLoggedIn() {
         return loginService.checkLoggedIn();
+    }
+
+    public String login() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try {
+            request.login(username, password);
+            context.getExternalContext().redirect("/games/index.xhtml");
+        } catch (ServletException se) {
+            logger.log(Level.SEVERE, se.getMessage(), se);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public void logout() {
+        try {
+            ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).logout();
+        } catch (ServletException ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
 }

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Login Page</title>
+    <h:outputStylesheet name="login.css"/>
+</h:head>
+<body class="align">
+<div class="grid align__item">
+    <div class="register">
+        <h2>Login</h2>
+        <form id="loginForm" method="post" action="j_security_check" class="form">
+            <div class="form__field">
+                <input type="text" name="j_username"/> <br />
+            </div>
+            <div class="form__field">
+                <input type="password" name="j_password"/><br/>
+            </div>
+            <div class="form__field">
+                <input type="submit" value="Login" />
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

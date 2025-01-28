@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+    <h:form styleClass="nav-bar">
+        <p:sidebar widgetVar="sidebar" modal="true">
+            <h3>Quick Navigation</h3>
+        </p:sidebar>
+        <p:commandButton icon="pi pi-bars" type="button" onclick="PF('sidebar').show()"/>
+        <p:toolbar>
+            <p:toolbarGroup>
+                <h1>Game Collection</h1>
+                <p:commandButton value="Home" action="/index.xhtml?faces-redirect=true"/>
+                <p:commandButton value="Dashboard" action="/dashboard.xhtml?faces-redirect=true" rendered="#{loginBean.checkLoggedIn()}"/>
+            </p:toolbarGroup>
+            <p:toolbarGroup align="right">
+                <div class="field col-12 md:col-4">
+                    <p:autoComplete id="quickSearch" icon="pi pi-search" minQueryLength="3" value="#{gameBean.searchQuery}"
+                                    completeMethod="#{gameBean.searchGamesByName}"
+                                    var="game" itemLabel="#{game.name}" itemValue="#{game}"
+                                    forceSelection="true"
+                                    scrollHeight="250"
+                                    placeholder="Quick Search, input at least 3 chars">
+                        <p:column>
+                            <h:panelGrid columns="2" cellpadding="0">
+                                <h:graphicImage value="#{game.thumbCover}" width="100" height="100"/>
+                                <h:outputText value="#{game.name}"/>
+                            </h:panelGrid>
+                        </p:column>
+                    </p:autoComplete>
+                </div>
+                <p:commandButton value="Login" action="login/login.xhtml?faces-redirect=true"/>
+                <p:commandButton value="User" action="/user.xhtml?faces-redirect=true" rendered="#{loginBean.checkLoggedIn()}"/>
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+</h:body>
+</html>

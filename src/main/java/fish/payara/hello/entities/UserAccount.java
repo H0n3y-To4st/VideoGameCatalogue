@@ -46,6 +46,15 @@ public class UserAccount implements Serializable {
     @Column(name = "password")
     private String password;
 
+//    @Column
+//    private String role;
+//
+//    @Column
+//    private byte[] profilePicture;
+//
+//    @Column
+//    private String theme;
+
     public UserAccount() {
 
     }
@@ -87,6 +96,30 @@ public class UserAccount implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+//    public String getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(String role) {
+//        this.role = role;
+//    }
+//
+//    public byte[] getProfilePicture() {
+//        return profilePicture;
+//    }
+//
+//    public void setProfilePicture(byte[] profilePicture) {
+//        this.profilePicture = profilePicture;
+//    }
+//
+//    public String getTheme() {
+//        return theme;
+//    }
+//
+//    public void setTheme(String theme) {
+//        this.theme = theme;
+//    }
 
     @Override
     public int hashCode() {

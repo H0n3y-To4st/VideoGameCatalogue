@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xsi:schemaLocation="http://primefaces.org/ui "
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Game page</title>
+    <style type="">
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("#{gameBean.selectedGame.getBackgroundImageUrl(gameBean.selectedGame)}") no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
+</h:head>
+<body>
+<f:metadata>
+    <f:viewAction action="#{gameBean.loadGameDetails}"/>
+</f:metadata>
+<h:outputStylesheet name="main.css"/>
+<h:outputStylesheet name="game.css"/>
+
+<ui:include src="navbar.xhtml"/>
+
+<h:form styleClass="game-overview">
+    <div class="game-header">
+        <h:panelGrid columns="2" width="100%">
+        <h:outputText value="#{gameBean.selectedGame.fullName} | (#{gameBean.selectedGame.gameReleaseYear})" styleClass="game-title"/>
+        <p:commandButton value="Save/Remove" style="float: right;" styleClass="game-save-remove-button"/>
+            <ui:repeat value="#{gameBean.selectedGame.involved_companies}" var="companies" backgroundColor="white">
+                <h:outputText value="#{companies.company.name} " styleClass=""/>
+            </ui:repeat>
+        </h:panelGrid>
+    </div>
+
+    <h:panelGrid columns="2" styleClass="" cellpadding="0px" width="100%">
+        <p:knob value="#{gameBean.selectedGame.rating}" disabled="true"
+                foregroundColor="green" backgroundColor="white" style="float: right;" width="50px" height="50px"/>
+        <p:knob value="#{gameBean.selectedGame.rating}" disabled="true"
+                foregroundColor="green" backgroundColor="white" style="float: right;" width="50px" height="50px"/>
+    </h:panelGrid>
+
+    <div class="cover-and-screenshots">
+        <div>
+            <img src="#{gameBean.selectedGame.cover.url}" alt="No Game Cover Found"
+                 style="width: 264px; height: 352px; margin-left: 100px"/>
+        </div>
+        <div>
+            <p:galleria value="#{gameBean.selectedGame.screenshots}" var="screenshot" numVisible="5"
+                        style="max-width: 75%; margin-left: 125px;">
+                <img src="#{gameBean.selectedGame.getBigScreenshot(screenshot).url}" alt="Missing screenshot"
+                     style="width: 100%;"/>
+                <f:facet name="thumbnail">
+                    <img src="#{screenshot.url}" alt="Missing screenshot"/>
+                </f:facet>
+            </p:galleria>
+        </div>
+    </div>
+
+    <div class="game-details">
+        <h:panelGrid columns="3" styleClass="">
+            <h:panelGrid>
+                <h:outputText value="#{gameBean.selectedGame.summary}" styleClass="" colspan="3"
+                              backgroundColor="white"/>
+                <h:outputText value="Genres:" styleClass=""/>
+                <ui:repeat value="#{gameBean.selectedGame.genres}" var="genre" colspan="2" backgroundColor="white">
+                    <h:outputText value="#{genre.name} " styleClass="genre"/>
+                </ui:repeat>
+            </h:panelGrid>
+        </h:panelGrid>
+    </div>
+
+<!--    <h:panelGrid columns="2" styleClass="mini-rows" colspan="2">-->
+
+<!--        <h:outputText value="Websites:"/>-->
+
+<!--        <h:outputText value="Related Games:"/>-->
+
+<!--    </h:panelGrid>-->
+<!--    <h:outputText value="Time to Beat:" style="float: right;"/>-->
+</h:form>
+</body>
+</html>

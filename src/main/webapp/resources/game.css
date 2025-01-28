@@ -1,8 +1,54 @@
-.game-overview .game-overview-header {
+/*body {*/
+/*    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),*/
+/*    url("#{gameBean.selectedGame.getBackgroundImageUrl}") no-repeat center center fixed;*/
+/*}*/
+
+.game-overview .game-title {
+    font-size: 2rem;
+    margin-left: 50px;
+}
+
+.game-overview .game-header {
+    margin-top: 50px;
+    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
+    padding: 20px; /* Space around the content */
+    max-width: 90%; /* Limit the width of the background */
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px; /* Optional: rounded corners */
+}
+
+.game-overview .game-header .game-save-remove-button {
+    margin-top: 25px;
+    margin-right: 50px;
+}
+
+.cover-and-screenshots {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 1rem;
+    width: 100%;
+    margin-top: 20px;
+    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
+    padding: 20px; /* Space around the content */
+    max-width: 90%; /* Limit the width of the background */
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px; /* Optional: rounded corners */
+}
+
+.game-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
+    padding: 20px; /* Space around the content */
+    max-width: 90%; /* Limit the width of the background */
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
 }
 
 .game-overview th, .game-overview table td {
@@ -11,21 +57,30 @@
 }
 
 .game-overview table td:first-child {
-    width: 25%;
+    /*width: 25%;*/
     /*background: red;*/
 }
 
 .game-overview table td:nth-child(2) {
-    width: 100%;
+    /*width: 100%;*/
     /*background: pink;*/
 }
 
+.game-overview table td:nth-child(3) {
+    /*width: 100%;*/
+    /*background: blue;*/
+}
+
+.game-overview .genre {
+    /*width: 100%;*/
+    /*background: green;*/
+}
+
 .game-overview .knob {
-    width: 100px;
-    height: 100px;
-    margin-right: 1rem;
+    /*width: 50px;*/
+    /*height: 50px;*/
 }
 
 .game-overview .galleria {
-    margin-top: 1rem;
+    /*margin-top: 1rem;*/
 }
