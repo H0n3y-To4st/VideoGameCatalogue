@@ -6,6 +6,11 @@ import jakarta.ejb.LocalBean;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 
 @Stateless
@@ -36,10 +41,23 @@ public class RegisterService {
 
     public void registerUser(String username, String email, String password) {
         try {
-            UserAccount user = new UserAccount(username, email, password);
+            UserAccount user = new UserAccount(username, email, encodeSHA256(password));
             em.persist(user);
         } catch (Exception e) {
             throw new RuntimeException("Error registering user within registerservice", e);
         }
+    }
+
+    public static String encodeSHA256(String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        return encodeSHA256(password, "");
+    }
+
+    public static String encodeSHA256(String password, String salt)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        md.update(password.getBytes(StandardCharsets.UTF_8));
+        md.update(salt.getBytes(StandardCharsets.UTF_8));
+        byte[] digest = md.digest();
+        return Base64.getEncoder().encodeToString(digest);
     }
 }
