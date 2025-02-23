@@ -30,9 +30,7 @@ import java.util.logging.Logger;
 public class UserGamesBean implements Serializable {
 
     private List<Games> games;
-    private int userId;
-
-//    private List<GameState> gameStates;
+    private String username;
     private List<GameState> selectedGameStates;
 
     @Inject
@@ -54,16 +52,14 @@ public class UserGamesBean implements Serializable {
 
     @PostConstruct
     public void init() {
-//        gameStates = List.of(GameState.values());
         selectedGameStates = new ArrayList<>();
-        userId = userAccountBean.getLoggedInUserId();
-//        games = userGamesService.listAllGamesInDashboard(userId);
+        username = userAccountBean.getUsername();
         logger.info("UserGamesBean instantiated");
     }
 
     public void saveGameAndStates(int gameId) {
         UserID userID = new UserID();
-        userID.setId(userId);
+        userID.setId(userAccountBean.getUserByUsername(username).getId());
 
         //save game to dashboard, include body params
         Client client = ClientBuilder.newClient();
@@ -84,7 +80,7 @@ public class UserGamesBean implements Serializable {
 
     public void removeGameFromDashboard(int gameId) {
         UserID userID = new UserID();
-        userID.setId(userId);
+        userID.setId(userAccountBean.getUserByUsername(username).getId());
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/delete/" + gameId + "/dashboard")
@@ -100,7 +96,7 @@ public class UserGamesBean implements Serializable {
     }
 
     public List<Games> getGames() {
-        games = userGamesService.listAllGamesInDashboard(userId);
+        games = userGamesService.listAllGamesInDashboard((userAccountBean.getUserByUsername(username).getId()));
         return games;
     }
 
@@ -110,9 +106,7 @@ public class UserGamesBean implements Serializable {
 
     public int getUserGameId(int gameId) {
         UserID userID = new UserID();
-        userID.setId(userId);
-
-        logger.log(Level.SEVERE, "Current User ID: " + userID.getId() + " Game ID: " + gameId);
+        userID.setId(userAccountBean.getUserByUsername(username).getId());
         return userGamesService.getUserGameId(userID.getId(), gameId);
     }
 }

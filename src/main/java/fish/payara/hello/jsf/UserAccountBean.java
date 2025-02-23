@@ -1,8 +1,9 @@
 package fish.payara.hello.jsf;
 
 import fish.payara.hello.entities.UserAccount;
+import fish.payara.hello.service.UserAccountService;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
@@ -11,13 +12,33 @@ import java.io.Serializable;
 @SessionScoped
 public class UserAccountBean implements Serializable {
 
-    public Integer getLoggedInUserId() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
-        return user != null ? user.getId() : null;
+    @Inject
+    UserAccountService userAccountService;
+
+    private String username;
+    private String password;
+
+    public UserAccount getUserByUsername(String username) {
+        return userAccountService.getUserByUsername(username);
     }
 
-    public boolean isLoggedIn() {
-        return getLoggedInUserId() != null;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean checkLoggedIn() {
+        return username != null;
     }
 }

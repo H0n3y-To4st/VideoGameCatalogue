@@ -15,19 +15,20 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>games/index.xhtml</welcome-file>
     </welcome-file-list>
 
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Protected Area</web-resource-name>
-            <url-pattern>/games/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>user</role-name>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
+<!--&lt;!&ndash;    the url pattern prevents user from logging in, might be an issue with matching roles->-->
+<!--    <security-constraint>-->
+<!--        <web-resource-collection>-->
+<!--            <web-resource-name>Protected Area</web-resource-name>-->
+<!--            <url-pattern>/games/*</url-pattern>-->
+<!--        </web-resource-collection>-->
+<!--        <auth-constraint>-->
+<!--            <role-name>user</role-name>-->
+<!--            <role-name>admin</role-name>-->
+<!--        </auth-constraint>-->
+<!--    </security-constraint>-->
 
     <security-constraint>
         <web-resource-collection>

@@ -15,9 +15,10 @@
         <p:toolbar>
             <p:toolbarGroup>
                 <h1>Game Collection</h1>
-                <p:commandButton value="Home" action="/index.xhtml?faces-redirect=true"/>
-                <p:commandButton value="Dashboard" action="/dashboard.xhtml?faces-redirect=true" rendered="#{loginBean.checkLoggedIn()}"/>
+                <p:commandButton value="Home" action="#{navBean.index()}"/>
+                <p:commandButton value="Dashboard" action="#{navBean.dashboard()}" rendered="#{userAccountBean.checkLoggedIn()}"/>
             </p:toolbarGroup>
+<!--            TODO: quick search menu showing as blank -->
             <p:toolbarGroup align="right">
                 <div class="field col-12 md:col-4">
                     <p:autoComplete id="quickSearch" icon="pi pi-search" minQueryLength="3" value="#{gameBean.searchQuery}"
@@ -34,7 +35,8 @@
                         </p:column>
                     </p:autoComplete>
                 </div>
-                <p:commandButton value="Login" action="login/login.xhtml?faces-redirect=true"/>
+                <p:commandButton value="Login" action="#{navBean.login()}" rendered="#{!userAccountBean.checkLoggedIn()}"/>
+                <p:commandButton value="Logout" action="#{loginBean.logout()}" rendered="#{userAccountBean.checkLoggedIn()}"/>
                 <p:commandButton value="User" action="/user.xhtml?faces-redirect=true" rendered="#{loginBean.checkLoggedIn()}"/>
             </p:toolbarGroup>
         </p:toolbar>

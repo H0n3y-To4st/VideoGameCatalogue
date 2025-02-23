@@ -1,30 +1,22 @@
 package fish.payara.hello.jsf;
 
-import fish.payara.hello.entities.Games;
-import fish.payara.hello.entities.UserAccount;
-import fish.payara.hello.service.LoginService;
-
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import jakarta.servlet.http.HttpSession;
 
 @Named(value = "loginBean")
 @SessionScoped
 public class LoginBean implements Serializable {
 
-    @Inject
-    private LoginService loginService;
-
+//    these attributes are for my outdated "MyLogin" page, not the current one
     private String username;
     private String password;
     private String message;
@@ -51,48 +43,29 @@ public class LoginBean implements Serializable {
         return message;
     }
 
-    public String checkForAccount() {
-        if (loginService.checkForAccount(username, password)) {
-            try {
-                UserAccount user = loginService.getUser(username, password);
-                FacesContext facesContext = FacesContext.getCurrentInstance();
-                facesContext.getExternalContext().getSessionMap().put("user", user);
-                facesContext.getExternalContext().redirect("index.xhtml");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        } else {
-            message = "Invalid username or password";
-            logger.log(Level.SEVERE, "Login failed");
-            return "login";
-        }
-    }
-
     public boolean checkLoggedIn() {
-        return loginService.checkLoggedIn();
+        return username != null;
     }
 
     public String login() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        try {
-            request.login(username, password);
-            context.getExternalContext().redirect("/games/index.xhtml");
-        } catch (ServletException se) {
-            logger.log(Level.SEVERE, se.getMessage(), se);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if ("user".equals(username) && "password".equals(password)) {
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            session.setAttribute("username", username);
+            message = "Welcome, " + username + "!";
+            return "/games/index.xhtml?faces-redirect=true";
+        } else {
+            message = "Invalid login. Please try again.";
+            return "/login/login.xhtml?faces-redirect=true";
         }
-        return null;
     }
 
-    public void logout() {
+    public String logout() {
         try {
             ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).logout();
         } catch (ServletException ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "/games/index.xhtml?faces-redirect=true";
     }
 }

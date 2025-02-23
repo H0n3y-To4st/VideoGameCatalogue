@@ -20,15 +20,19 @@ public class RegisterBean implements Serializable {
     @Inject
     private RegisterService registerService;
 
-    public void registerAccount() {
+    @Inject
+    private NavigationController navigationController;
+
+    public String registerAccount() {
         if (checkRegisterValid()) {
             try {
                 registerService.registerUser(username, email, password);
-                FacesContext.getCurrentInstance().getExternalContext().redirect("dashboard.xhtml");
+                navigationController.index();
             } catch (Exception e) {
                 throw new RuntimeException("Error registering user", e);
             }
         }
+        return null;
     }
 
     public boolean checkRegisterValid() {

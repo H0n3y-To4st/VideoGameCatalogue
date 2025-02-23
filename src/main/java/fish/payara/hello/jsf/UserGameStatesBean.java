@@ -37,7 +37,6 @@ public class UserGameStatesBean implements Serializable {
     @Inject
     private UserGameStatesService userGameStatesService;
 
-    @Named("userAccountBean")
     @Inject
     private UserAccountBean userAccountBean;
 
@@ -78,9 +77,9 @@ public class UserGameStatesBean implements Serializable {
         return userGameStatesService.getGameStatesByUserGameId(userGamesBean.getUserGameId(gameId));
     }
 
+//    TODO: optimise this method
     public void updateGameStates(int gameId, List<GameState> selectedGameStates) {
-
-        int id = userAccountBean.getLoggedInUserId();
+        int id = userAccountBean.getUserByUsername(userAccountBean.getUsername()).getId();
         UserID userId = new UserID();
         userId.setId(id);
 

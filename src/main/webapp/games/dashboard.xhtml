@@ -13,7 +13,7 @@
 <body>
 
 <h:outputStylesheet name="main.css"/>
-<ui:include src="games/navbar.xhtml"/>
+<ui:include src="navbar.xhtml"/>
 
 <p>Welcome to your dashboard! Here you can view all your saved games.
 </p>
@@ -75,7 +75,6 @@
     <h:form id="gameStateForm">
         <h:outputText value="Update the collections you want to save this game to"/>
         <br/>
-        <!--            <h:inputHidden id="selectedGameId" value="#{userGameStatesBean.selectedGameId}" />-->
         <p:selectCheckboxMenu id="menu"
                               label="Collections"
                               value="#{userGameStatesBean.selectedGameStates}">

@@ -12,17 +12,22 @@
 <div class="grid align__item">
     <div class="register">
         <h2>Login</h2>
-        <form id="loginForm" method="post" action="j_security_check" class="form">
+        <h:form id="loginForm">
             <div class="form__field">
-                <input type="text" name="j_username"/> <br />
+                <h:inputText value="#{userAccountBean.username}" required="true" placeholder="Username"/> <br />
             </div>
             <div class="form__field">
-                <input type="password" name="j_password"/><br/>
+                <h:inputSecret value="#{userAccountBean.password}" required="true" placeholder="Password"/><br/>
             </div>
             <div class="form__field">
-                <input type="submit" value="Login" />
+                <h:commandButton value="Login" action="#{navBean.index()}"/>
             </div>
-        </form>
+        </h:form>
+        <h:form>
+            Don't have an account?
+            <br/>
+            <h:commandButton value="Register" action="#{navBean.register()}" styleClass="button"/>
+        </h:form>
     </div>
 </div>
 </body>

@@ -16,6 +16,7 @@
     <ui:include src="navbar.xhtml"/>
     <h:form>
         <h1>Popular Games</h1>
+        <h1>Hello #{userAccountBean.username}</h1>
         <div class="card-container">
             <ui:repeat value="#{gameBean.games}" var="game">
                 <p:card style="margin: 1em;">

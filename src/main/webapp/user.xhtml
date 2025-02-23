@@ -20,7 +20,8 @@
 </div>
 
 <h:panelGrid columns="1">
-    <h:outputText value="Welcome, #{loginBean.username}"/>
+<!--    TODO: learn how to add user profiles? link to their profile? -->
+    <h:outputText value="Welcome, #{userAccountBean.username}"/>
     <h:outputText value="Big things coming soon! :D"/>
     <p:commandButton value="Home" action="/index.xhtml?faces-redirect=true"/>
 </h:panelGrid>
