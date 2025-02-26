@@ -11,12 +11,14 @@
 <h:head>
     <title>Welcome Page</title>
 </h:head>
+
+<h:outputStylesheet name="main.css"/>
+
+<ui:include src="../navbar.xhtml"/>
+
 <h:body>
-    <h:outputStylesheet name="main.css"/>
-    <ui:include src="navbar.xhtml"/>
     <h:form>
         <h1>Popular Games</h1>
-        <h1>Hello #{userAccountBean.username}</h1>
         <div class="card-container">
             <ui:repeat value="#{gameBean.games}" var="game">
                 <p:card style="margin: 1em;">
@@ -35,7 +37,7 @@
                     <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}">
                     </p:commandButton>
                     <p:commandButton icon="pi pi-check" value="Save"
-                                     rendered="#{loginBean.checkLoggedIn()}"
+                                     rendered="#{userAccountBean.checkLoggedIn()}"
                                      onclick="PF('gameDialog').show();"
                                      update=":gameStateForm:menu">
                         <f:setPropertyActionListener target="#{userGameStatesBean.selectedGameId}" value="#{game.id}" />
@@ -49,7 +51,6 @@
         <h:form id="gameStateForm">
             <h:outputText value="Select the collections you want to save this game to"/>
             <br/>
-<!--            <h:inputHidden id="selectedGameId" value="#{userGameStatesBean.selectedGameId}" />-->
             <p:selectCheckboxMenu id="menu"
                                   label="Collections"
                                   value="#{userGameStatesBean.selectedGameStates}">

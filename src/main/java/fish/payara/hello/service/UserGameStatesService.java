@@ -16,6 +16,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -81,54 +82,40 @@ public class UserGameStatesService implements Serializable {
         return query.getResultList();
     }
 
-    // TODO: optimise this
-
-    //get current game states for a user game
-    //get selected game states
-    //compare the two
-
-    //using sets to more efficiently compare the two lists
-    //time this
     public void updateGameStates(UserID userId, int gameId, List<GameState> selectedGameStates) {
         int userGamesId = userGamesService.getUserGameId(userId.getId(), gameId);
 
-        List<GameState> alreadySavedGameStates = getGameStatesByUserGameId(userGamesId);
-        Set<GameState> alreadySavedGameStatesSet = new HashSet<>(alreadySavedGameStates);
-        Set<GameState> selectedGameStatesSet = new HashSet<>(selectedGameStates);
-
         UserGames userGames = em.find(UserGames.class, userGamesId);
-
-        if (userGames != null) {
-            //remove already saved game states from selected game states
-            Set<GameState> statesToAdd = new HashSet<>(selectedGameStatesSet);
-            statesToAdd.removeAll(alreadySavedGameStatesSet);
-
-            Set<GameState> statesToRemove = new HashSet<>(alreadySavedGameStatesSet);
-            statesToRemove.removeAll(selectedGameStatesSet);
-
-            if (!statesToAdd.isEmpty()) {
-                for (GameState newState : statesToAdd) {
-                    UserGameStatesId id = new UserGameStatesId();
-                    id.setUserGamesId(userGamesId);
-                    id.setGameState(newState);
-
-                    UserGameStates userGameStates = new UserGameStates();
-                    userGameStates.setId(id);
-                    userGameStates.setUserGames(userGames);
-
-                    em.merge(userGameStates);
-                }
-            }
-
-            if (!statesToRemove.isEmpty()) {
-                Query query = em.createQuery("DELETE FROM UserGameStates ugs WHERE ugs.id.userGamesId = :userGamesId AND ugs.id.gameState IN :gameStates");
-                query.setParameter("userGamesId", userGamesId);
-                query.setParameter("gameStates", statesToRemove);
-                query.executeUpdate();
-            }
-        } else {
+        if (userGames == null) {
             throw new IllegalArgumentException("userId: " + userId + " not found during update game state");
         }
+
+        Set<GameState> alreadySavedGameStates = new HashSet<>(getGameStatesByUserGameId(userGamesId));
+        Set<GameState> selectedGameStatesSet = new HashSet<>(selectedGameStates);
+
+        Set<GameState> statesToAdd = new HashSet<>(selectedGameStatesSet);
+        statesToAdd.removeAll(alreadySavedGameStates);
+
+        Set<GameState> statesToRemove = new HashSet<>(alreadySavedGameStates);
+        statesToRemove.removeAll(selectedGameStatesSet);
+
+        if (!statesToAdd.isEmpty()) {
+            List<UserGameStates> userGameStatesList = new ArrayList<>();
+            for (GameState newState : statesToAdd) {
+                UserGameStatesId id = new UserGameStatesId(userGamesId, newState);
+                UserGameStates userGameStates = new UserGameStates(id, userGames);
+                userGameStatesList.add(userGameStates);
+            }
+            userGameStatesList.forEach(em::persist);
+        }
+
+        if (!statesToRemove.isEmpty()) {
+            em.createQuery("DELETE FROM UserGameStates ugs WHERE ugs.id.userGamesId = :userGamesId AND ugs.id.gameState IN :gameStates")
+                    .setParameter("userGamesId", userGamesId)
+                    .setParameter("gameStates", statesToRemove)
+                    .executeUpdate();
+        }
     }
+
 
 }

@@ -37,7 +37,7 @@
                 </div>
                 <p:commandButton value="Login" action="#{navBean.login()}" rendered="#{!userAccountBean.checkLoggedIn()}"/>
                 <p:commandButton value="Logout" action="#{loginBean.logout()}" rendered="#{userAccountBean.checkLoggedIn()}"/>
-                <p:commandButton value="User" action="/user.xhtml?faces-redirect=true" rendered="#{loginBean.checkLoggedIn()}"/>
+                <p:commandButton value="#{userAccountBean.username}" action="/user.xhtml?faces-redirect=true" rendered="#{userAccountBean.checkLoggedIn()}"/>
             </p:toolbarGroup>
         </p:toolbar>
     </h:form>

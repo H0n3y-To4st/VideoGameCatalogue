@@ -11,19 +11,22 @@
 <h:head>
     <title>User Profile</title>
 </h:head>
+
 <h:outputStylesheet name="main.css"/>
 <h:outputStylesheet name="user.css"/>
+
+<ui:include src="navbar.xhtml"/>
 
 <body>
 <div>
     <h:outputText value="User Profile"/>
 </div>
-
-<h:panelGrid columns="1">
-<!--    TODO: learn how to add user profiles? link to their profile? -->
-    <h:outputText value="Welcome, #{userAccountBean.username}"/>
-    <h:outputText value="Big things coming soon! :D"/>
-    <p:commandButton value="Home" action="/index.xhtml?faces-redirect=true"/>
-</h:panelGrid>
+<h:form>
+    <h:panelGrid columns="1">
+        <!--    TODO: learn how to add user profiles? link to their profile? -->
+        <h:outputText value="Welcome, #{userAccountBean.username}!"/>
+        <h:outputText value="Big things coming soon! :D"/>
+    </h:panelGrid>
+</h:form>
 </body>
 </html>

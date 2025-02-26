@@ -16,6 +16,14 @@ public class UserGameStatesId {
     @Column(name = "game_state", nullable = false)
     private GameState gameState;
 
+    public UserGameStatesId() {
+    }
+
+    public UserGameStatesId(int userGamesId, GameState newState) {
+        this.userGamesId = userGamesId;
+        this.gameState = newState;
+    }
+
     // Getters, Setters, hashCode, equals
     public Integer getUserGamesId() {
         return userGamesId;

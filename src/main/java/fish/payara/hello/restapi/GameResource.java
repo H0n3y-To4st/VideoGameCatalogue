@@ -40,8 +40,7 @@ public class GameResource {
     @Path("/top")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Games> getTopGames() {
-        List<Games> games = igdbService.getTopGames();
-        return games;
+        return igdbService.getTopGames();
     }
 
     @PUT

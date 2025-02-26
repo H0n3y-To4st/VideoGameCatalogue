@@ -1,6 +1,7 @@
 package fish.payara.hello.jsf;
 
 import fish.payara.hello.entities.UserAccount;
+import fish.payara.hello.restapi.dto.UserID;
 import fish.payara.hello.service.UserAccountService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -17,6 +18,7 @@ public class UserAccountBean implements Serializable {
 
     private String username;
     private String password;
+    private UserID userID;
 
     public UserAccount getUserByUsername(String username) {
         return userAccountService.getUserByUsername(username);
@@ -42,7 +44,17 @@ public class UserAccountBean implements Serializable {
         this.password = password;
     }
 
+    public UserID getUserID() {
+        return userID;
+    }
+
     public Boolean checkLoggedIn() {
         return username != null;
+    }
+
+    public String login() {
+        int userId = getUserIdByUsername(username);
+        userID = new UserID(userId);
+        return "/games/index.xhtml?faces-redirect=true";
     }
 }

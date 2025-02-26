@@ -58,8 +58,7 @@ public class UserGamesBean implements Serializable {
     }
 
     public void saveGameAndStates(int gameId) {
-        UserID userID = new UserID();
-        userID.setId(userAccountBean.getUserByUsername(username).getId());
+        int userID = userAccountBean.getUserID().getId();
 
         //save game to dashboard, include body params
         Client client = ClientBuilder.newClient();
@@ -79,16 +78,15 @@ public class UserGamesBean implements Serializable {
     }
 
     public void removeGameFromDashboard(int gameId) {
-        UserID userID = new UserID();
-        userID.setId(userAccountBean.getUserByUsername(username).getId());
+        int userID = userAccountBean.getUserID().getId();
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/delete/" + gameId + "/dashboard")
-                .queryParam("userId", userID.getId());
+                .queryParam("userId", userID);
         Response response = target.request(MediaType.APPLICATION_JSON).delete();
 
         if (response.getStatus() == 204) {
-            games = userGamesService.listAllGamesInDashboard(userID.getId());
+            games = userGamesService.listAllGamesInDashboard(userID);
             PrimeFaces.current().ajax().update("gameTable");
         }  else {
             logger.log(Level.SEVERE, "Failed to delete game from dashboard");
@@ -96,7 +94,7 @@ public class UserGamesBean implements Serializable {
     }
 
     public List<Games> getGames() {
-        games = userGamesService.listAllGamesInDashboard((userAccountBean.getUserByUsername(username).getId()));
+        games = userGamesService.listAllGamesInDashboard(userAccountBean.getUserID().getId());
         return games;
     }
 
@@ -105,8 +103,6 @@ public class UserGamesBean implements Serializable {
     }
 
     public int getUserGameId(int gameId) {
-        UserID userID = new UserID();
-        userID.setId(userAccountBean.getUserByUsername(username).getId());
-        return userGamesService.getUserGameId(userID.getId(), gameId);
+        return userGamesService.getUserGameId(userAccountBean.getUserID().getId(), gameId);
     }
 }

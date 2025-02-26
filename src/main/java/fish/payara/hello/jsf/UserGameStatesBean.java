@@ -77,19 +77,13 @@ public class UserGameStatesBean implements Serializable {
         return userGameStatesService.getGameStatesByUserGameId(userGamesBean.getUserGameId(gameId));
     }
 
-//    TODO: optimise this method
     public void updateGameStates(int gameId, List<GameState> selectedGameStates) {
-        int id = userAccountBean.getUserByUsername(userAccountBean.getUsername()).getId();
-        UserID userId = new UserID();
-        userId.setId(id);
-
         UpdateGameStates request = new UpdateGameStates();
-        request.setUserId(userId);
+        request.setUserId(userAccountBean.getUserID());
         request.setSelectedGameStates(selectedGameStates);
 
-            //this is just for demo for demonstrating accessing the REST API from the JSF managed bean
-        try  (Client client = ClientBuilder.newClient()) {
-
+        // This is just for demo for demonstrating accessing the REST API from the JSF managed bean
+        try (Client client = ClientBuilder.newClient()) {
             Response response = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/update/" + gameId + "/dashboard")
                     .request(MediaType.APPLICATION_JSON)
                     .put(Entity.entity(request, MediaType.APPLICATION_JSON));
@@ -105,4 +99,6 @@ public class UserGameStatesBean implements Serializable {
         }
     }
 
+    // add method to highlight already saved game states, and update the UI to reflect the changes
+    // change this bean to a view scoped bean for better performance?
 }
