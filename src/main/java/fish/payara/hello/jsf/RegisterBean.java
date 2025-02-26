@@ -1,7 +1,7 @@
 package fish.payara.hello.jsf;
 
+
 import fish.payara.hello.service.RegisterService;
-import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.RequestScoped;

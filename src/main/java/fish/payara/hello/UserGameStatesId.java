@@ -1,5 +1,6 @@
 package fish.payara.hello;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -24,7 +25,6 @@ public class UserGameStatesId {
         this.gameState = newState;
     }
 
-    // Getters, Setters, hashCode, equals
     public Integer getUserGamesId() {
         return userGamesId;
     }

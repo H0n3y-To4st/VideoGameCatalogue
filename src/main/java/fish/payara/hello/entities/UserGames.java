@@ -1,10 +1,6 @@
 package fish.payara.hello.entities;
 
-//import fish.payara.hello.GamestateArrayConverter;
 import jakarta.persistence.*;
-import fish.payara.hello.GameState;
-
-import java.util.List;
 
 @Entity
 @Table(name = "user_games")

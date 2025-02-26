@@ -17,15 +17,16 @@
         }
     </style>
 </h:head>
+
+<h:outputStylesheet name="main.css"/>
+<h:outputStylesheet name="game.css"/>
+
+<ui:include src="../navbar.xhtml"/>
+
 <body>
 <f:metadata>
     <f:viewAction action="#{gameBean.loadGameDetails}"/>
 </f:metadata>
-<h:outputStylesheet name="main.css"/>
-<h:outputStylesheet name="game.css"/>
-
-<ui:include src="navbar.xhtml"/>
-
 <h:form styleClass="game-overview">
     <div class="game-header">
         <h:panelGrid columns="2" width="100%">
@@ -43,7 +44,7 @@
         <p:knob value="#{gameBean.selectedGame.rating}" disabled="true"
                 foregroundColor="green" backgroundColor="white" style="float: right;" width="50px" height="50px"/>
     </h:panelGrid>
-
+<!--TODO: fix CSS for their positioning, do not rely on hardcoded values-->
     <div class="cover-and-screenshots">
         <div>
             <img src="#{gameBean.selectedGame.cover.url}" alt="No Game Cover Found"
@@ -51,7 +52,7 @@
         </div>
         <div>
             <p:galleria value="#{gameBean.selectedGame.screenshots}" var="screenshot" numVisible="5"
-                        style="max-width: 75%; margin-left: 125px;">
+                        style="max-width: 60%; margin-left: 150px;">
                 <img src="#{gameBean.selectedGame.getBigScreenshot(screenshot).url}" alt="Missing screenshot"
                      style="width: 100%;"/>
                 <f:facet name="thumbnail">

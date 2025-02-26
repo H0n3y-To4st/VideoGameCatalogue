@@ -1,8 +1,8 @@
 package fish.payara.hello.jsf;
 
+
 import fish.payara.hello.GameState;
 import fish.payara.hello.restapi.dto.UpdateGameStates;
-import fish.payara.hello.restapi.dto.UserID;
 import fish.payara.hello.service.UserGameStatesService;
 
 import jakarta.annotation.PostConstruct;

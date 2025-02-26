@@ -1,8 +1,8 @@
 package fish.payara.hello.jsf;
 
+
 import fish.payara.hello.GameState;
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.restapi.dto.UserID;
 import fish.payara.hello.service.UserGameStatesService;
 import fish.payara.hello.service.UserGamesService;
 
@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 public class UserGamesBean implements Serializable {
 
     private List<Games> games;
-    private String username;
     private List<GameState> selectedGameStates;
 
     @Inject
@@ -53,7 +52,6 @@ public class UserGamesBean implements Serializable {
     @PostConstruct
     public void init() {
         selectedGameStates = new ArrayList<>();
-        username = userAccountBean.getUsername();
         logger.info("UserGamesBean instantiated");
     }
 

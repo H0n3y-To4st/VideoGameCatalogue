@@ -1,11 +1,10 @@
 package fish.payara.hello.service;
 
+
 import fish.payara.hello.GameState;
 import fish.payara.hello.UserGameStatesId;
 import fish.payara.hello.entities.UserGameStates;
 import fish.payara.hello.entities.UserGames;
-import fish.payara.hello.jsf.UserAccountBean;
-import fish.payara.hello.jsf.UserGamesBean;
 import fish.payara.hello.restapi.dto.UserID;
 
 import jakarta.ejb.Stateless;
@@ -27,12 +26,6 @@ public class UserGameStatesService implements Serializable {
 
     @PersistenceContext
     private EntityManager em;
-
-    @Inject
-    private UserGamesBean userGamesBean;
-
-    @Inject
-    private UserAccountBean userAccountBean;
 
     @Inject
     private UserGamesService userGamesService;

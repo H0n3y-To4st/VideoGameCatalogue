@@ -1,5 +1,6 @@
 package fish.payara.hello.service;
 
+
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.entities.UserGames;
@@ -16,9 +17,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author IsmahHussain
- */
 @Stateless
 @LocalBean
 public class UserGamesService implements Serializable {

@@ -1,5 +1,6 @@
 package fish.payara.hello.restapi;
 
+
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.restapi.client.IGDBClient;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,4 +1,6 @@
 package fish.payara.hello.service;
+
+
 import fish.payara.hello.entities.UserAccount;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.LocalBean;

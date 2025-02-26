@@ -1,5 +1,6 @@
 package fish.payara.hello.service;
 
+
 import fish.payara.hello.entities.UserAccount;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.LocalBean;
@@ -33,11 +34,6 @@ public class RegisterService {
                 .getResultList();
         return !users.isEmpty();
     }
-
-    /*
-    need to use entity manager instead of jpa because we want to insert data into the database
-    and jpa is for: SELECT, UPDATE AND DELETE
-     */
 
     public void registerUser(String username, String email, String password) {
         try {

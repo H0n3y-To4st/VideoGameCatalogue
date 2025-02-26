@@ -1,5 +1,6 @@
 package fish.payara.hello.servlet;
 
+
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.jsf.UserAccountBean;
 import fish.payara.hello.service.UserGamesService;
@@ -15,7 +16,6 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-//@WebServlet("/exportUserGames")
 public class ExportUserGamesService extends HttpServlet {
 
     @Inject

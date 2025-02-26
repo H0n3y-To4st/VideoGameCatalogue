@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSF/JSFManagedBean.java to edit this template
- */
 package fish.payara.hello.jsf;
+
 
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.restapi.IGDBService;
@@ -20,9 +17,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author IsmahHussain
- */
 @Named(value = "gameBean")
 @RequestScoped
 public class GameBean implements Serializable {

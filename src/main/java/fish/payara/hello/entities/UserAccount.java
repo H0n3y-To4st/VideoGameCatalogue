@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fish.payara.hello.entities;
+
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -10,9 +7,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
 
-/**
- * @author IsmahHussain
- */
 @Entity
 @Table(name = "user_account")
 @XmlRootElement
