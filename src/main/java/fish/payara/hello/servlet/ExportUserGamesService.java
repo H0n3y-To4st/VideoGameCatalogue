@@ -1,7 +1,7 @@
 package fish.payara.hello.servlet;
 
 import fish.payara.hello.entities.Games;
-import fish.payara.hello.entities.UserAccount;
+import fish.payara.hello.jsf.UserAccountBean;
 import fish.payara.hello.service.UserGamesService;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 //@WebServlet("/exportUserGames")
 public class ExportUserGamesService extends HttpServlet {
@@ -20,13 +21,15 @@ public class ExportUserGamesService extends HttpServlet {
     @Inject
     private UserGamesService userGamesService;
 
+    @Inject
+    private UserAccountBean userAccountBean;
+
     public void exportUserGames() throws IOException {
-        // Fetch the logged-in user from the session
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        UserAccount user = (UserAccount) facesContext.getExternalContext().getSessionMap().get("user");
+        // Fetch the logged-in userid from the session
+        int userId = userAccountBean.getUserIdByUsername(userAccountBean.getUsername());
 
         // Fetch the user's saved games
-        List<Games> userGames = userGamesService.listAllGamesInDashboard(user.getId());
+        List<Games> userGames = userGamesService.listAllGamesInDashboard(userId);
 
         // Create Excel file
         Workbook workbook = new XSSFWorkbook();
@@ -47,8 +50,14 @@ public class ExportUserGamesService extends HttpServlet {
             row.createCell(1).setCellValue(game.getName());
 
             // Combine genres as a comma-separated string
-            String genres = game.getGenres() != null ? String.join(", ", game.getGenres().toString()) : "N/A";
-            row.createCell(2).setCellValue(genres);
+            StringBuilder genres = new StringBuilder();
+            for (Map<String, String> genre: game.getGenres()) {
+                if (!genres.isEmpty()) {
+                    genres.append(", ");
+                }
+                genres.append(genre.get("name"));
+            }
+            row.createCell(2).setCellValue(genres.toString());
 
             row.createCell(3).setCellValue(game.getRating() != null ? game.getRating() : "N/A");
         }

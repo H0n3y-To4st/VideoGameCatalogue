@@ -22,6 +22,10 @@ public class UserAccountBean implements Serializable {
         return userAccountService.getUserByUsername(username);
     }
 
+    public int getUserIdByUsername(String username) {
+        return userAccountService.getUserIdByUsername(username);
+    }
+
     public String getUsername() {
         return username;
     }

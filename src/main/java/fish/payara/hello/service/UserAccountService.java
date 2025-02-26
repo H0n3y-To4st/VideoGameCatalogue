@@ -28,4 +28,9 @@ public class UserAccountService implements Serializable {
         return em.createNamedQuery("UserAccount.findById", UserAccount.class)
                 .setParameter("id", id).getSingleResult();
     }
+
+    public int getUserIdByUsername(String username){
+        return em.createNamedQuery("UserAccount.findIDByUsername", Integer.class)
+                .setParameter("username", username).getSingleResult();
+    }
 }
