@@ -15,7 +15,7 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>games/index.xhtml</welcome-file>
+        <welcome-file>welcome.xhtml</welcome-file>
     </welcome-file-list>
 
 <!--&lt;!&ndash;    the url pattern prevents user from logging in, might be an issue with matching roles->-->

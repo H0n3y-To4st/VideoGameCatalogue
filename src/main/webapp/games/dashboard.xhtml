@@ -10,11 +10,12 @@
 <h:head>
     <title>Dashboard</title>
 </h:head>
-<body>
 
 <h:outputStylesheet name="main.css"/>
-<ui:include src="navbar.xhtml"/>
 
+<ui:include src="../navbar.xhtml"/>
+
+<body>
 <p>Welcome to your dashboard! Here you can view all your saved games.
 </p>
 
@@ -25,7 +26,6 @@
     </h:form>
 </p:toolbarGroup>
 
-<!--        DISPLAY ALL GAMES SAVED -->
 <h:form id="gameTable">
     <p:dataTable value="#{userGamesBean.games}" var="game" styleClass="game-table">
         <p:column headerText="Icon">

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xsi:schemaLocation="http://primefaces.org/ui "
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Welcome Page</title>
+</h:head>
+
+<ui:include src="navbar.xhtml"/>
+
+<h:outputStylesheet name="main.css"/>
+<h:outputStylesheet name="welcome.css"/>
+
+<h:body>
+    <h:outputText value="Welcome to the Game Collection!"/>
+    <div class="container">
+        <h:panelGrid columns="2" styleClass="welcome-grid">
+            <h:panelGroup>
+                <h1>Track</h1>
+<!--                pi-search-->
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <h1>Chat</h1>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <h1>Share</h1>
+            </h:panelGroup>
+
+            <h:panelGroup>
+                <h1>Save</h1>
+            </h:panelGroup>
+        </h:panelGrid>
+    </div>
+</h:body>
+</html>
