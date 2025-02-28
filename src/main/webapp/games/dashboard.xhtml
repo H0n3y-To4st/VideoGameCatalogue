@@ -82,7 +82,7 @@
         </p:selectCheckboxMenu>
         <p:commandButton icon="pi pi-check" value="Save"
                          action="#{userGameStatesBean.updateGameStates(userGameStatesBean.selectedGameId, userGameStatesBean.selectedGameStates)}"
-                         update=":gameStateForm:menu"
+                         update=":gameStateForm:menu :gameTable"
                          oncomplete="PF('gameDialog').hide();"/>
     </h:form>
 </p:dialog>

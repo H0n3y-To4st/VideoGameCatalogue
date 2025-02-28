@@ -9,18 +9,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
-import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Named(value = "userGameStatesBean")
@@ -82,21 +74,23 @@ public class UserGameStatesBean implements Serializable {
         request.setUserId(userAccountBean.getUserID());
         request.setSelectedGameStates(selectedGameStates);
 
-        // This is just for demo for demonstrating accessing the REST API from the JSF managed bean
-        try (Client client = ClientBuilder.newClient()) {
-            Response response = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/update/" + gameId + "/dashboard")
-                    .request(MediaType.APPLICATION_JSON)
-                    .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+        userGameStatesService.updateGameStates(request.getUserId(), gameId, request.getSelectedGameStates());
 
-            if (response.getStatus() == 200) {
-                logger.log(Level.INFO, "Updated game state");
-                PrimeFaces.current().ajax().update("gameTable");
-            } else {
-                logger.log(Level.SEVERE, "Failed to update game state");
-            }
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "An error occurred while updating game states", e);
-        }
+        // This is just for demo for demonstrating accessing the REST API from the JSF managed bean
+//        try (Client client = ClientBuilder.newClient()) {
+//            Response response = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/update/" + gameId + "/dashboard")
+//                    .request(MediaType.APPLICATION_JSON)
+//                    .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+//
+//            if (response.getStatus() == 200) {
+//                logger.log(Level.INFO, "Updated game state");
+//                PrimeFaces.current().ajax().update("gameTable");
+//            } else {
+//                logger.log(Level.SEVERE, "Failed to update game state");
+//            }
+//        } catch (Exception e) {
+//            logger.log(Level.SEVERE, "An error occurred while updating game states", e);
+//        }
     }
 
     // add method to highlight already saved game states, and update the UI to reflect the changes

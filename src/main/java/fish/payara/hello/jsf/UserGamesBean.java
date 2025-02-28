@@ -10,19 +10,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
-import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Named(value = "userGamesBean")
@@ -31,6 +22,7 @@ public class UserGamesBean implements Serializable {
 
     private List<Games> games;
     private List<GameState> selectedGameStates;
+    private int userID;
 
     @Inject
     private UserGamesService userGamesService;
@@ -52,47 +44,23 @@ public class UserGamesBean implements Serializable {
     @PostConstruct
     public void init() {
         selectedGameStates = new ArrayList<>();
-        logger.info("UserGamesBean instantiated");
+        userID = userAccountBean.getUserID().getId();
+        logger.info("UserGamesBean instantiated with userID: " + userID);
     }
 
     public void saveGameAndStates(int gameId) {
-        int userID = userAccountBean.getUserID().getId();
-
-        //save game to dashboard, include body params
-        Client client = ClientBuilder.newClient();
-        Response response = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/save/" + gameId + "/dashboard")
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(userID, MediaType.APPLICATION_JSON));
-
-        if (response.getStatus() == 200) {
-            logger.log(Level.INFO, "Saved game to dashboard");
-            selectedGameStates = new ArrayList<>(userGameStatesBean.getSelectedGameStates());
-            userGameStatesService.saveGameStates(getUserGameId(gameId), selectedGameStates);
-        } else {
-            logger.log(Level.SEVERE, "Failed to saved game to dashboard");
-        }
-        response.close();
-        client.close();
+        userGamesService.saveGameToDashboard(userID, gameId);
+        selectedGameStates = new ArrayList<>(userGameStatesBean.getSelectedGameStates());
+        userGameStatesService.saveGameStates(getUserGameId(gameId), selectedGameStates);
     }
 
     public void removeGameFromDashboard(int gameId) {
-        int userID = userAccountBean.getUserID().getId();
-
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/videogame-catalogue-3.9.8/app/games/delete/" + gameId + "/dashboard")
-                .queryParam("userId", userID);
-        Response response = target.request(MediaType.APPLICATION_JSON).delete();
-
-        if (response.getStatus() == 204) {
-            games = userGamesService.listAllGamesInDashboard(userID);
-            PrimeFaces.current().ajax().update("gameTable");
-        }  else {
-            logger.log(Level.SEVERE, "Failed to delete game from dashboard");
-        }
+        userGamesService.removeGameFromDashboard(userID, gameId);
+        games = userGamesService.listAllGamesInDashboard(userID);
     }
 
     public List<Games> getGames() {
-        games = userGamesService.listAllGamesInDashboard(userAccountBean.getUserID().getId());
+        games = userGamesService.listAllGamesInDashboard(userID);
         return games;
     }
 
@@ -101,6 +69,6 @@ public class UserGamesBean implements Serializable {
     }
 
     public int getUserGameId(int gameId) {
-        return userGamesService.getUserGameId(userAccountBean.getUserID().getId(), gameId);
+        return userGamesService.getUserGameId(userID, gameId);
     }
 }
