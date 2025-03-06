@@ -1,0 +1,53 @@
+/* NAV BAR */
+.nav-bar {
+    background-color: black;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+.nav-bar .ui-toolbar {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 0;
+    margin: 5px;
+    width: 100%;
+}
+
+.nav-bar .ui-button {
+    background-color: black;
+    color: white;
+    margin-right: .5rem;
+    margin-left: .5rem;
+    border: none;
+    height: 60px;
+}
+
+.ui-sidebar {
+    z-index: 1050 !important;
+}
+
+.ui-widget-overlay {
+    z-index: 999 !important;
+}
+
+/* QUICK SEARCH BAR */
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {
+    font-weight: normal;
+    width: 300px;
+    margin-left: 10px;
+}
+
+.ui-autocomplete-panel .ui-autocomplete-table th, .ui-autocomplete-panel .ui-autocomplete-table td {
+    border-width: 0;
+    border-style: none;
+    border-color: inherit;
+    padding: 4px 10px 4px 10px;
+    height: 50px;
+    width: 300px;
+}

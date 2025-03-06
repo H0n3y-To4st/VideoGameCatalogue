@@ -6,6 +6,9 @@
       xmlns:f="jakarta.faces.core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:outputStylesheet name="navbar.css"/>
+
 <h:body>
     <h:form styleClass="nav-bar">
         <p:sidebar widgetVar="sidebar" modal="true">
@@ -18,20 +21,21 @@
                 <p:commandButton value="Home" action="#{navBean.index()}"/>
                 <p:commandButton value="Dashboard" action="#{navBean.dashboard()}" rendered="#{userAccountBean.checkLoggedIn()}"/>
             </p:toolbarGroup>
-<!--            TODO: quick search menu showing as blank -->
             <p:toolbarGroup align="right">
-                <div class="field col-12 md:col-4">
-                    <p:autoComplete id="quickSearch" icon="pi pi-search" minQueryLength="3" value="#{gameBean.searchQuery}"
+                <div>
+                    <p:autoComplete id="quickSearch"
+                                    minQueryLength="3"
+                                    value="#{gameBean.searchQuery}"
                                     completeMethod="#{gameBean.searchGamesByName}"
-                                    var="game" itemLabel="#{game.name}" itemValue="#{game}"
+                                    var="game"
+                                    itemLabel="#{game.name}"
+                                    itemValue="#{game}"
                                     forceSelection="true"
                                     scrollHeight="250"
                                     placeholder="Quick Search, input at least 3 chars">
                         <p:column>
-                            <h:panelGrid columns="2" cellpadding="0">
-                                <h:graphicImage value="#{game.thumbCover}" width="100" height="100"/>
-                                <h:outputText value="#{game.name}"/>
-                            </h:panelGrid>
+                            <img src="#{game.thumbCover.url}" alt="Game Cover"/>
+                            <h:outputText value="#{game.name}"/>
                         </p:column>
                     </p:autoComplete>
                 </div>

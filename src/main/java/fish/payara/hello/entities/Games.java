@@ -29,6 +29,11 @@ public class Games implements Serializable {
         this.rating = rating;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public Integer getId() {
         return id;
     }
