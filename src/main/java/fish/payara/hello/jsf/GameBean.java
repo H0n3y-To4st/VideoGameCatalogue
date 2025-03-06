@@ -4,9 +4,9 @@ package fish.payara.hello.jsf;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.restapi.IGDBService;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.context.Flash;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Named(value = "gameBean")
-@RequestScoped
+@ViewScoped
 public class GameBean implements Serializable {
 
     @Inject

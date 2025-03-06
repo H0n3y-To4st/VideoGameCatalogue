@@ -1,4 +1,4 @@
-FROM payara/server-full:6.2024.7-jdk21
+FROM payara/server-full:6.2024.11-jdk21
 
 COPY postgresql*.jar /tmp
 RUN echo 'add-library /tmp/postgresql-42.7.5.jar' > $POSTBOOT_COMMANDS
