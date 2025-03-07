@@ -23,6 +23,8 @@
             </p:toolbarGroup>
             <p:toolbarGroup align="right">
                 <div>
+<!--                    use this in advanced search -->
+<!--                    <h:outputText icon="pi pi-search"/>-->
                     <p:autoComplete id="quickSearch"
                                     minQueryLength="3"
                                     value="#{gameBean.searchQuery}"
@@ -30,6 +32,7 @@
                                     var="game"
                                     itemLabel="#{game.name}"
                                     itemValue="#{game}"
+                                    converter="#{gamesConverter}"
                                     forceSelection="true"
                                     scrollHeight="250"
                                     placeholder="Quick Search, input at least 3 chars">
@@ -37,7 +40,11 @@
                             <img src="#{game.thumbCover.url}" alt="Game Cover"/>
                             <h:outputText value="#{game.name}"/>
                         </p:column>
+                        <p:ajax event="itemSelect" listener="#{navBean.onGameSelect}" oncomplete="navigateToGame()"/>
                     </p:autoComplete>
+
+                    <!-- Remote command to trigger gameDetails() -->
+                    <p:remoteCommand name="navigateToGame" action="#{navBean.gameDetails()}"/>
                 </div>
                 <p:commandButton value="Login" action="#{navBean.login()}" rendered="#{!userAccountBean.checkLoggedIn()}"/>
                 <p:commandButton value="Logout" action="#{loginBean.logout()}" rendered="#{userAccountBean.checkLoggedIn()}"/>

@@ -25,7 +25,12 @@ public class IGDBService {
         return igdbClient.getTopGames(body);
     }
 
-    public List<Games> getGameByID(int gameId) {
+    public List<Games> getGamesByID(int gameId) {
+        String body = "fields id, name, genres.name, rating, cover.url; where id = " + gameId + ";";
+        return igdbClient.getGamesByID(body);
+    }
+
+    public Games getGameByID(int gameId) {
         String body = "fields id, name, genres.name, rating, cover.url; where id = " + gameId + ";";
         return igdbClient.getGameByID(body);
     }

@@ -47,7 +47,7 @@ public class UserGamesService implements Serializable {
         List<Future<List<Games>>> futures = new ArrayList<>();
 
         for (UserGames userGame : userGamesList) {
-            Future<List<Games>> future = mes.submit(() -> igdbService.getGameByID(userGame.getGame()));
+            Future<List<Games>> future = mes.submit(() -> igdbService.getGamesByID(userGame.getGame()));
             futures.add(future);
         }
 

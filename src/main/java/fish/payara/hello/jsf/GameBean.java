@@ -69,22 +69,6 @@ public class GameBean implements Serializable {
         this.games = games;
     }
 
-    public String getSearchQuery() {
-        return searchQuery;
-    }
-
-    public void setSearchQuery(String searchQuery) {
-        this.searchQuery = searchQuery;
-    }
-
-    public List<Games> getSearchGames() {
-        return searchGames;
-    }
-
-    public void setSearchGames(List<Games> searchGames) {
-        this.searchGames = searchGames;
-    }
-
     public Games getSelectedGame() {
         return selectedGame;
     }
@@ -96,6 +80,10 @@ public class GameBean implements Serializable {
             flash.put("selectedGame", this.selectedGame);
             FacesContext.getCurrentInstance().getExternalContext().redirect("game.xhtml?gameId=" + this.selectedGame.getId());
         }
+    }
+
+    public Games getGameById(int id) {
+        return igdbService.getGameByID(id);
     }
 
     public List<Games> searchGamesByName(String name) {
@@ -110,5 +98,25 @@ public class GameBean implements Serializable {
             logger.log(Level.SEVERE, "Failed to fetch top games.", e);
         }
         return games;
+    }
+
+    public void searchGames() {
+        searchGames = searchGamesByName(searchQuery);
+    }
+
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+    }
+
+    public List<Games> getSearchGames() {
+        return searchGames;
+    }
+
+    public void setSearchGames(List<Games> searchGames) {
+        this.searchGames = searchGames;
     }
 }

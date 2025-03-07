@@ -28,7 +28,10 @@ public interface IGDBClient {
     List<Games> getTopGames(String body);
 
     @POST
-    List<Games> getGameByID(String body);
+    List<Games> getGamesByID(String body);
+
+    @POST
+    Games getGameByID(String body);
 
     @POST
     List<Games> searchGamesByName(String body);
