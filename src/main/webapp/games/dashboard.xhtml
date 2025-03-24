@@ -29,7 +29,7 @@
 <h:form id="gameTable">
     <p:dataTable value="#{userGamesBean.games}" var="game" styleClass="game-table">
         <p:column headerText="Icon">
-            <img src="#{game.thumbCover.url}" alt="Game Cover"/>
+            <h:graphicImage value="#{game.thumbCover.url}" alt="Game Cover"/>
         </p:column>
 
         <p:column headerText="Title" sortBy="#{game.name}">

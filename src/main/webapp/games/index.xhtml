@@ -23,7 +23,7 @@
             <ui:repeat value="#{gameBean.games}" var="game">
                 <p:card style="margin: 1em;">
                     <f:facet name="header">
-                        <img src="#{game.cover.url}" alt="No Game Cover Found"/>
+                        <h:graphicImage value="#{game.cover.url}" alt="No Game Cover Found"/>
                     </f:facet>
                     <f:facet name="title">
                         <h:outputText value="#{game.name}"/>

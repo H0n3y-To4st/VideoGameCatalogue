@@ -47,8 +47,10 @@
 <!--TODO: fix CSS for their positioning, do not rely on hardcoded values-->
     <div class="cover-and-screenshots">
         <div>
-            <img src="#{gameBean.selectedGame.cover.url}" alt="No Game Cover Found"
-                 style="width: 264px; height: 352px; margin-left: 100px"/>
+            <h:graphicImage
+                    value="#{gameBean.selectedGame.cover.url}"
+                    alt="Game Cover"
+                    style="width: 264px; height: 352px; margin-left: 100px"/>
         </div>
         <div>
             <p:galleria value="#{gameBean.selectedGame.screenshots}" var="screenshot" numVisible="5"

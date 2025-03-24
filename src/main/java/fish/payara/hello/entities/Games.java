@@ -18,6 +18,9 @@ public class Games implements Serializable {
     private Double rating;
     public String summary;
 
+//    Just a placeholder for now
+    private static final String DEFAULT_COVER = "/resources/images/payara-fish-logo.svg";
+
     Logger logger = Logger.getLogger(Games.class.getName());
 
     public Games() {
@@ -139,12 +142,21 @@ public class Games implements Serializable {
     }
 
     public Map<String, String> getCover() {
-        String url = cover.get("url");
+        if (cover == null) {
+            cover = new HashMap<>();
+        }
+
+        String url = Optional.ofNullable(cover.get("url")).orElse(DEFAULT_COVER);
+
         if (url.contains("thumb")) {
             url = url.replace("thumb", "cover_big");
-            cover.put("url", url);
         }
-        logger.info("Cover URL: " + cover.get("url"));
+
+        if (!url.startsWith("http")) {
+            url = "https:" + url;
+        }
+
+        cover.put("url", url);
         return cover;
     }
 
@@ -153,12 +165,21 @@ public class Games implements Serializable {
     }
 
     public Map<String, String> getThumbCover() {
-        String url = cover.get("url");
+        if (cover == null) {
+            cover = new HashMap<>();
+        }
+        // TODO: need to create thumb cover
+        String url = Optional.ofNullable(cover.get("url")).orElse(DEFAULT_COVER);
+
         if (url.contains("cover_big")) {
             url = url.replace("cover_big", "thumb");
-            cover.put("url", url);
         }
-        logger.info("Cover URL: " + cover.get("url"));
+
+        if (!url.startsWith("http")) {
+            url = "https:" + url;
+        }
+
+        cover.put("url", url);
         return cover;
     }
 
