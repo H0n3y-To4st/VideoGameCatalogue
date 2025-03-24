@@ -27,6 +27,7 @@
 <!--                    <h:outputText icon="pi pi-search"/>-->
                     <p:autoComplete id="quickSearch"
                                     minQueryLength="3"
+                                    queryDelay="400"
                                     value="#{gameBean.searchQuery}"
                                     completeMethod="#{gameBean.searchGamesByName}"
                                     var="game"
@@ -35,6 +36,7 @@
                                     converter="#{gamesConverter}"
                                     forceSelection="true"
                                     scrollHeight="250"
+                                    cache="true"
                                     placeholder="Quick Search, input at least 3 chars">
                         <p:column>
                             <img src="#{game.thumbCover.url}" alt="Game Cover"/>
