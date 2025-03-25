@@ -21,31 +21,41 @@
         <h1>Popular Games</h1>
         <div class="card-container">
             <ui:repeat value="#{gameBean.games}" var="game">
-                <p:card style="margin: 1em;">
+                <p:card styleClass="ui-card">
                     <f:facet name="header">
-                        <h:graphicImage value="#{game.cover.url}" alt="No Game Cover Found"/>
+                        <div class="card-header">
+                            <h:graphicImage value="#{game.cover.url}" alt="No Game Cover Found" class="game-image"/>
+
+                            <!-- Save button needs to overlay -->
+                            <p:commandButton icon="pi pi-check"
+                                             rendered="#{userAccountBean.checkLoggedIn()}"
+                                             onclick="PF('gameDialog').show();"
+                                             update=":gameStateForm:menu"
+                                             styleClass="save-button">
+                                <f:setPropertyActionListener target="#{userGameStatesBean.selectedGameId}" value="#{game.id}"/>
+                            </p:commandButton>
+                        </div>
                     </f:facet>
+
                     <f:facet name="title">
                         <h:outputText value="#{game.name}"/>
                     </f:facet>
+
                     <f:facet name="subtitle">
                         <h:outputText value="#{game.genres.get(0).name}"/>
                         <h:outputText value="..." rendered="#{game.genres.size() ge 2}"/>
                     </f:facet>
+
                     <h:outputText value="User Rating: #{game.rating}"/>
-                    <br/>
-                    <p:commandButton icon="pi pi-search" value="View Details" action="#{gameBean.setSelectedGame(game)}">
-                    </p:commandButton>
-                    <p:commandButton icon="pi pi-check" value="Save"
-                                     rendered="#{userAccountBean.checkLoggedIn()}"
-                                     onclick="PF('gameDialog').show();"
-                                     update=":gameStateForm:menu">
-                        <f:setPropertyActionListener target="#{userGameStatesBean.selectedGameId}" value="#{game.id}" />
-                    </p:commandButton>
+
+                    <!-- Hidden button over entire card -->
+                    <p:commandButton action="#{gameBean.setSelectedGame(game)}"
+                                     styleClass="hidden-button"/>
                 </p:card>
             </ui:repeat>
         </div>
     </h:form>
+
 
     <p:dialog header="Select Game Collections" widgetVar="gameDialog" modal="true" resizable="false">
         <h:form id="gameStateForm">
