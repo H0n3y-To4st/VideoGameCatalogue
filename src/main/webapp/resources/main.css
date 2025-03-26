@@ -56,8 +56,6 @@ body .ui-card {
 }
 
 .ui-card-header {
-    display: flex;
-    justify-content: center;
     align-items: center;
     width: 264px;
     height: 352px;
@@ -94,8 +92,8 @@ body .ui-card .ui-card-title {
 .save-button {
     opacity: 0;
     z-index: 3;
-    bottom: 325px;
-    left: 215px;
+    bottom: 350px;
+    left: 220px;
 }
 
 .ui-card:hover .save-button {
