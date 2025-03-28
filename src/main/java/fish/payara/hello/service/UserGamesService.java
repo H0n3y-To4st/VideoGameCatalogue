@@ -1,5 +1,6 @@
 package fish.payara.hello.service;
 
+import fish.payara.hello.UserGameStatesId;
 import fish.payara.hello.entities.Games;
 import fish.payara.hello.entities.UserAccount;
 import fish.payara.hello.entities.UserGames;
@@ -113,4 +114,42 @@ public class UserGamesService implements Serializable {
             throw new IllegalArgumentException("No UserGames found for userId: " + userId + " and gameId: " + gameId);
         }
     }
+
+    public List<Games> getGamesByUserGamesIds(List<UserGameStatesId> userGameIds) {
+        List<UserGames> userGames = new ArrayList<>();
+        List<Games> games = new ArrayList<>();
+
+        for (UserGameStatesId userGameId : userGameIds) {
+            try {
+                // Access the userGamesId field from the composite key
+                int id = userGameId.getUserGamesId();
+                UserGames userGame = em.createNamedQuery("UserGames.findByUserGameId", UserGames.class)
+                        .setParameter("usergameid", id)
+                        .getSingleResult();
+                userGames.add(userGame);
+            } catch (NoResultException e) {
+                // Log or handle the case where no result is found
+                LOGGER.log(Level.WARNING, "No games found");
+            }
+        }
+
+        List<Future<List<Games>>> futures = new ArrayList<>();
+
+        for (UserGames userGame : userGames) {
+            Future<List<Games>> future = mes.submit(() -> igdbService.getGamesByID(userGame.getGame()));
+            futures.add(future);
+        }
+
+        for (Future<List<Games>> future : futures) {
+            try {
+                games.addAll(future.get());
+            } catch (InterruptedException | ExecutionException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Error fetching game details", e);
+            }
+        }
+
+        return games;
+    }
+
 }

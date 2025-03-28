@@ -6,7 +6,8 @@ import jakarta.persistence.*;
 @Table(name = "user_games")
 @NamedQueries({
         @NamedQuery(name = UserGames.QUERY_BY_USER_ID, query = "SELECT ug FROM UserGames ug WHERE ug.user.id = :userId"),
-        @NamedQuery(name = "UserGames.findByUserIdAndGameId", query = "SELECT ug FROM UserGames ug WHERE ug.user.id = :userId AND ug.game = :gameId")
+        @NamedQuery(name = "UserGames.findByUserIdAndGameId", query = "SELECT ug FROM UserGames ug WHERE ug.user.id = :userId AND ug.game = :gameId"),
+        @NamedQuery(name = "UserGames.findByUserGameId", query = "SELECT ug FROM UserGames ug WHERE ug.id = :usergameid")
 })
 public class UserGames {
 

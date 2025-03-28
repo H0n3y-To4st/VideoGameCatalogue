@@ -46,6 +46,7 @@ public class UserGamesBean implements Serializable {
         selectedGameStates = new ArrayList<>();
         userID = userAccountBean.getUserID().getId();
         logger.info("UserGamesBean instantiated with userID: " + userID);
+        games = userGamesService.listAllGamesInDashboard(userID);
     }
 
     public void saveGameAndStates(int gameId) {
@@ -60,7 +61,10 @@ public class UserGamesBean implements Serializable {
     }
 
     public List<Games> getGames() {
-        games = userGamesService.listAllGamesInDashboard(userID);
+        // to ensure when no collection is selected it just defaults
+        if (games == null || games.isEmpty()) {
+            games = userGamesService.listAllGamesInDashboard(userID);
+        }
         return games;
     }
 
@@ -70,5 +74,10 @@ public class UserGamesBean implements Serializable {
 
     public int getUserGameId(int gameId) {
         return userGamesService.getUserGameId(userID, gameId);
+    }
+
+    public void gamesWithState() {
+        var state = userGameStatesBean.getSelectedGameState();
+        games = userGamesService.getGamesByUserGamesIds(userGameStatesBean.getUserGameIdsBySelectedGameState(state));
     }
 }

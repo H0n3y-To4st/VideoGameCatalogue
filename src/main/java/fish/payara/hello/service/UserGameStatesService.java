@@ -75,6 +75,12 @@ public class UserGameStatesService implements Serializable {
         return query.getResultList();
     }
 
+    public List<UserGameStatesId> getUserGameIdsBySelectedGameState(GameState selectedGameState) {
+        Query query = em.createQuery("SELECT ugs.id FROM UserGameStates ugs WHERE ugs.id.gameState = :gameState");
+        query.setParameter("gameState", selectedGameState);
+        return query.getResultList();
+    }
+
     public void updateGameStates(UserID userId, int gameId, List<GameState> selectedGameStates) {
         int userGamesId = userGamesService.getUserGameId(userId.getId(), gameId);
 

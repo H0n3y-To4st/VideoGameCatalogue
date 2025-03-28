@@ -26,6 +26,19 @@
     </h:form>
 </p:toolbarGroup>
 
+<p:toolbarGroup align="left">
+    <h:form>
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="collection" value="Collection: "/>
+                <p:selectOneMenu id="collection" value="#{userGameStatesBean.selectedGameState}" style="width:150px">
+                    <f:selectItem itemLabel="ALL" itemValue="#{null}"/>
+                    <f:selectItems value="#{userGameStatesBean.gameStates}"/>
+                    <p:ajax listener="#{userGamesBean.gamesWithState}" event="change" update="gameTable"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+    </h:form>
+</p:toolbarGroup>
+
 <h:form id="gameTable">
     <p:dataTable value="#{userGamesBean.games}" var="game" styleClass="game-table">
         <p:column headerText="Icon">

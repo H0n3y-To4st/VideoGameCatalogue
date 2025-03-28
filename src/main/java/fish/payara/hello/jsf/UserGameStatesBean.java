@@ -2,6 +2,7 @@ package fish.payara.hello.jsf;
 
 
 import fish.payara.hello.GameState;
+import fish.payara.hello.UserGameStatesId;
 import fish.payara.hello.restapi.dto.UpdateGameStates;
 import fish.payara.hello.service.UserGameStatesService;
 
@@ -21,6 +22,7 @@ public class UserGameStatesBean implements Serializable {
 
     private List<GameState> gameStates;
     private List<GameState> selectedGameStates;
+    private GameState selectedGameState;
     private int selectedGameId;
 
     @Inject
@@ -56,6 +58,14 @@ public class UserGameStatesBean implements Serializable {
         this.selectedGameStates = selectedGameStates;
     }
 
+    public GameState getSelectedGameState() {
+        return selectedGameState;
+    }
+
+    public void setSelectedGameState(GameState selectedGameState) {
+        this.selectedGameState = selectedGameState;
+    }
+
     public int getSelectedGameId() {
         return selectedGameId;
     }
@@ -67,6 +77,10 @@ public class UserGameStatesBean implements Serializable {
 
     public List<GameState> getGameStatesByUserGameId(int gameId) {
         return userGameStatesService.getGameStatesByUserGameId(userGamesBean.getUserGameId(gameId));
+    }
+
+    public List<UserGameStatesId> getUserGameIdsBySelectedGameState(GameState selectedGameState) {
+        return userGameStatesService.getUserGameIdsBySelectedGameState(selectedGameState);
     }
 
     public void updateGameStates(int gameId, List<GameState> selectedGameStates) {
