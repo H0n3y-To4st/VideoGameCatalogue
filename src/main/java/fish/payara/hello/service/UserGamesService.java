@@ -44,24 +44,7 @@ public class UserGamesService implements Serializable {
                 .setParameter("userId", userId)
                 .getResultList();
 
-        List<Games> games = new ArrayList<>();
-        List<Future<List<Games>>> futures = new ArrayList<>();
-
-        for (UserGames userGame : userGamesList) {
-            Future<List<Games>> future = mes.submit(() -> igdbService.getGamesByID(userGame.getGame()));
-            futures.add(future);
-        }
-
-        for (Future<List<Games>> future : futures) {
-            try {
-                games.addAll(future.get()); // Wait for each Future to complete
-            } catch (InterruptedException | ExecutionException e) {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException("Error fetching game details", e);
-            }
-        }
-
-        return games;
+        return fetchGamesAsynchronously(userGamesList);
     }
 
     public void saveGameToDashboard(int userId, int gameId) {
@@ -117,7 +100,6 @@ public class UserGamesService implements Serializable {
 
     public List<Games> getGamesByUserGamesIds(List<UserGameStatesId> userGameIds) {
         List<UserGames> userGames = new ArrayList<>();
-        List<Games> games = new ArrayList<>();
 
         for (UserGameStatesId userGameId : userGameIds) {
             try {
@@ -132,7 +114,11 @@ public class UserGamesService implements Serializable {
                 LOGGER.log(Level.WARNING, "No games found");
             }
         }
+        return fetchGamesAsynchronously(userGames);
+    }
 
+    private List<Games> fetchGamesAsynchronously(List<UserGames> userGames) {
+        List<Games> games = new ArrayList<>();
         List<Future<List<Games>>> futures = new ArrayList<>();
 
         for (UserGames userGame : userGames) {
@@ -148,7 +134,6 @@ public class UserGamesService implements Serializable {
                 throw new RuntimeException("Error fetching game details", e);
             }
         }
-
         return games;
     }
 
