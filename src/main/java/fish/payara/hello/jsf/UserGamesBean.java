@@ -22,6 +22,7 @@ public class UserGamesBean implements Serializable {
 
     private List<Games> games;
     private List<GameState> selectedGameStates;
+    private Games selectedGame;
     private int userID;
 
     @Inject
@@ -53,6 +54,7 @@ public class UserGamesBean implements Serializable {
         userGamesService.saveGameToDashboard(userID, gameId);
         selectedGameStates = new ArrayList<>(userGameStatesBean.getSelectedGameStates());
         userGameStatesService.saveGameStates(getUserGameId(gameId), selectedGameStates);
+        games = userGamesService.listAllGamesInDashboard(userID);
     }
 
     public void removeGameFromDashboard(int gameId) {
@@ -79,5 +81,17 @@ public class UserGamesBean implements Serializable {
     public void gamesWithState() {
         var state = userGameStatesBean.getSelectedGameState();
         games = userGamesService.getGamesByUserGamesIds(userGameStatesBean.getUserGameIdsBySelectedGameState(state));
+    }
+
+    public Games getSelectedGame() {
+        return selectedGame;
+    }
+
+    public void setSelectedGame(Games selectedGame) {
+        this.selectedGame = selectedGame;
+    }
+
+    public void viewGameDetails(){
+        //no-op to trigger primefaces update
     }
 }

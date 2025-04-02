@@ -28,19 +28,19 @@
 
 <p:toolbarGroup align="left">
     <h:form>
-            <h:panelGrid columns="2" cellpadding="5">
-                <p:outputLabel for="collection" value="Collection: "/>
-                <p:selectOneMenu id="collection" value="#{userGameStatesBean.selectedGameState}" style="width:150px">
-                    <f:selectItem itemLabel="ALL" itemValue="#{null}"/>
-                    <f:selectItems value="#{userGameStatesBean.gameStates}"/>
-                    <p:ajax listener="#{userGamesBean.gamesWithState}" event="change" update="gameTable"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="collection" value="Collection: "/>
+            <p:selectOneMenu id="collection" value="#{userGameStatesBean.selectedGameState}" style="width:150px">
+                <f:selectItem itemLabel="ALL" itemValue="#{null}"/>
+                <f:selectItems value="#{userGameStatesBean.gameStates}"/>
+                <p:ajax listener="#{userGamesBean.gamesWithState}" event="change" update="gameTable"/>
+            </p:selectOneMenu>
+        </h:panelGrid>
     </h:form>
 </p:toolbarGroup>
-
 <h:form id="gameTable">
-    <p:dataTable value="#{userGamesBean.games}" var="game" styleClass="game-table">
+    <p:dataTable value="#{userGamesBean.games}" var="game" styleClass="game-table" selectionMode="single"
+                 selection="#{userGamesBean.selectedGame}" rowKey="#{game.id}" id="gameData">
         <p:column headerText="Icon">
             <h:graphicImage value="#{game.thumbCover.url}" alt="Game Cover"/>
         </p:column>
@@ -49,39 +49,18 @@
             <h:outputText value="#{game.name}"/>
         </p:column>
 
-        <p:column headerText="Genres">
-            <p:dataTable value="#{game.genres}" var="genre" styleClass="nested-table">
-                <p:column>
-                    <h:outputText value="#{genre.get('name')}"/>
-                </p:column>
-            </p:dataTable>
-        </p:column>
-
-        <p:column headerText="Collection">
-            <p:dataTable value="#{userGameStatesBean.getGameStatesByUserGameId(game.id)}" var="gameState" styleClass="nested-table">
-                <p:column>
-                    <h:outputText value="#{gameState}"/>
-                </p:column>
-            </p:dataTable>
-        </p:column>
-
-        <p:column>
-            <f:facet name="header">
-                <h:outputText value="Update"/>
-            </f:facet>
-            <p:commandButton icon="pi pi-check" value="Update"
-                             onclick="PF('gameDialog').show();">
-                <f:setPropertyActionListener target="#{userGameStatesBean.selectedGameId}" value="#{game.id}" />
-            </p:commandButton>
-        </p:column>
-
-        <p:column>
-            <f:facet name="header">
-                <h:outputText value="Remove"/>
-            </f:facet>
-            <p:commandButton value="-" update="gameTable" action="#{userGamesBean.removeGameFromDashboard(game.id)}"/>
-        </p:column>
     </p:dataTable>
+
+    <p:contextMenu for="gameData">
+        <p:menuitem value="View" icon="pi pi-search"
+                    actionListener="#{userGamesBean.viewGameDetails}"
+                    update="gameDetailsForm"
+                    oncomplete="PF('gameDetails').show()"/>
+        <p:menuitem value="Update" icon="pi pi-check" update="gameTable" oncomplete="PF('gameDialog').show()"
+                    actionListener="#{userGameStatesBean.setSelectedGameId(game.id)}"/>
+        <p:menuitem value="Delete" update="gameTable" icon="pi pi-times"
+                    action="#{userGamesBean.removeGameFromDashboard(userGamesBean.selectedGame.id)}"/>
+    </p:contextMenu>
 </h:form>
 
 <p:dialog header="Update Game Collections" widgetVar="gameDialog" modal="true" resizable="false">
@@ -91,12 +70,28 @@
         <p:selectCheckboxMenu id="menu"
                               label="Collections"
                               value="#{userGameStatesBean.selectedGameStates}">
-            <f:selectItems value="#{userGameStatesBean.gameStates}" var="state" itemValue="#{state}" itemLabel="#{state}" />
+            <f:selectItems value="#{userGameStatesBean.gameStates}" var="state" itemValue="#{state}"
+                           itemLabel="#{state}"/>
         </p:selectCheckboxMenu>
         <p:commandButton icon="pi pi-check" value="Save"
                          action="#{userGameStatesBean.updateGameStates(userGameStatesBean.selectedGameId, userGameStatesBean.selectedGameStates)}"
-                         update=":gameStateForm:menu :gameTable"
+                         update=":gameTable"
                          oncomplete="PF('gameDialog').hide();"/>
+    </h:form>
+</p:dialog>
+
+<!--TODO: need to show collections and select the game properly-->
+<p:dialog header="View game details" widgetVar="gameDetails" modal="true" resizable="false">
+    <h:form id="gameDetailsForm">
+        <h:outputText value="#{userGamesBean.selectedGame.fullName}"/>
+        <h:graphicImage value="#{userGamesBean.selectedGame.cover.url}" alt="Game Cover"/>
+
+        <p:dataTable value="#{userGamesBean.selectedGame.genres}" var="genre" styleClass="nested-table">
+            <p:column>
+                <h:outputText value="#{genre.get('name')}"/>
+            </p:column>
+        </p:dataTable>
+
     </h:form>
 </p:dialog>
 </body>
