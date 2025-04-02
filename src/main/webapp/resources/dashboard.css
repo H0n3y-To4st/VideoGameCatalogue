@@ -1,4 +1,54 @@
 body {
     background-color: #353535;
     color: white;
+    padding-top: 60px;
+}
+
+.gameDetailsForm {
+}
+
+body .ui-dialog {
+    width: 500px;
+    height: 500px;
+    top: 500px;
+}
+
+/* Game Datatables */
+.game-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+body .ui-datatable .ui-datatable-data>tr {
+    background-color: #404040;
+    color: white;
+}
+
+.game-table tr {
+    border-bottom: 10px solid #353535;
+}
+
+.nested-table thead {
+    display: none;
+}
+.nested-table tr {
+    border: none;
+    background: transparent;
+    font-size: 13.5px;
+}
+
+/* Popup */
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-shadow.ui-hidden-container.gameDetailsForm.ui-draggable {
+    border-radius: 4px;
+    visibility: visible;
+    z-index: 1022;
+    display: grid;
+    left: 773.5px;
+    top: 199.906px;
+}
+body .ui-dialog .ui-dialog-titlebar {
+}
+
+body .ui-dialog .ui-dialog-content {
+    width: 500px;
 }

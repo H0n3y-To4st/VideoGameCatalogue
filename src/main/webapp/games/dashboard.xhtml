@@ -11,11 +11,12 @@
     <title>Dashboard</title>
 </h:head>
 
-<h:outputStylesheet name="main.css"/>
-
 <ui:include src="../navbar.xhtml"/>
 
 <body>
+
+<h:outputStylesheet name="dashboard.css"/>
+
 <p>Welcome to your dashboard! Here you can view all your saved games.
 </p>
 
@@ -57,7 +58,7 @@
                     update="gameDetailsForm"
                     oncomplete="PF('gameDetails').show()"/>
         <p:menuitem value="Update" icon="pi pi-check" update="gameTable" oncomplete="PF('gameDialog').show()"
-                    actionListener="#{userGameStatesBean.setSelectedGameId(game.id)}"/>
+                    actionListener="#{userGameStatesBean.setSelectedGameId(userGamesBean.selectedGame.id)}"/>
         <p:menuitem value="Delete" update="gameTable" icon="pi pi-times"
                     action="#{userGamesBean.removeGameFromDashboard(userGamesBean.selectedGame.id)}"/>
     </p:contextMenu>
@@ -80,18 +81,28 @@
     </h:form>
 </p:dialog>
 
-<!--TODO: need to show collections and select the game properly-->
-<p:dialog header="View game details" widgetVar="gameDetails" modal="true" resizable="false">
+<!--TODO: update CSS-->
+<p:dialog header="View game details" widgetVar="gameDetails" modal="true" resizable="false" styleClass="gameDetailsForm">
     <h:form id="gameDetailsForm">
         <h:outputText value="#{userGamesBean.selectedGame.fullName}"/>
+        <br/>
         <h:graphicImage value="#{userGamesBean.selectedGame.cover.url}" alt="Game Cover"/>
-
+        <br/>
+        <h:outputText value="Genres:"/>
         <p:dataTable value="#{userGamesBean.selectedGame.genres}" var="genre" styleClass="nested-table">
             <p:column>
                 <h:outputText value="#{genre.get('name')}"/>
             </p:column>
         </p:dataTable>
-
+        <br/>
+        <h:outputText value="Collections saved to: "/>
+        <p:dataTable value="#{userGameStatesBean.getGameStatesByUserGameId(userGamesBean.selectedGame.id)}" var="gameState"
+                     styleClass="nested-table"
+                     rendered="#{not empty userGamesBean.selectedGame}">
+            <p:column>
+                <h:outputText value="#{gameState}"/>
+            </p:column>
+        </p:dataTable>
     </h:form>
 </p:dialog>
 </body>
