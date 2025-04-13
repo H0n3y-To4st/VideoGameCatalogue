@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title>Search</title>
+</h:head>
+
+<h:outputStylesheet name="main.css"/>
+
+<ui:include src="../navbar.xhtml"/>
+
+<h:body>
+    <h:form id="searchForm">
+        <h2>Advanced Search Results</h2>
+        <p:inputText id="searchQuery" value="#{gameSearchBean.searchQuery}" placeholder="Search for a game" />
+        <p:commandButton icon="pi pi-search" value="Search" action="#{gameSearchBean.searchGamesByName(gameSearchBean.searchQuery)}"
+                         update="searchResultsTable" process="@form"/>
+        <br/>
+        <br/>
+        <p:dataTable id="searchResultsTable" value="#{gameSearchBean.searchResults}" var="game"
+                     selectionMode="single"
+                     selection="#{gameBean.selectedGame}" rowKey="#{game.id}"
+                     paginator="true" paginatorPosition="both"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                     rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+            <p:column headerText="Game Name">
+                <h:outputText value="#{game.name}"/>
+            </p:column>
+            <p:column headerText="Cover">
+                <h:graphicImage value="#{game.thumbCover.url}" alt="Game Cover"/>
+            </p:column>
+            <p:ajax event="rowSelect" listener="#{gameBean.onGameSelect}"/>
+        </p:dataTable>
+    </h:form>
+</h:body>
+
+</html>
