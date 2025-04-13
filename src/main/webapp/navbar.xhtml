@@ -23,30 +23,30 @@
             </p:toolbarGroup>
             <p:toolbarGroup align="right">
                 <div>
-<!--                    use this in advanced search -->
-<!--                    <h:outputText icon="pi pi-search"/>-->
                     <p:autoComplete id="quickSearch"
                                     minQueryLength="3"
                                     queryDelay="400"
-                                    value="#{gameBean.searchQuery}"
-                                    completeMethod="#{gameBean.searchGamesByName}"
+                                    value="#{gameSearchBean.searchQuery}"
+                                    completeMethod="#{gameSearchBean.searchGamesByName}"
                                     var="game"
                                     itemLabel="#{game.name}"
                                     itemValue="#{game}"
                                     converter="#{gamesConverter}"
                                     forceSelection="true"
-                                    scrollHeight="250"
-                                    cache="true"
                                     placeholder="Quick Search, input at least 3 chars">
                         <p:column>
                             <img src="#{game.thumbCover.url}" alt="Game Cover"/>
                             <h:outputText value="#{game.name}"/>
                         </p:column>
-                        <p:ajax event="itemSelect" listener="#{navBean.onGameSelect}" oncomplete="navigateToGame()"/>
+                        <!-- Store the query when an item is selected -->
+                        <p:ajax event="itemSelect" listener="#{gameBean.onGameSelect}"/>
                     </p:autoComplete>
 
-                    <!-- Remote command to trigger gameDetails() -->
-                    <p:remoteCommand name="navigateToGame" action="#{navBean.gameDetails()}"/>
+                    <!-- Search Button -->
+                    <p:commandButton icon="pi pi-search" value="Advanced Search" action="#{navBean.advancedSearch}">
+<!--                        TODO: find a way to store the current query instead of making the user type it again-->
+                        <p:ajax event="click" listener="#{gameSearchBean.storeQuery}"/>
+                    </p:commandButton>
                 </div>
                 <p:commandButton value="Login" action="#{navBean.login()}" rendered="#{!userAccountBean.checkLoggedIn()}"/>
                 <p:commandButton value="Logout" action="#{loginBean.logout()}" rendered="#{userAccountBean.checkLoggedIn()}"/>
