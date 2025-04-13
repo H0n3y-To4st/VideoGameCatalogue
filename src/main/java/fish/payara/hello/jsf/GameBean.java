@@ -9,6 +9,7 @@ import jakarta.faces.context.Flash;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.primefaces.event.SelectEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -25,8 +26,6 @@ public class GameBean implements Serializable {
     private IGDBService igdbService;
 
     private List<Games> games;
-    private String searchQuery;
-    private List<Games> searchGames;
     private Games selectedGame;
 
     private static final Logger logger = Logger.getLogger(GameBean.class.getName());
@@ -73,21 +72,34 @@ public class GameBean implements Serializable {
         return selectedGame;
     }
 
-    public void setSelectedGame(Games selectedGame) throws IOException {
-        if (selectedGame != null) {
-            this.selectedGame = selectedGame;
-            Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
-            flash.put("selectedGame", this.selectedGame);
-            FacesContext.getCurrentInstance().getExternalContext().redirect("game.xhtml?gameId=" + this.selectedGame.getId());
+    public void setSelectedGame(Games selectedGame) {
+        this.selectedGame = selectedGame;
+    }
+
+//    this is specifically for triggering via Ajax
+public void onGameSelect(SelectEvent<Games> event) {
+    selectedGame = event.getObject();
+    if (selectedGame != null) {
+        try {
+            String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(contextPath + "/games/game.xhtml?gameId=" + selectedGame.getId());
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Redirection failed", e);
         }
+    }
+}
+
+//    this is specifically for triggering via command buttons
+    public String redirectToGameDetails() {
+        if (selectedGame != null) {
+            return "/games/game.xhtml?faces-redirect=true&gameId=" + selectedGame.getId();
+        }
+        return null;
     }
 
     public Games getGameById(int id) {
         return igdbService.getGameByID(id);
-    }
-
-    public List<Games> searchGamesByName(String name) {
-        return igdbService.searchGamesByName(name, false);
     }
 
     private List<Games> fetchTopGames() {
@@ -98,25 +110,5 @@ public class GameBean implements Serializable {
             logger.log(Level.SEVERE, "Failed to fetch top games.", e);
         }
         return games;
-    }
-
-    public void searchGames() {
-        searchGames = searchGamesByName(searchQuery);
-    }
-
-    public String getSearchQuery() {
-        return searchQuery;
-    }
-
-    public void setSearchQuery(String searchQuery) {
-        this.searchQuery = searchQuery;
-    }
-
-    public List<Games> getSearchGames() {
-        return searchGames;
-    }
-
-    public void setSearchGames(List<Games> searchGames) {
-        this.searchGames = searchGames;
     }
 }

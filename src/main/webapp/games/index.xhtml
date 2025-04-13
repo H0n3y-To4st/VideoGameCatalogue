@@ -49,8 +49,10 @@
                     <h:outputText value="User Rating: #{game.rating}"/>
 
                     <!-- Hidden button over entire card -->
-                    <p:commandButton action="#{gameBean.setSelectedGame(game)}"
-                                     styleClass="hidden-button"/>
+                    <p:commandButton styleClass="hidden-button"
+                                     action="#{gameBean.redirectToGameDetails}">
+                        <f:setPropertyActionListener target="#{gameBean.selectedGame}" value="#{game}"/>
+                    </p:commandButton>
                 </p:card>
             </ui:repeat>
         </div>
