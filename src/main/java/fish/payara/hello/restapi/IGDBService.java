@@ -37,7 +37,13 @@ public class IGDBService {
 
     public List<Games> searchGamesByName(String gameName, boolean advancedSearch) {
         String body = "fields name,genres.name,rating, cover.url;\n" +
-                "where name ~ *\"" + gameName + "\"* & category = 0 & themes != (42); limit 3;";
+                "where name ~ *\"" + gameName + "\"* & category = 0 & themes != (42);";
+        if (!advancedSearch) {
+            body += "limit 3;";
+        } else {
+//            setting limit for performance
+            body += "limit 100;";
+        }
         return igdbClient.searchGamesByName(body);
     }
 
