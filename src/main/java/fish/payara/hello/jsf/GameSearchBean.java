@@ -20,13 +20,17 @@ public class GameSearchBean implements Serializable {
     private String searchQuery;
     private List<Games> searchResults;
 
+    private List<String> selectedGenres;
+    private List<String> selectedPlatforms;
+    private List<String> selectedGameModes;
+
     @PostConstruct
     public void init() {
         searchResults = igdbService.searchGamesByName("", true);
     }
 
     public List<Games> searchGamesByName(String name) {
-        searchResults = igdbService.searchGamesByName(name, false);
+        searchResults = igdbService.searchGamesByFilters(name, selectedGenres, selectedPlatforms, selectedGameModes);
         return searchResults;
     }
 
@@ -46,7 +50,27 @@ public class GameSearchBean implements Serializable {
         this.searchResults = searchResults;
     }
 
-    public void storeQuery() {
-        // TODO: implement logic to store the search query
+    public List<String> getSelectedGenres() {
+        return selectedGenres;
+    }
+
+    public void setSelectedGenres(List<String> selectedGenres) {
+        this.selectedGenres = selectedGenres;
+    }
+
+    public List<String> getSelectedPlatforms() {
+        return selectedPlatforms;
+    }
+
+    public void setSelectedPlatforms(List<String> selectedPlatforms) {
+        this.selectedPlatforms = selectedPlatforms;
+    }
+
+    public List<String> getSelectedGameModes() {
+        return selectedGameModes;
+    }
+
+    public void setSelectedGameModes(List<String> selectedGameModes) {
+        this.selectedGameModes = selectedGameModes;
     }
 }

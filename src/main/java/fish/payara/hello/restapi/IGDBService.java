@@ -47,6 +47,33 @@ public class IGDBService {
         return igdbClient.searchGamesByName(body);
     }
 
+    public List<Games> searchGamesByFilters(String gameName, List<String> selectedGenres, List<String> selectedPlatforms, List<String> selectedGameModes) {
+        StringBuilder body = new StringBuilder("fields name,genres.name,rating,cover.url;\n");
+        body.append("where name ~ *\"").append(gameName).append("\"* & category = 0 & themes != (42)");
+
+        if (selectedGenres != null && !selectedGenres.isEmpty()) {
+            body.append(" & genres.name = (");
+            body.append(String.join(",", selectedGenres.stream().map(genre -> "\"" + genre + "\"").toList()));
+            body.append(")");
+        }
+
+        if (selectedPlatforms != null && !selectedPlatforms.isEmpty()) {
+            body.append(" & platforms.name = (");
+            body.append(String.join(",", selectedPlatforms.stream().map(platform -> "\"" + platform + "\"").toList()));
+            body.append(")");
+        }
+
+        if (selectedGameModes != null && !selectedGameModes.isEmpty()) {
+            body.append(" & game_modes.name = (");
+            body.append(String.join(",", selectedGameModes.stream().map(mode -> "\"" + mode + "\"").toList()));
+            body.append(")");
+        }
+
+        body.append("; limit 100;");
+
+        return igdbClient.searchGamesByName(body.toString());
+    }
+
     public Games getSelectedGameDetails(int gameId) {
         String body = """
                 fields name,involved_companies.company.name,genres.name,
