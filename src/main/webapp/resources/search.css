@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start; /* Aligns top by default */
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Optional: push searchContainer down */
+}
+
+.searchContainer {
+    /* No height or flex growth needed unless you want control */
+}
+
+.filterContainer {
+    align-self: flex-end; /* Aligns with the bottom of .searchContainer */
+}
+
+.game-detail-box {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+}
+
