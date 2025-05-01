@@ -19,316 +19,57 @@
 <h:body>
     <div class="container">
 
-    <h:form id="searchForm">
-        <div class="title">
-            <h2>Advanced Search Results</h2>
-            <p:inputText id="searchQuery" value="#{gameSearchBean.searchQuery}" placeholder="Search for a game"/>
-            <p:commandButton icon="pi pi-search" value="Search"
-                             action="#{gameSearchBean.searchGamesByName(gameSearchBean.searchQuery)}"
-                             update="searchResultsTable" process="@form"/>
-        </div>
+        <h:form id="searchForm">
+            <div class="title">
+                <h2>Advanced Search Results</h2>
+                <p:inputText id="searchQuery" value="#{gameSearchBean.searchQuery}" placeholder="Search for a game"/>
+                <p:commandButton icon="pi pi-search" value="Search"
+                                 action="#{gameSearchBean.searchGamesByName(gameSearchBean.searchQuery)}"
+                                 update="searchResultsTable" process="@form"/>
+            </div>
 
             <br/>
             <br/>
 
-        <div class="searchContainer">
-            <p:dataTable id="searchResultsTable" value="#{gameSearchBean.searchResults}" var="game"
-                         selectionMode="single"
-                         selection="#{gameBean.selectedGame}" rowKey="#{game.id}"
-                         paginator="true" paginatorPosition="bottom"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                         rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+            <div class="searchContainer">
+                <p:dataTable id="searchResultsTable" value="#{gameSearchBean.searchResults}" var="game"
+                             selectionMode="single"
+                             selection="#{gameBean.selectedGame}" rowKey="#{game.id}"
+                             paginator="true" paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">
 
-                <p:ajax event="rowSelect" listener="#{gameBean.onGameSelect}"/>
+                    <p:ajax event="rowSelect" listener="#{gameBean.onGameSelect}">
+                        <f:attribute name="gameId" value="#{game.id}"/>
+                    </p:ajax>
 
-                <p:ajax event="mouseover" listener="#{gameSearchBean.onRowHover}" update="gameDetailPanel">
-                    <f:attribute name="gameId" value="#{game.id}"/>
-                </p:ajax>
-
-                <p:column headerText="Game Name">
-                    <h:outputText value="#{game.name}"/>
-                </p:column>
-                <p:column headerText="Cover">
-                    <h:graphicImage value="#{game.thumbCover.url}" alt="Game Cover"/>
-                </p:column>
-
-<!--            setting up the hovergame details    -->
-                <p:outputPanel id="gameDetailPanel" rendered="#{not empty gameSearchBean.hoveredGame}" styleClass="game-detail-box">
-                    <h3>#{gameSearchBean.hoveredGame.name}</h3>
-                    <p>#{gameSearchBean.hoveredGame.summary}</p>
-                    <h:graphicImage value="#{gameSearchBean.hoveredGame.screenshotUrl}" />
-                </p:outputPanel>
-            </p:dataTable>
-        </div>
-    </h:form>
-    <!--    TODO: Make this scroll with user view-->
-    <h:form id="gameFilter">
-        <div class="filterContainer">
-            <p:accordionPanel widgetVar="Genre">
-                <p:tab title="Genre">
-                    <p class="m-0">
-                        <p:selectBooleanCheckbox value="" itemLabel="Point-and-click"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Fighting"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Shooter"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Music"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Puzzle"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Racing"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Real Time Strategy"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="RPG"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Simulator"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sport"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Strategy"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Turn-Based Strategy"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Tactical"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Brawler"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Quiz/Trivia"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Pinball"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Adventure"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Indie"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Arcade"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Visual Novel"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Card &amp; Board Game"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="MOBA"/>
-                    </p>
-                </p:tab>
-                <p:tab title="Platform">
-                    <p class="m-0">
-                        <p:selectBooleanCheckbox value="" itemLabel="Xbox Series X|S"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation 5"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo Switch 2"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Windows PC"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation 4"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Xbox One"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo Switch"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Google Stadia"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation Vita"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo 3DS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="New Nintendo 3DS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation VR"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Oculus VR"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="SteamVR"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Android"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="iOS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation 3"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Xbox 360"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Wii U"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Wii"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo DS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo DSi"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation Portable"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation 2"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Xbox"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo GameCube"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Game Boy Advance"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Dreamcast"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo 64"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Game Boy Color"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sega Saturn"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Super Nintendo Entertainment System"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sega Genesis"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Game Boy"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo Entertainment System"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sega Master System/Mark III"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Linux"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="DOS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Mac"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Commodore C64/128/MAX"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Amiga"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PC-FX"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Amstrad CPC"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="ZX Spectrum"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="MSX"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sega 32X"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sega Game Gear"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="N-Gage"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Tapwave Zodiac"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Virtual Console"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="3DO Interactive Multiplayer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Satellaview"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Family Computer Disk System"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Game &amp; Watch"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Arcade"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Playdia"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="MSX2"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Evercade"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Legacy Mobile Device"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="WonderSwan"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Super Famicom"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Atari 2600"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Atari 7800"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Atari Lynx"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Atari Jaguar"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Atari ST/STE"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Atari 8-bit"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Atari 5200"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Intellivision"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="ColecoVision"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="BBC Microcomputer System"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Vectrex"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Commodore VIC-20"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Ouya"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="BlackBerry OS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Windows Phone"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Apple II"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sharp X1"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sega CD"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Neo Geo MVS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Neo Geo AES"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Web browser"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sega Pico"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="SG-1000"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Donner Model 30"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="TurboGrafx-16/PC Engine"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Virtual Boy"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Odyssey"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Microvision"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Commodore PET"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Bally Astrocade"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Commodore 16"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Commodore Plus/4"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PDP-1"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PDP-10"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PDP-8"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="DEC GT40"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Family Computer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Analogue Electronics"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Ferranti Nimrod Computer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="EDSAC"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PDP-7"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="HP 2100"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="HP 3000"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="SDS Sigma 7"/>
-                        <p:selectBooleanCheckbox value=""
-                                                 itemLabel="Call-A-Computer time-shared mainframe computer system"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PDP-11"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="CDC Cyber 70"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PLATO"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Imlac PDS-1"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Microcomputer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="OnLive Game System"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Amiga CD32"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Apple IIGS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Acorn Archimedes"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="OOParts"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Philips CD-i"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sinclair ZX81"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="FM Towns"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sharp MZ-2200"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Neo Geo Pocket"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Epoch Cassette Vision"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Neo Geo Pocket Color"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Epoch Super Cassette Vision"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sharp X68000"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Plug &amp; Play"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nuon"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Gamate"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="WonderSwan Color"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Game.com"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="SwanCrystal"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Casio Loopy"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PC-8800 Series"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Playdate"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="TRS-80"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Intellivision Amico"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Fairchild Channel F"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PC Engine SuperGrafx"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Oculus Quest"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Texas Instruments TI-99"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Oculus Rift"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Meta Quest 2"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo PlayStation"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Oculus Go"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Amazon Fire TV"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Gear VR"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Odyssey 2 / Videopac G7000"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AirConsole"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Acorn Electron"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PlayStation VR2"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Hyper Neo Geo 64"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Neo Geo CD"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="VC 4000"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="1292 Advanced Programmable Video System"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AY-3-8500"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AY-3-8610"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PC-50X Family"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AY-3-8760"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AY-3-8710"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AY-3-8603"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AY-3-8605"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AY-3-8606"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="AY-3-8607"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PC-9800 Series"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Windows Mobile"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Turbografx-16/PC Engine CD"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sinclair QL"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="TRS-80 Color Computer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="HyperScan"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="FM-7"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Mega Duck/Cougar Boy"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Dragon 32/64"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Legacy Computer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Amstrad PCW"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Atari Jaguar CD"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Tatung Einstein"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Handheld Electronic LCD"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Thomson MO5"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Leapster"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="NEC PC-6000 Series"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Leapster Explorer/LeadPad Explorer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Commodore CDTV"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="LeapTV"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Watara/QuickShot Supervision"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Nintendo 64DD"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Windows Mixed Reality"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Palm OS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Daydream"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Pokémon mini"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Arduboy"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="V.Smile"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Visual Memory Unit / Visual Memory System"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="PocketStation"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Meta Quest 3"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="visionOS"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Arcadia 2001"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Gizmondo"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="R-Zone"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Apple Pippin"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Panasonic Jungle"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Panasonic M2"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Terebikko / See 'n Say Video Phone"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Super A'Can"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Tomy Tutor / Pyuta / Grandstand Tutor"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sega CD 32X"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Advanced Pico Beena"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Digiblast"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="LaserActive"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Exidy Sorcerer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Sol-20"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="DVD Player"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Blu-ray Player"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Zeebo"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Uzebox"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Elektor TV Games Computer"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Amstrad GX4000"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Polymega"/>
-                    </p>
-                </p:tab>
-                <p:tab title="Gamemode">
-                    <p class="m-0">
-                        <p:selectBooleanCheckbox value="" itemLabel="First person"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Third person"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Bird view / Isometric"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Side view"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Text"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Auditory"/>
-                        <p:selectBooleanCheckbox value="" itemLabel="Virtual Reality"/>
-                    </p>
-                </p:tab>
-            </p:accordionPanel>
-        </div>
-    </h:form>
+                    <p:column headerText="Cover">
+                        <h:graphicImage value="#{game.thumbCover.url}" alt="Game Cover"/>
+                    </p:column>
+                    <p:column headerText="Game Name">
+                        <h:outputText value="#{game.name}"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+        <!--    TODO: Make this scroll with user view-->
+        <h:form id="gameFilter">
+            <div class="filterContainer">
+                        <p:selectCheckboxMenu label="Genres" value="#{gameSearchBean.selectedGenres}">
+                        <f:selectItems value="#{gameSearchBean.genres}" var="genre" itemValue="#{genre}" itemLabel="#{genre}" />
+                        <p:ajax event="change" listener="#{gameSearchBean.searchGamesByName(gameSearchBean.searchQuery)}" process="@this" update=":searchForm:searchResultsTable"/>
+                    </p:selectCheckboxMenu>
+                        <p:selectCheckboxMenu label="Platforms" value="#{gameSearchBean.selectedPlatforms}">
+                            <f:selectItems value="#{gameSearchBean.platforms}" var="platforms" itemValue="#{platforms}" itemLabel="#{platforms}" />
+                            <p:ajax event="change" listener="#{gameSearchBean.searchGamesByName(gameSearchBean.searchQuery)}" process="@this" update=":searchForm:searchResultsTable"/>
+                        </p:selectCheckboxMenu>
+                        <p:selectCheckboxMenu label="GameModes" value="#{gameSearchBean.selectedGameModes}">
+                            <f:selectItems value="#{gameSearchBean.gameModes}" var="gameModes" itemValue="#{gameModes}" itemLabel="#{gameModes}" />
+                            <p:ajax event="change" listener="#{gameSearchBean.searchGamesByName(gameSearchBean.searchQuery)}" process="@this" update=":searchForm:searchResultsTable"/>
+                        </p:selectCheckboxMenu>
+            </div>
+        </h:form>
     </div>
 </h:body>
 </html>
