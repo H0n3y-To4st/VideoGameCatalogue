@@ -1,8 +1,3 @@
-/*body {*/
-/*    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),*/
-/*    url("#{gameBean.selectedGame.getBackgroundImageUrl}") no-repeat center center fixed;*/
-/*}*/
-
 .game-overview .game-title {
     font-size: 2rem;
     margin-left: 50px;
@@ -10,12 +5,12 @@
 
 .game-overview .game-header {
     margin-top: 50px;
-    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
-    padding: 20px; /* Space around the content */
-    max-width: 90%; /* Limit the width of the background */
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    max-width: 90%;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 10px; /* Optional: rounded corners */
+    border-radius: 10px;
 }
 
 .game-overview .game-header .game-save-remove-button {
@@ -29,12 +24,11 @@
     align-items: center;
     width: 100%;
     margin-top: 20px;
-    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
-    padding: 20px; /* Space around the content */
-    max-width: 90%; /* Limit the width of the background */
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 10px; /* Optional: rounded corners */
+    border-radius: 10px;
 }
 
 .game-details {
@@ -43,9 +37,9 @@
     align-items: center;
     width: 100%;
     margin-top: 20px;
-    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
-    padding: 20px; /* Space around the content */
-    max-width: 90%; /* Limit the width of the background */
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    max-width: 90%;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
@@ -56,31 +50,25 @@
     vertical-align: center;
 }
 
-.game-overview table td:first-child {
-    /*width: 25%;*/
-    /*background: red;*/
+.genre-names {
+    font-weight: bold;
+    color: white;
+    background-color: cornflowerblue;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-right: 10px;
 }
 
-.game-overview table td:nth-child(2) {
-    /*width: 100%;*/
-    /*background: pink;*/
+.company-name:first-child {
+    margin-left: 50px; /* Apply margin-left only to the first company name */
 }
 
-.game-overview table td:nth-child(3) {
-    /*width: 100%;*/
-    /*background: blue;*/
-}
-
-.game-overview .genre {
-    /*width: 100%;*/
-    /*background: green;*/
-}
-
-.game-overview .knob {
-    /*width: 50px;*/
-    /*height: 50px;*/
-}
-
-.game-overview .galleria {
-    /*margin-top: 1rem;*/
+.company-name {
+    font-weight: bold;
+    color: white;
+    background-color: cornflowerblue;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-right: 10px; /* Spacing between other items */
+    margin-left: 0; /* Reset margin for other items */
 }
