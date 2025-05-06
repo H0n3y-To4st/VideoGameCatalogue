@@ -5,6 +5,8 @@ body {
 }
 
 .gameDetailsForm {
+    width:600px;
+    height: 600px;
 }
 
 body .ui-dialog {
@@ -51,4 +53,25 @@ body .ui-dialog .ui-dialog-titlebar {
 
 body .ui-dialog .ui-dialog-content {
     width: 500px;
+}
+
+.game-title {
+    font-size: 2rem;
+    margin-left: 50px;
+}
+
+.game-cover {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.genre-collection-names {
+    font-weight: bold;
+    color: white;
+    background-color: cornflowerblue;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-right: 10px;
 }
