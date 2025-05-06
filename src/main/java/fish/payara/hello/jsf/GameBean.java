@@ -76,26 +76,30 @@ public class GameBean implements Serializable {
         this.selectedGame = selectedGame;
     }
 
-//    this is specifically for triggering via Ajax
-public void onGameSelect(SelectEvent<Games> event) {
-    selectedGame = event.getObject();
-    if (selectedGame != null) {
-        try {
-            String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(contextPath + "/games/game.xhtml?gameId=" + selectedGame.getId());
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Redirection failed", e);
+    //    this is specifically for triggering via Ajax
+    public void onGameSelect(SelectEvent<Games> event) {
+        selectedGame = event.getObject();
+        if (selectedGame != null) {
+            try {
+                String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .redirect(contextPath + "/games/game.xhtml?gameId=" + selectedGame.getId());
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Redirection failed", e);
+            }
         }
     }
-}
 
-//    this is specifically for triggering via command buttons
-    public String redirectToGameDetails() {
+    //    this is specifically for triggering via command buttons
+    public String redirectToGameDetails(int gameId) {
+        return "/games/game.xhtml?faces-redirect=true&gameId=" + gameId;
+    }
+
+    public void onSearchGameSelect(SelectEvent<Games> event) {
+        selectedGame = event.getObject();
         if (selectedGame != null) {
-            return "/games/game.xhtml?faces-redirect=true&gameId=" + selectedGame.getId();
+            logger.log(Level.INFO, "Selected game: {0}", selectedGame.getName());
         }
-        return null;
     }
 
     public Games getGameById(int id) {
@@ -110,5 +114,9 @@ public void onGameSelect(SelectEvent<Games> event) {
             logger.log(Level.SEVERE, "Failed to fetch top games.", e);
         }
         return games;
+    }
+
+    public List<Games> getTopGamesByGenre(String genreName) {
+        return igdbService.getTopGamesByGenre(genreName);
     }
 }

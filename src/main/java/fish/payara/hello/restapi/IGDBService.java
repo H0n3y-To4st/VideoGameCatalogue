@@ -81,4 +81,15 @@ public class IGDBService {
                 """ + "where id = " + gameId + ";";
         return igdbClient.getSelectedGameDetails(body);
     }
+
+    public List<Games> getTopGamesByGenre(String genreName) {
+        String body = """
+        fields name, cover.url;
+        where rating >= 90 & category = 0 & themes != (42) & genres.name = (" """ + genreName +
+        """
+        "); sort rating_count desc; limit 5;
+        """;
+        return igdbClient.getTopGamesByGenre(body);
+    }
+
 }

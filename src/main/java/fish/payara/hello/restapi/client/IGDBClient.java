@@ -38,4 +38,7 @@ public interface IGDBClient {
 
     @POST
     Games getSelectedGameDetails(String body);
+
+    @POST
+    List<Games> getTopGamesByGenre(String body);
 }
