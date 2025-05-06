@@ -1,7 +1,6 @@
 package fish.payara.hello.jsf;
 
 
-import fish.payara.hello.entities.Games;
 import fish.payara.hello.restapi.IGDBService;
 
 import jakarta.annotation.PostConstruct;
@@ -14,9 +13,13 @@ import software.xdev.chartjs.model.data.PieData;
 import software.xdev.chartjs.model.dataset.PieDataset;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Named(value = "pieChartBean")
 @RequestScoped
@@ -30,38 +33,35 @@ public class PieChartBean {
     @Inject
     private UserGamesBean userGamesBean;
 
-    //want to ensure piechart is created
     @PostConstruct
     public void init() {
         generateGenreChartModel();
     }
 
     public void generateGenreChartModel() {
-        // Placeholder for games list
-        List<Games> games = userGamesBean.getGames();
-        Map<String, Integer> genreCount = new HashMap<>();
+        Map<String, Integer> genreCount = userGamesBean.getGames().stream()
+                .map(game -> igdbService.getGameByID(game.getId()))
+                .filter(fullGame -> fullGame.getGenres() != null)
+                .flatMap(fullGame -> fullGame.getGenres().stream())  // flatten all genres because of its datatype
+                .map(genreMap -> genreMap.get("name"))
+                .filter(Objects::nonNull)                            //  prevent npe
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        g -> 1,
+                        Integer::sum
+                ));
 
-        for (Games game : games) {
-            Games fullGame = igdbService.getGameByID(game.getId());
-            for (Map<String, String> genre : fullGame.getGenres()) {
-                String genreName = genre.get("name");
-                genreCount.put(genreName, genreCount.getOrDefault(genreName, 0) + 1);
-            }
-        }
-
-        List<Number> values = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
+        List<String> labels = new ArrayList<>(genreCount.keySet());
+        List<Number> values = new ArrayList<>(genreCount.values());
         List<String> colours = new ArrayList<>();
 
-        for (Map.Entry<String, Integer> entry : genreCount.entrySet()) {
-            labels.add(entry.getKey());
-            values.add(entry.getValue());
-
-            String colour = generateRandomColor();
-            while (colours.contains(colour)) {
-                colour = generateRandomColor();
-            }
-            colours.add(colour);
+        Set<String> usedColors = new HashSet<>();
+        for (int i = 0; i < labels.size(); i++) {
+            String color;
+            do {
+                color = generateRandomColor();
+            } while (!usedColors.add(color));
+            colours.add(color);
         }
 
         PieDataset dataSet = new PieDataset();
@@ -75,21 +75,17 @@ public class PieChartBean {
         PieChart pieChart = new PieChart();
         pieChart.setData(data);
 
-        genreChartModel = pieChart.toJson();
+        this.genreChartModel = pieChart.toJson();
     }
 
     private String generateRandomColor() {
-        int r = (int) (Math.random() * 256);
-        int g = (int) (Math.random() * 256);
-        int b = (int) (Math.random() * 256);
-        return String.format("rgb(%d, %d, %d)", r, g, b);
+        return String.format("rgb(%d, %d, %d)",
+                (int) (Math.random() * 256),
+                (int) (Math.random() * 256),
+                (int) (Math.random() * 256));
     }
 
     public String getGenreChartModel() {
-        return genreChartModel;
-    }
-
-    public String setGenreChartModel() {
         return genreChartModel;
     }
 }

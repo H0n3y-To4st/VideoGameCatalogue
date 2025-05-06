@@ -4,50 +4,57 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xsi:schemaLocation="http://primefaces.org/ui "
       xmlns:p="http://primefaces.org/ui">
+
 <h:head>
     <title>User Profile</title>
+    <h:outputStylesheet name="main.css"/>
+    <h:outputStylesheet name="user.css"/>
 </h:head>
-
-<h:outputStylesheet name="main.css"/>
-<h:outputStylesheet name="user.css"/>
 
 <ui:include src="navbar.xhtml"/>
 
-<body>
-<div>
-    <h:outputText value="User Profile"/>
-</div>
-<h:form>
-    <h:panelGrid columns="1">
-        <!--    TODO: learn how to add user profiles? link to their profile? -->
-        <h:outputText value="Welcome, #{userAccountBean.username}!"/>
-        <h:outputText value="Big things coming soon! :D"/>
-    </h:panelGrid>
+<h:body styleClass="dashboard-body">
 
-<!--    TODO: recently added games? (can usergameid to display last games saved)-->
-<!--    TODO: user game like stats in terms of game genres saved?-->
-<!--    TODO: game recommendations?-->
+    //i want to add splash images for them
+    <div class="banner-container">
+        <div class="banner-image"/>
+        <div class="profile-pic"/>
+    </div>
+
     <h:form>
-        <h:panelGrid columns="2" cellpadding="10">
-            <h:outputText value="Total Games Saved: #{userGamesBean.games.size()}" styleClass="user-stats"/>
-        </h:panelGrid>
+        <div class="user-grid">
 
-        <div style="height: 500px; width: 500px; color:white;">
-            <p:chart value="#{pieChartBean.genreChartModel}"/>
+            <div class="left-column">
+
+                <h2>Welcome, #{userAccountBean.username}!</h2>
+
+                <div class="fav-genre-container">
+                    <h3>Top Rated in Your Favorite Genre: </h3>
+                    <h3 class="fav-genre-title">#{userGamesBean.favouriteGenre}</h3>
+                </div>
+
+                <ui:repeat value="#{gameBean.getTopGamesByGenre(userGamesBean.favouriteGenre)}" var="game">
+                    <div class="game-card">
+                        <img src="#{game.thumbCover.url}" alt="Game Cover"/>
+                        <h:outputText value="#{game.fullName}" styleClass="game-name"/>
+                        <p:commandButton styleClass="user-hidden-button" action="#{gameBean.redirectToGameDetails(game.id)}"/>
+                    </div>
+                </ui:repeat>
+            </div>
+
+            <div class="right-column">
+                <div class="stats-block">
+                    <h:outputText value="Total Games Saved: #{userGamesBean.games.size()}" styleClass="user-stats"/>
+                </div>
+
+                <div class="chart-block" style="height: 500px; width: 500px;">
+                    <p:chart value="#{pieChartBean.genreChartModel}"/>
+                </div>
+            </div>
+
         </div>
-
-        <h:panelGroup>
-            <h:outputText value="Recently Added Games:" styleClass="section-title"/>
-        </h:panelGroup>
-
-        <h:panelGroup>
-            <h:outputText value="Recommended Games:" styleClass="section-title"/>
-        </h:panelGroup>
     </h:form>
-</h:form>
-</body>
+</h:body>
 </html>

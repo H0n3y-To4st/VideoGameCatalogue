@@ -1,0 +1,89 @@
+.dashboard-body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.banner-container {
+    position: relative;
+    height: 200px;
+}
+
+.banner-image {
+    background-image: url('https://picsum.photos/1200/300');
+    background-color: #404040;
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+}
+
+.profile-pic {
+    position: absolute;
+    bottom: -40px;
+    left: 40px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-image: url('https://picsum.photos/400');
+    background-color: white;
+    background-size: cover;
+    border: 3px solid white;
+}
+
+.fav-genre-container h3 {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.fav-genre-title {
+    font-weight: bold;
+    color: white;
+    background-color: cornflowerblue;
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.user-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    padding: 60px 40px 40px 40px;
+}
+
+.left-column {
+    flex: 3;
+}
+
+.right-column {
+    flex: 2;
+}
+
+.user-hidden-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border: none;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 2;
+}
+
+.game-card {
+    position: relative;
+    background-color: #1e1e1e;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.game-name {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}

@@ -15,11 +15,18 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.*;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 
 @Stateless
 @LocalBean
@@ -135,6 +142,26 @@ public class UserGamesService implements Serializable {
             }
         }
         return games;
+    }
+
+    public String getFavouriteGenre(int userID) {
+        List<Games> games = listAllGamesInDashboard(userID);
+
+        // collect all genres into a single list
+        // get the name of each one and ensure its not null
+        //then count each type via collect
+        //can make use of the max to get the one with the highest count
+        //then return the name of that genre
+
+        return games.stream()
+                .flatMap(game -> game.getGenres().stream())
+                .map(genreMap -> genreMap.get("name"))
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
     }
 
 }

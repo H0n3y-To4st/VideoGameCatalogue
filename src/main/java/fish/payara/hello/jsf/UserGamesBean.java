@@ -94,4 +94,9 @@ public class UserGamesBean implements Serializable {
     public void viewGameDetails(){
         //no-op to trigger primefaces update
     }
+
+    public String getFavouriteGenre() {
+        return userGamesService.getFavouriteGenre(userID);
+    }
+
 }
