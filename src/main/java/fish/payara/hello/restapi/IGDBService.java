@@ -18,8 +18,8 @@ public class IGDBService {
 
     public List<Games> getTopGames() {
         String body = """
-                fields name,genres.name,rating,category, cover.url;
-                where rating >= 90 & category = 0 & themes != (42); sort rating_count desc;
+                fields name,genres.name,rating,game_type, cover.url;
+                where rating >= 90 & game_type = 0 & themes != (42); sort rating_count desc;
                 limit 24;
                 """;
         return igdbClient.getTopGames(body);
@@ -37,7 +37,7 @@ public class IGDBService {
 
     public List<Games> searchGamesByName(String gameName, boolean advancedSearch) {
         String body = "fields name,genres.name,rating, cover.url;\n" +
-                "where name ~ *\"" + gameName + "\"* & category = 0 & themes != (42);";
+                "where name ~ *\"" + gameName + "\"* & game_type = 0 & themes != (42);";
         if (!advancedSearch) {
             body += "limit 3;";
         } else {
@@ -49,7 +49,7 @@ public class IGDBService {
 
     public List<Games> searchGamesByFilters(String gameName, List<String> selectedGenres, List<String> selectedPlatforms, List<String> selectedGameModes) {
         StringBuilder body = new StringBuilder("fields name,genres.name,rating,cover.url;\n");
-        body.append("where name ~ *\"").append(gameName).append("\"* & category = 0 & themes != (42)");
+        body.append("where name ~ *\"").append(gameName).append("\"* & game_type = 0 & themes != (42)");
 
         if (selectedGenres != null && !selectedGenres.isEmpty()) {
             body.append(" & genres.name = (");
@@ -85,7 +85,7 @@ public class IGDBService {
     public List<Games> getTopGamesByGenre(String genreName) {
         String body = """
         fields name, cover.url;
-        where rating >= 90 & category = 0 & themes != (42) & genres.name = (" """ + genreName +
+        where rating >= 90 & game_type = 0 & themes != (42) & genres.name = (" """ + genreName +
         """
         "); sort rating_count desc; limit 5;
         """;
