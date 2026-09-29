@@ -1,8 +1,8 @@
-version: '3'
 services:
-
   videogamecatalogue:
     #    see info at https://hub.docker.com/r/payara/server-full/
+    build:
+      context: .
     image: videogamecatalogue
     container_name: videogamecatalogue
     restart: always
@@ -15,7 +15,7 @@ services:
       - "9009:9009" # debug
 
   videogamecatalogue-db:
-    image: postgres
+    image: postgres:16 # pre 18, using old data directory layout
     restart: always
     container_name: videogamecatalogue-db
     #    user: "1000:1000"
